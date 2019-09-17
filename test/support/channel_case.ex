@@ -15,6 +15,8 @@ defmodule MarkevichMoneyWeb.ChannelCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       # Import conveniences for testing with channels
@@ -26,10 +28,10 @@ defmodule MarkevichMoneyWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(MarkevichMoney.Repo)
+    :ok = Sandbox.checkout(MarkevichMoney.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(MarkevichMoney.Repo, {:shared, self()})
+      Sandbox.mode(MarkevichMoney.Repo, {:shared, self()})
     end
 
     :ok

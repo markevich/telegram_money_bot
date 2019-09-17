@@ -15,6 +15,8 @@ defmodule MarkevichMoneyWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       # Import conveniences for testing with connections
@@ -27,10 +29,10 @@ defmodule MarkevichMoneyWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(MarkevichMoney.Repo)
+    :ok = Sandbox.checkout(MarkevichMoney.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(MarkevichMoney.Repo, {:shared, self()})
+      Sandbox.mode(MarkevichMoney.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
