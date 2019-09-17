@@ -13,14 +13,12 @@ defmodule MarkevichMoneyWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", MarkevichMoneyWeb do
-    pipe_through :browser
-
-    get "/", PageController, :index
-  end
+  # scope "/", MarkevichMoneyWeb do
+    # pipe_through :browser
+  # end
 
   # Other scopes may use custom stacks.
-  # scope "/api", MarkevichMoneyWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", MarkevichMoneyWeb do
+    pipe_through :api
+  end
 end
