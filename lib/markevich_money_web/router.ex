@@ -20,5 +20,10 @@ defmodule MarkevichMoneyWeb.Router do
   # Other scopes may use custom stacks.
   scope "/api", MarkevichMoneyWeb do
     pipe_through :api
+
+    scope "/bot" do
+      post "/message", BotController, :message
+      post "/compliment", BotController, :compliment
+    end
   end
 end
