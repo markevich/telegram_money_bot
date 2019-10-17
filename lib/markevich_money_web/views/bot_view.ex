@@ -11,7 +11,6 @@ defmodule MarkevichMoneyWeb.BotView do
   end
 
   def render("bot.json", %{bot: bot}) do
-    %{id: bot.id,
-      name: bot.name}
+    %{id: bot.id, name: bot.name}
   end
 end

@@ -14,7 +14,7 @@ defmodule MarkevichMoneyWeb.Router do
   end
 
   # scope "/", MarkevichMoneyWeb do
-    # pipe_through :browser
+  # pipe_through :browser
   # end
 
   # Other scopes may use custom stacks.
@@ -22,8 +22,7 @@ defmodule MarkevichMoneyWeb.Router do
     pipe_through :api
 
     scope "/bot" do
-      post "/message", BotController, :message
-      post "/compliment", BotController, :compliment
+      post "/webhook", BotController, :webhook
     end
   end
 end
