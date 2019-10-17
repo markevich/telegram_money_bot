@@ -52,7 +52,7 @@ defmodule MarkevichMoney.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
-      {:nadia, git: "https://github.com/zhyu/nadia.git"}
+      {:nadia, git: "https://github.com/zhyu/nadia.git"},
     ]
   end
 

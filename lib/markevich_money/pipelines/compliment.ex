@@ -1,6 +1,6 @@
 defmodule MarkevichMoney.Pipelines.Compliment do
-  alias MarkevichMoney.Steps.Compliment.{FetchCompliments, ChooseRandomCompliment}
-  alias MarkevichMoney.Steps.Telegram.{SendMessage, AnswerCallback}
+  alias MarkevichMoney.Steps.Compliment.{ChooseRandomCompliment, FetchCompliments}
+  alias MarkevichMoney.Steps.Telegram.{AnswerCallback, SendMessage}
 
   def call(payload) do
     payload
