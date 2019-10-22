@@ -16,7 +16,7 @@ defmodule MarkevichMoney.Pipelines do
     end
   end
 
-  def call(%MessageData{message: "Карта" <> _rest = message}) do
+  def call(%MessageData{message: "✉️ <click@alfa-bank.by>" <> _rest = message}) do
     %{input_message: message}
     |> ReceiveTransactionPipeline.call()
   end

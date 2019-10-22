@@ -11,6 +11,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
     field :currency_code, :string
     field :balance, :decimal
     field :target, :string
+    field :type, :string
 
     field :status, :string
 
@@ -26,7 +27,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
 
   def update_changeset(transaction, attrs) do
     transaction
-    |> cast(attrs, [:account, :datetime, :amount, :currency_code, :balance, :target])
-    |> validate_required([:account, :datetime, :amount, :currency_code, :balance, :target])
+    |> cast(attrs, [:account, :datetime, :amount, :currency_code, :balance, :target, :type])
+    |> validate_required([:account, :datetime, :amount, :currency_code, :balance, :target, :type])
   end
 end

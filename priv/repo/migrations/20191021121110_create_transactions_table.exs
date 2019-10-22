@@ -9,6 +9,7 @@ defmodule MarkevichMoney.Repo.Migrations.CreateTransactionsTable do
       add(:currency_code, :string)
       add(:balance, :decimal)
       add(:target, :string)
+      add(:type, :string)
 
       add(:status, :string)
 

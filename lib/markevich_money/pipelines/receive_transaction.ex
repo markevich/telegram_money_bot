@@ -9,6 +9,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     ParseCurrencyCode,
     ParseDateTime,
     ParseTarget,
+    ParseType,
     UpdateTransaction
   }
 
@@ -18,7 +19,13 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     @template """
       `<%= transaction.datetime %>`
 
-      Оплата
+      <%=
+        case transaction.type do
+          "income" -> "Поступление"
+          "outcome" -> "Списание"
+          true -> "Неизвестно"
+        end
+      %>
 
       | На сумму` |` `<%= transaction.amount %>` <%= transaction.currency_code %>
       | Кому:`    |` `<%= transaction.target %>`
@@ -41,6 +48,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     |> ParseCurrencyCode.call()
     |> ParseBalance.call()
     |> ParseTarget.call()
+    |> ParseType.call()
     |> ParseDateTime.call()
     |> UpdateTransaction.call()
     # |> Map.put(:output_message, Template.render(payload))
