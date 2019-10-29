@@ -10,6 +10,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     ParseDateTime,
     ParseTarget,
     ParseType,
+    PredictCategory,
     UpdateTransaction
   }
 
@@ -51,7 +52,8 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     |> ParseType.call()
     |> ParseDateTime.call()
     |> UpdateTransaction.call()
-    # |> Map.put(:output_message, Template.render(payload))
+    |> PredictCategory.call()
+    |> insert_buttons()
     |> insert_rendered_template()
     |> SendMessage.call()
   end
@@ -59,5 +61,22 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
   def insert_rendered_template(payload) do
     payload
     |> Map.put(:output_message, Template.render(payload[:transaction]))
+  end
+
+  def insert_buttons(%{transaction: %{id: transaction_id}} = payload) do
+    callback_data = Jason.encode!(%{pipeline: "choose_category", id: transaction_id })
+    reply_markup = %Nadia.Model.InlineKeyboardMarkup{
+      inline_keyboard: [
+        [
+          %Nadia.Model.InlineKeyboardButton{
+            text: "Выбрать категорию",
+            callback_data: callback_data
+          }
+        ]
+      ]
+    }
+
+    payload
+    |> Map.put(:reply_markup, reply_markup)
   end
 end

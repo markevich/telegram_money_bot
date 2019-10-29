@@ -1,17 +1,21 @@
 defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.{CallbackData, MessageData}
+  alias MarkevichMoney.Pipelines.ChooseCategory, as: ChooseCategoryPipeline
   alias MarkevichMoney.Pipelines.Compliment, as: ComplimentPipeline
   alias MarkevichMoney.Pipelines.Help, as: HelpPipeline
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
   alias MarkevichMoney.Pipelines.Start, as: StartPipeline
 
-  def call(%CallbackData{data: callback_data, id: callback_id}) do
-    case callback_data["pipeline"] do
+  def call(%CallbackData{callback_data: %{"pipeline" => pipeline}} = callback_data) do
+    case pipeline do
       "compliment" ->
-        %{callback_id: callback_id}
+        callback_data
         |> ComplimentPipeline.call()
-
+      "choose_category" ->
+        callback_data
+        |> ChooseCategoryPipeline.call()
       _ ->
+
         nil
     end
   end
