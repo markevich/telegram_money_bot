@@ -10,9 +10,9 @@ defmodule MarkevichMoney.Transactions.TransactionCategoryPrediction do
   end
 
   @doc false
-  def changeset(category_prediction, attrs) do
-    category_prediction
-    |> cast(attrs, [:prediction])
-    |> validate_required([:prediction])
+  def create_changeset(attrs) do
+    %__MODULE__{}
+    |> cast(attrs, [:prediction, :transaction_category_id])
+    |> validate_required([:prediction, :transaction_category_id])
   end
 end

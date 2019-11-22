@@ -16,7 +16,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
 
     field :status, :string
 
-    belongs_to(:category, TransactionCategory)
+    belongs_to(:transaction_category, TransactionCategory)
 
     timestamps()
   end
@@ -38,7 +38,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :balance,
       :target,
       :type,
-      :category_id
+      :transaction_category_id
     ])
     |> validate_required([:account, :datetime, :amount, :currency_code, :balance, :target, :type])
   end

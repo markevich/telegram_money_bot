@@ -11,34 +11,11 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     ParseTarget,
     ParseType,
     PredictCategory,
+    RenderTransaction,
     UpdateTransaction
   }
 
-  defmodule Template do
-    require EEx
 
-    @template """
-      `<%= transaction.datetime %>`
-
-      <%=
-        case transaction.type do
-          "income" -> "Поступление"
-          "outcome" -> "Списание"
-          true -> "Неизвестно"
-        end
-      %>
-
-      | На сумму` |` `<%= transaction.amount %>` <%= transaction.currency_code %>
-      | Кому:`    |` `<%= transaction.target %>`
-
-      | Счет:`    |` `<%= transaction.account %>`
-      | Остаток`  |` `<%= transaction.balance %>` <%= transaction.currency_code %>
-
-      %meta{id: <%= transaction.id %>}
-    """
-
-    EEx.function_from_string(:def, :render, @template, [:transaction])
-  end
 
   def call(payload) do
     payload
@@ -51,16 +28,11 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     |> ParseTarget.call()
     |> ParseType.call()
     |> ParseDateTime.call()
-    |> UpdateTransaction.call()
     |> PredictCategory.call()
+    |> UpdateTransaction.call()
     |> insert_buttons()
-    |> insert_rendered_template()
+    |> RenderTransaction.call()
     |> SendMessage.call()
-  end
-
-  def insert_rendered_template(payload) do
-    payload
-    |> Map.put(:output_message, Template.render(payload[:transaction]))
   end
 
   def insert_buttons(%{transaction: %{id: transaction_id}} = payload) do

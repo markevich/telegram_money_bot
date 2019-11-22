@@ -1,14 +1,17 @@
 defmodule MarkevichMoney.Steps.Transaction.UpdateTransaction do
   alias MarkevichMoney.Transactions
+  alias MarkevichMoney.Transactions.Transaction
 
-  def call(%{parsed_attributes: parsed_attributes, transaction: transaction} = payload) do
+  def call(%{parsed_attributes: parsed_attributes, transaction_id: transaction_id} = payload) do
     payload
-    |> Map.put(:transaction, update_transaction(transaction, parsed_attributes))
+    |> Map.put(:transaction, update_transaction(transaction_id, parsed_attributes))
   end
 
-  defp update_transaction(transaction, attrs) do
-    {:ok, transaction} = Transactions.update_transaction(transaction, attrs)
+  defp update_transaction(transaction_id, attrs) do
+    {:ok, transaction} =
+      %Transaction{id: transaction_id}
+      |> Transactions.update_transaction(attrs)
 
-    transaction
+    Transactions.get_transaction!(transaction.id)
   end
 end

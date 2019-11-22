@@ -1,10 +1,10 @@
 defmodule MarkevichMoney.Steps.Transaction.PredictCategory do
   alias MarkevichMoney.Transactions
 
-  def call(%{parsed_attributes: %{target: target}} = payload) do
+  def call(%{parsed_attributes: %{target: target}} = payload) when is_binary(target) do
     payload
     |> Map.update!(:parsed_attributes, fn parsed_data ->
-      Map.put(parsed_data, :category_id, predict_category_id(target))
+      Map.put(parsed_data, :transaction_category_id, predict_category_id(target))
     end)
   end
 

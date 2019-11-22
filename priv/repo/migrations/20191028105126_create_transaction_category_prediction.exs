@@ -3,8 +3,8 @@ defmodule MarkevichMoney.Repo.Migrations.CreateTransactionCategoryPrediction do
 
   def change do
     create table(:transaction_category_prediction) do
-      add :prediction, :string
-      add :transaction_category_id, references(:transaction_categories, on_delete: :nothing)
+      add :prediction, :string, null: false
+      add :transaction_category_id, references(:transaction_categories, on_delete: :nothing), null: false
 
       timestamps()
     end
