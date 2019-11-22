@@ -22,7 +22,9 @@ defmodule MarkevichMoney.Pipelines.SetCategory do
     |> Map.put(:transaction_id, transaction_id)
   end
 
-  defp set_category(%{callback_data: %{"c_id" => category_id}, transaction: transaction} = payload) do
+  defp set_category(
+         %{callback_data: %{"c_id" => category_id}, transaction: transaction} = payload
+       ) do
     Transactions.update_transaction(transaction, %{transaction_category_id: category_id})
 
     payload

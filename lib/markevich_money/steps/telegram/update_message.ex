@@ -3,7 +3,6 @@ defmodule MarkevichMoney.Steps.Telegram.UpdateMessage do
         %{message_id: message_id, output_message: output_message, reply_markup: reply_markup} =
           payload
       ) do
-
     Nadia.edit_message_text(
       -371_960_187,
       message_id,

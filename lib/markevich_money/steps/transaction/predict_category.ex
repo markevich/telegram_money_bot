@@ -12,7 +12,9 @@ defmodule MarkevichMoney.Steps.Transaction.PredictCategory do
     case Transactions.predict_category_id(target) do
       category_id when is_integer(category_id) ->
         category_id
-      nil -> nil
+
+      nil ->
+        nil
     end
   end
 end

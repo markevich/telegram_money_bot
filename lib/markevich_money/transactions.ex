@@ -36,7 +36,10 @@ defmodule MarkevichMoney.Transactions do
   end
 
   def create_prediction(target, transaction_category_id) do
-    %TransactionCategoryPrediction{prediction: target, transaction_category_id: transaction_category_id}
+    %TransactionCategoryPrediction{
+      prediction: target,
+      transaction_category_id: transaction_category_id
+    }
     |> Repo.insert!()
   end
 

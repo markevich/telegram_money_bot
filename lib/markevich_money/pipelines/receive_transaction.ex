@@ -15,8 +15,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     UpdateTransaction
   }
 
-
-
   def call(payload) do
     payload
     |> CreateTransaction.call()
@@ -36,7 +34,8 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
   end
 
   def insert_buttons(%{transaction: %{id: transaction_id}} = payload) do
-    callback_data = Jason.encode!(%{pipeline: "choose_category", id: transaction_id })
+    callback_data = Jason.encode!(%{pipeline: "choose_category", id: transaction_id})
+
     reply_markup = %Nadia.Model.InlineKeyboardMarkup{
       inline_keyboard: [
         [

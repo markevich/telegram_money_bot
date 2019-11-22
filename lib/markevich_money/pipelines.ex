@@ -12,14 +12,16 @@ defmodule MarkevichMoney.Pipelines do
       "compliment" ->
         callback_data
         |> ComplimentPipeline.call()
+
       "choose_category" ->
         callback_data
         |> ChooseCategoryPipeline.call()
+
       "set_category" ->
         callback_data
         |> SetCategoryPipeline.call()
-      _ ->
 
+      _ ->
         nil
     end
   end

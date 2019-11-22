@@ -28,5 +28,7 @@ categories = ~w(
 )
 
 Enum.each(categories, fn category_name ->
-  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{name: category_name})
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
+    name: category_name
+  })
 end)
