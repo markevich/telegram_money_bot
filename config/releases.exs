@@ -4,6 +4,15 @@
 # remember to add this file to your .gitignore.
 import Config
 
+defmodule Helpers do
+  def get_env(name) do
+    case System.get_env(name) do
+      nil -> raise "Environment variable #{name} is not set!"
+      val -> val
+    end
+  end
+end
+
 database_url =
   System.get_env("DATABASE_URL") ||
     raise """
@@ -24,7 +33,13 @@ secret_key_base =
     """
 
 config :markevich_money, MarkevichMoneyWeb.Endpoint,
-  http: [:inet6, port: String.to_integer(System.get_env("PORT") || "4000")],
+  https: [
+    port: 443,
+    cipher_suite: :strong,
+    keyfile: Helpers.get_env("CO2_OFFSET_SSL_KEY_PATH"),
+    cacertfile: Helpers.get_env("CO2_OFFSET_SSL_CACERT_PATH"),
+    certfile: Helpers.get_env("CO2_OFFSET_SSL_CERT_PATH")
+  ],
   secret_key_base: secret_key_base
 
 # ## Using releases (Elixir v1.9+)
