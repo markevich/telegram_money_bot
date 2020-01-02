@@ -13,6 +13,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
     field :balance, :decimal
     field :target, :string
     field :type, :string
+    field :lookup_hash, :string
 
     field :status, :string
 

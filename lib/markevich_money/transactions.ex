@@ -12,12 +12,19 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload(:transaction_category)
   end
 
-  def get_categories(), do: Repo.all(TransactionCategory)
+  def upsert_transaction(account, type, amount, datetime) do
+    lookup_hash =
+      :crypto.hash(:sha, "#{account}-#{type}-#{amount}-#{datetime}") |> Base.encode16()
 
-  def create_transaction do
-    Transaction.create_changeset()
-    |> Repo.insert()
+    Repo.insert(
+      %Transaction{lookup_hash: lookup_hash},
+      returning: true,
+      on_conflict: [set: [lookup_hash: lookup_hash]],
+      conflict_target: :lookup_hash
+    )
   end
+
+  def get_categories(), do: Repo.all(TransactionCategory)
 
   def update_transaction(%Transaction{} = transaction, attrs) do
     {:ok, _} =

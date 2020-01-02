@@ -2,7 +2,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
   alias MarkevichMoney.Steps.Telegram.{SendMessage}
 
   alias MarkevichMoney.Steps.Transaction.{
-    CreateTransaction,
+    FindOrCreateTransaction,
     ParseAccount,
     ParseAmount,
     ParseBalance,
@@ -17,7 +17,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
 
   def call(payload) do
     payload
-    |> CreateTransaction.call()
     |> Map.put(:parsed_attributes, %{})
     |> ParseAccount.call()
     |> ParseAmount.call()
@@ -27,6 +26,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     |> ParseType.call()
     |> ParseDateTime.call()
     |> PredictCategory.call()
+    |> FindOrCreateTransaction.call()
     |> UpdateTransaction.call()
     |> insert_buttons()
     |> RenderTransaction.call()
