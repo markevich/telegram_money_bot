@@ -48,6 +48,7 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
 # to start each relevant endpoint:
 #
 config :markevich_money, MarkevichMoneyWeb.Endpoint, server: true
+config :nadia, token: Helpers.get_env("TELEGRAM_TOKEN")
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
