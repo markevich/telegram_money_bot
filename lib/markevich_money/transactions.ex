@@ -9,15 +9,15 @@ defmodule MarkevichMoney.Transactions do
 
   def get_transaction!(id) do
     Repo.get!(Transaction, id)
-    |> Repo.preload(:transaction_category)
+    |> Repo.preload([:transaction_category, :user])
   end
 
-  def upsert_transaction(account, type, amount, datetime) do
+  def upsert_transaction(user_id, account, type, amount, datetime) do
     lookup_hash =
       :crypto.hash(:sha, "#{account}-#{type}-#{amount}-#{datetime}") |> Base.encode16()
 
     Repo.insert(
-      %Transaction{lookup_hash: lookup_hash},
+      %Transaction{user_id: user_id, lookup_hash: lookup_hash},
       returning: true,
       on_conflict: [set: [lookup_hash: lookup_hash]],
       conflict_target: :lookup_hash

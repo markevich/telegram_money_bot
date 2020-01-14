@@ -1,6 +1,9 @@
 defmodule MarkevichMoney.Steps.Telegram.SendMessage do
-  def call(%{output_message: output_message, reply_markup: reply_markup} = payload) do
-    Nadia.send_message(-371_960_187, output_message,
+  def call(
+        %{output_message: output_message, reply_markup: reply_markup, current_user: current_user} =
+          payload
+      ) do
+    Nadia.send_message(current_user.telegram_chat_id, output_message,
       reply_markup: reply_markup,
       parse_mode: "Markdown"
     )
@@ -8,8 +11,14 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
     payload
   end
 
-  def call(%{output_message: output_message} = payload) do
-    Nadia.send_message(-371_960_187, output_message, parse_mode: "Markdown")
+  def call(%{output_message: output_message, current_user: current_user} = payload) do
+    Nadia.send_message(current_user.telegram_chat_id, output_message, parse_mode: "Markdown")
+
+    payload
+  end
+
+  def call(%{output_message: output_message, chat_id: chat_id} = payload) do
+    Nadia.send_message(chat_id, output_message, parse_mode: "Markdown")
 
     payload
   end

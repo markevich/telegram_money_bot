@@ -4,6 +4,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
 
   alias __MODULE__
   alias MarkevichMoney.Transactions.TransactionCategory
+  alias MarkevichMoney.Users.User
 
   schema "transactions" do
     field :account, :string
@@ -18,6 +19,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
     field :status, :string
 
     belongs_to(:transaction_category, TransactionCategory)
+    belongs_to(:user, User)
 
     timestamps()
   end

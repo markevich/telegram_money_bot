@@ -24,8 +24,11 @@ defmodule MarkevichMoneyWeb.BotController do
     json(conn, %{})
   end
 
-  def webhook(conn, %{"message" => %{"text" => input_message}}) do
-    %MessageData{message: input_message}
+  def webhook(
+        conn,
+        %{"message" => %{"text" => input_message, "chat" => %{"id" => chat_id}}}
+      ) do
+    %MessageData{message: input_message, chat_id: chat_id}
     |> Pipelines.call()
 
     json(conn, %{})

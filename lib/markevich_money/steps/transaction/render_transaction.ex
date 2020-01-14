@@ -4,7 +4,6 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
 
     @template """
       `<%= transaction.datetime %>`
-
       <%=
         case transaction.type do
           "income" -> "Поступление"
@@ -14,13 +13,12 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       %>
 
       | На сумму`  |` `<%= transaction.amount %>` <%= transaction.currency_code %>
-      | Кому:`     |` `<%= transaction.target %>`
       <%= if transaction.transaction_category do %>
-      | Категория:`|` `<%= transaction.transaction_category.name %>`
+      | Категория:` |` `<%= transaction.transaction_category.name %>`
       <% end %>
-
-      | Счет:`     |` `<%= transaction.account %>`
-      | Остаток`   |` `<%= transaction.balance %>` <%= transaction.currency_code %>
+      | Кому:`     |` <%= transaction.target %>
+      | Счет:`     |` <%= transaction.account %>
+      | Остаток`   |` <%= transaction.balance %>
 
       %meta{id: <%= transaction.id %>}
     """

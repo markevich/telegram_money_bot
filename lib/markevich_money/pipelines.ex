@@ -6,6 +6,8 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
   alias MarkevichMoney.Pipelines.SetCategory, as: SetCategoryPipeline
   alias MarkevichMoney.Pipelines.Start, as: StartPipeline
+  alias MarkevichMoney.Users
+  alias MarkevichMoney.Steps.Telegram.SendMessage
 
   def call(%CallbackData{callback_data: %{"pipeline" => pipeline}} = callback_data) do
     case pipeline do
@@ -26,8 +28,21 @@ defmodule MarkevichMoney.Pipelines do
     end
   end
 
-  def call(%MessageData{message: "✉️ <click@alfa-bank.by>" <> _rest = message}) do
-    %{input_message: message}
+  def call(%MessageData{current_user: nil, chat_id: chat_id} = message_data) do
+    user = Users.get_user_by_chat_id(chat_id)
+
+    if user do
+      call(%MessageData{message_data | current_user: user})
+    else
+      SendMessage.call(%{output_message: "Unauthorized", chat_id: chat_id})
+    end
+  end
+
+  def call(%MessageData{message: "✉️ <click@alfa-bank.by>" <> _rest = message, current_user: user}) do
+    %{
+      input_message: message,
+      current_user: user
+    }
     |> ReceiveTransactionPipeline.call()
   end
 
