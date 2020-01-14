@@ -25,6 +25,7 @@ categories = ~w(
   Другое
   Долги
   Зарплата
+  Праздники
 )
 
 Enum.each(categories, fn category_name ->
