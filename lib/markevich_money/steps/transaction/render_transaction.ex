@@ -1,38 +1,37 @@
 defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
-  defmodule Template do
-    require EEx
-
-    @template """
-      `<%= transaction.datetime %>`
-      <%=
-        case transaction.type do
-          "income" -> "Поступление"
-          "outcome" -> "Списание"
-          true -> "Неизвестно"
-        end
-      %>
-
-      | На сумму`  |` `<%= transaction.amount %>` <%= transaction.currency_code %>
-      <%= if transaction.transaction_category do %>
-      | Категория:` |` `<%= transaction.transaction_category.name %>`
-      <% end %>
-      | Кому:`     |` <%= transaction.target %>
-      | Счет:`     |` <%= transaction.account %>
-      | Остаток`   |` <%= transaction.balance %>
-
-      %meta{id: <%= transaction.id %>}
-    """
-
-    EEx.function_from_string(:def, :render, @template, [:transaction])
-  end
+  use Timex
 
   def call(%{transaction: transaction} = payload) do
     payload
-    |> Map.put(:output_message, Template.render(transaction))
+    |> Map.put(:output_message, render_table(transaction))
     |> insert_buttons()
   end
 
-  def insert_buttons(%{transaction: %{id: transaction_id}} = payload) do
+  defp render_table(transaction) do
+    category = if transaction.transaction_category, do: transaction.transaction_category.name
+
+    table =
+      [
+        ["Сумма", "#{transaction.amount} #{transaction.currency_code}"],
+        ["Категория", category],
+        ["Кому", transaction.target],
+        ["Остаток", transaction.balance],
+        # ["Счет", transaction.account],
+        ["Дата", Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")]
+      ]
+      |> TableRex.Table.new()
+      |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
+
+    """
+    Транзакция №#{transaction.id}
+    ```
+
+    #{table}
+    ```
+    """
+  end
+
+  defp insert_buttons(%{transaction: %{id: transaction_id}} = payload) do
     callback_data = Jason.encode!(%{pipeline: "choose_category", id: transaction_id})
 
     reply_markup = %Nadia.Model.InlineKeyboardMarkup{
