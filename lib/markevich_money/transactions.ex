@@ -33,6 +33,19 @@ defmodule MarkevichMoney.Transactions do
       |> Repo.update()
   end
 
+  def stats(current_user, from, to) do
+    from(transaction in Transaction,
+      join: user in assoc(transaction, :user),
+      join: category in assoc(transaction, :transaction_category),
+      where: user.id == ^current_user.id,
+      where: transaction.type == "outcome",
+      where: transaction.datetime > ^from,
+      where: transaction.datetime <= ^to,
+      group_by: category.name,
+      select: {sum(transaction.amount), category.name}
+    ) |> Repo.all()
+  end
+
   def predict_category_id(target) do
     with query <- predict_category_query(target),
          %TransactionCategoryPrediction{} = prediction <- Repo.one(query) do

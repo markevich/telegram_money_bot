@@ -6,8 +6,16 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
   alias MarkevichMoney.Pipelines.SetCategory, as: SetCategoryPipeline
   alias MarkevichMoney.Pipelines.Start, as: StartPipeline
+  alias MarkevichMoney.Pipelines.Stats, as: StatsPipeline
   alias MarkevichMoney.Users
   alias MarkevichMoney.Steps.Telegram.SendMessage
+
+  def call(%CallbackData{chat_id: chat_id, current_user: nil} = callback_data)
+      when is_integer(chat_id) do
+    user = Users.get_user_by_chat_id(chat_id)
+
+    call(%CallbackData{callback_data | current_user: user})
+  end
 
   def call(%CallbackData{callback_data: %{"pipeline" => pipeline}} = callback_data) do
     case pipeline do
@@ -19,6 +27,10 @@ defmodule MarkevichMoney.Pipelines do
         callback_data
         |> ChooseCategoryPipeline.call()
 
+      "stats" ->
+        callback_data
+        |> StatsPipeline.call()
+
       "set_category" ->
         callback_data
         |> SetCategoryPipeline.call()
@@ -28,7 +40,8 @@ defmodule MarkevichMoney.Pipelines do
     end
   end
 
-  def call(%MessageData{current_user: nil, username: username} = message_data) when is_binary(username) do
+  def call(%MessageData{current_user: nil, username: username} = message_data)
+      when is_binary(username) do
     user = Users.get_user_by_username(username)
 
     if user do
@@ -36,7 +49,8 @@ defmodule MarkevichMoney.Pipelines do
     end
   end
 
-  def call(%MessageData{current_user: nil, chat_id: chat_id} = message_data) when is_integer(chat_id) do
+  def call(%MessageData{current_user: nil, chat_id: chat_id} = message_data)
+      when is_integer(chat_id) do
     user = Users.get_user_by_chat_id(chat_id)
 
     if user do
@@ -63,11 +77,15 @@ defmodule MarkevichMoney.Pipelines do
   end
 
   def call(%MessageData{message: "/help", current_user: user}) do
-    HelpPipeline.call(%{current_user: user})
+    HelpPipeline.call(%MessageData{current_user: user})
   end
 
   def call(%MessageData{message: "/start", current_user: user}) do
-    StartPipeline.call(%{current_user: user})
+    StartPipeline.call(%MessageData{current_user: user})
+  end
+
+  def call(%MessageData{message: "/stats", current_user: user}) do
+    StatsPipeline.call(%MessageData{current_user: user})
   end
 
   def call(%MessageData{message: _message}) do
