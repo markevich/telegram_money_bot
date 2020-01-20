@@ -54,12 +54,12 @@ defmodule MarkevichMoney.Pipelines do
     |> ReceiveTransactionPipeline.call()
   end
 
-  def call(%MessageData{message: "/help"}) do
-    HelpPipeline.call(%{})
+  def call(%MessageData{message: "/help", current_user: user}) do
+    HelpPipeline.call(%{current_user: user})
   end
 
-  def call(%MessageData{message: "/start"}) do
-    StartPipeline.call(%{})
+  def call(%MessageData{message: "/start", current_user: user}) do
+    StartPipeline.call(%{current_user: user})
   end
 
   def call(%MessageData{message: _message}) do

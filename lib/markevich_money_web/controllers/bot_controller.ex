@@ -8,12 +8,17 @@ defmodule MarkevichMoneyWeb.BotController do
         "callback_query" => %{
           "data" => callback_data,
           "id" => callback_id,
-          "message" => %{"message_id" => message_id, "text" => message_text}
-        }
+          "message" => %{
+            "message_id" => message_id,
+            "text" => message_text,
+            "chat" => %{"id" => chat_id}
+          }
+        },
       }) do
     callback_data = Jason.decode!(callback_data)
 
     %CallbackData{
+      chat_id: chat_id,
       callback_data: callback_data,
       callback_id: callback_id,
       message_id: message_id,
