@@ -1,10 +1,14 @@
 defmodule MarkevichMoney.Steps.Telegram.UpdateMessage do
   def call(
-        %{message_id: message_id, output_message: output_message, reply_markup: reply_markup} =
-          payload
+        %{
+          message_id: message_id,
+          output_message: output_message,
+          reply_markup: reply_markup,
+          chat_id: chat_id
+        } = payload
       ) do
     Nadia.edit_message_text(
-      -371_960_187,
+      chat_id,
       message_id,
       nil,
       output_message,
@@ -15,8 +19,8 @@ defmodule MarkevichMoney.Steps.Telegram.UpdateMessage do
     payload
   end
 
-  def call(%{message_id: message_id, output_message: output_message} = payload) do
-    Nadia.edit_message_text(-371_960_187, message_id, nil, output_message, parse_mode: "Markdown")
+  def call(%{message_id: message_id, output_message: output_message, chat_id: chat_id} = payload) do
+    Nadia.edit_message_text(chat_id, message_id, nil, output_message, parse_mode: "Markdown")
 
     payload
   end
