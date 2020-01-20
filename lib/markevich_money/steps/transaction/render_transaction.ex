@@ -22,8 +22,15 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       |> TableRex.Table.new()
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
+    type =
+      case transaction.type do
+        "income" -> "Поступление"
+        "outcome" -> "Списание"
+        true -> "Неизвестно"
+      end
+
     """
-    Транзакция №#{transaction.id}
+    Транзакция №#{transaction.id}(#{type})
     ```
 
     #{table}
