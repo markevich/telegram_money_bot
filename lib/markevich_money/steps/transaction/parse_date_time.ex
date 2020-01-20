@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.ParseDateTime do
-  @regex ~r/\n(?<day>\d+)\.(?<month>\d+)\.(?<year>\d{4})\s(?<time>.*)/
+  @regex ~r/\n(?<day>\d+)\.(?<month>\d+)\.(?<year>\d{4})\s(?<time>[\d:]+)/
 
   def call(%{input_message: input_message} = payload) do
     payload

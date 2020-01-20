@@ -1,3 +1,3 @@
 defmodule MarkevichMoney.MessageData do
-  defstruct [:message, :chat_id, :current_user]
+  defstruct [:message, :chat_id, :username, :current_user]
 end

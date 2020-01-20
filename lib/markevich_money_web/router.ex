@@ -25,4 +25,12 @@ defmodule MarkevichMoneyWeb.Router do
       post "/webhook", BotController, :webhook
     end
   end
+
+  forward("/api/mailgun_webhook", Receivex,
+    adapter: Receivex.Adapter.Mailgun,
+    adapter_opts: [
+      api_key: Application.fetch_env!(:markevich_money, :mailgun_api_key)
+    ],
+    handler: MarkevichMoney.MailgunProcessor
+  )
 end

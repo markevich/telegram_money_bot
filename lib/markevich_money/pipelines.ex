@@ -28,7 +28,15 @@ defmodule MarkevichMoney.Pipelines do
     end
   end
 
-  def call(%MessageData{current_user: nil, chat_id: chat_id} = message_data) do
+  def call(%MessageData{current_user: nil, username: username} = message_data) when is_binary(username) do
+    user = Users.get_user_by_username(username)
+
+    if user do
+      call(%MessageData{message_data | current_user: user})
+    end
+  end
+
+  def call(%MessageData{current_user: nil, chat_id: chat_id} = message_data) when is_integer(chat_id) do
     user = Users.get_user_by_chat_id(chat_id)
 
     if user do
@@ -38,7 +46,7 @@ defmodule MarkevichMoney.Pipelines do
     end
   end
 
-  def call(%MessageData{message: "✉️ <click@alfa-bank.by>" <> _rest = message, current_user: user}) do
+  def call(%MessageData{message: "Карта" <> _rest = message, current_user: user}) do
     %{
       input_message: message,
       current_user: user

@@ -59,7 +59,8 @@ defmodule MarkevichMoney.MixProject do
       {:excoveralls, "~> 0.10", only: :test},
       {:nadia, git: "https://github.com/zhyu/nadia.git"},
       {:table_rex, "~> 2.0.0"},
-      {:timex, "~> 3.5"}
+      {:timex, "~> 3.5"},
+      {:receivex, "~> 0.8", github: "maartenvanvliet/receivex"}
     ]
   end
 

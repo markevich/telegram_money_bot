@@ -49,6 +49,7 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
 #
 config :markevich_money, MarkevichMoneyWeb.Endpoint, server: true
 config :nadia, token: Helpers.get_env("TELEGRAM_TOKEN")
+config :markevich_money, mailgun_api_key: Helpers.get_env("MAILGUN_API_KEY")
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.
