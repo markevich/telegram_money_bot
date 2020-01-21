@@ -7,7 +7,7 @@ defmodule MarkevichMoney.Pipelines.Stats do
     callback_data
     |> Map.from_struct()
     |> Map.put(:stat_from, Timex.shift(Timex.now(), days: -7))
-    |> Map.put(:stat_to, Timex.shift(Timex.now(), days: 1)
+    |> Map.put(:stat_to, Timex.shift(Timex.now(), days: 1))
     |> call()
   end
 
