@@ -85,8 +85,8 @@ defmodule MarkevichMoney.Pipelines.Stats do
     if Enum.empty?(transactions) do
       "Отсутствуют транзакции за период с #{from} по #{to}."
     else
-      sum = Enum.reduce(transactions, 0, fn ({amount, _category}, acc) -> acc + Decimal.to_float(amount) end)
-      header = ["Всего:", sum]
+      total = Enum.reduce(transactions, 0, fn ({amount, _category}, acc) -> acc + Decimal.to_float(amount) end)
+      header = ["Всего:", Float.ceil(total, 2)]
 
       table =
         transactions
