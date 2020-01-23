@@ -1,4 +1,5 @@
 defmodule MarkevichMoneyWeb.BotController do
+  require Logger
   use MarkevichMoneyWeb, :controller
   alias MarkevichMoney.{CallbackData, MessageData, Pipelines}
 
@@ -33,8 +34,21 @@ defmodule MarkevichMoneyWeb.BotController do
         conn,
         %{"message" => %{"text" => input_message, "chat" => %{"id" => chat_id}}}
       ) do
-    %MessageData{message: input_message, chat_id: chat_id}
-    |> Pipelines.call()
+
+    try do
+      %MessageData{message: input_message, chat_id: chat_id}
+      |> Pipelines.call()
+    rescue
+      e ->
+        exception_message = Exception.message(e)
+        Logger.error(Exception.format(:error, e, __STACKTRACE__))
+        message = "Случилось что то страшное и я не смог обработать запрос. Детали в логах"
+
+        MarkevichMoney.Steps.Telegram.SendMessage.call(%{
+          output_message: message,
+          chat_id: chat_id
+        })
+    end
 
     json(conn, %{})
   end
