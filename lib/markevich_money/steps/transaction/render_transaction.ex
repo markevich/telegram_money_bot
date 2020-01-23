@@ -8,7 +8,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
   end
 
   defp render_table(transaction) do
-    category = if transaction.transaction_category, do: transaction.transaction_category.name
+    category = if transaction.transaction_category_id, do: transaction.transaction_category.name
 
     table =
       [
