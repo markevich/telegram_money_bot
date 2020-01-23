@@ -33,7 +33,7 @@ defmodule MarkevichMoney.Pipelines.Stats do
     callback_data
     |> Map.from_struct()
     |> Map.put(:stat_from, Timex.parse!("2000-01-01T00:00:00+0000", "{ISO:Extended}"))
-    |> Map.put(:stat_to, Timex.shift(Timex.now, days: 1))
+    |> Map.put(:stat_to, Timex.shift(Timex.now(), days: 1))
     |> call()
   end
 
@@ -85,7 +85,11 @@ defmodule MarkevichMoney.Pipelines.Stats do
     if Enum.empty?(transactions) do
       "Отсутствуют транзакции за период с #{from} по #{to}."
     else
-      total = Enum.reduce(transactions, 0, fn ({amount, _category}, acc) -> acc + Decimal.to_float(amount) end)
+      total =
+        Enum.reduce(transactions, 0, fn {amount, _category}, acc ->
+          acc + Decimal.to_float(amount)
+        end)
+
       header = ["Всего:", Float.ceil(total, 2)]
 
       table =

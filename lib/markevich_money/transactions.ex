@@ -43,7 +43,8 @@ defmodule MarkevichMoney.Transactions do
       where: transaction.datetime <= ^to,
       group_by: category.name,
       select: {sum(transaction.amount), category.name}
-    ) |> Repo.all()
+    )
+    |> Repo.all()
   end
 
   def predict_category_id(target) do

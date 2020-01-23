@@ -25,10 +25,20 @@ defmodule MarkevichMoney.Transactions.Transaction do
   end
 
   @doc false
-  def create_changeset(transaction \\ %Transaction{}) do
+  def create_changeset(transaction \\ %Transaction{}, attrs) do
     transaction
-    |> cast(%{}, [])
-    |> put_change(:status, "initial")
+    |> cast(attrs, [
+      :account,
+      :amount,
+      :target,
+      :account,
+      :currency_code,
+      :balance,
+      :type,
+      :datetime,
+      :transaction_category_id,
+      :lookup_hash
+    ])
   end
 
   def update_changeset(transaction, attrs) do
