@@ -33,7 +33,7 @@ defmodule MarkevichMoney.Pipelines.Stats do
     callback_data
     |> Map.from_struct()
     |> Map.put(:stat_from, Timex.parse!("2000-01-01T00:00:00+0000", "{ISO:Extended}"))
-    |> Map.put(:stat_to, Timex.now())
+    |> Map.put(:stat_to, Timex.shift(Timex.now, days: 1))
     |> call()
   end
 
