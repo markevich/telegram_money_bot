@@ -10,5 +10,4 @@ config :markevich_money, MarkevichMoney.Repo,
   pool_size: 10
 
 config :nadia, token: "bot token"
-
 config :mailgun, api_key: "api key"

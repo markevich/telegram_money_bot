@@ -9,6 +9,6 @@ defmodule MarkevichMoney.MailgunProcessor do
     [{_, to_email}] = mail.to
     [username, _rest] = String.split(to_email, "@")
 
-    %MessageData{message: input_message, username: username} |> Pipelines.call
+    %MessageData{message: input_message, username: username} |> Pipelines.call()
   end
 end

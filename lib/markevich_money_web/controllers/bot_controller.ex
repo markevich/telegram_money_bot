@@ -13,7 +13,7 @@ defmodule MarkevichMoneyWeb.BotController do
             "text" => message_text,
             "chat" => %{"id" => chat_id}
           }
-        },
+        }
       }) do
     callback_data = Jason.decode!(callback_data)
 
