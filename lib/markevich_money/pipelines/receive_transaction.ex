@@ -9,7 +9,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     ParseCurrencyCode,
     ParseDateTime,
     ParseTarget,
-    ParseType,
+    CalculateAmountSign,
     PredictCategory,
     RenderTransaction,
     UpdateTransaction
@@ -20,10 +20,10 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     |> Map.put(:parsed_attributes, %{})
     |> ParseAccount.call()
     |> ParseAmount.call()
+    |> CalculateAmountSign.call()
     |> ParseCurrencyCode.call()
     |> ParseBalance.call()
     |> ParseTarget.call()
-    |> ParseType.call()
     |> ParseDateTime.call()
     |> PredictCategory.call()
     |> FindOrCreateTransaction.call()

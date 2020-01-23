@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessage do
-  @regex ~r/\/add\s(?<amount>\d+)\s(?<target>\w+)/u
+  @regex ~r/\/add\s(?<amount>\d+\.?\d*)\s(?<target>\w+)/u
 
   def call(%{message: input_message} = payload) do
     payload
@@ -8,14 +8,14 @@ defmodule MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessage do
 
   defp extract_attrs(input_message) do
     result = Regex.named_captures(@regex, input_message)
+    {float_amount, _} = Float.parse(result["amount"])
 
     %{
-      amount: Decimal.new(result["amount"]),
+      amount: -float_amount,
       target: to_string(result["target"]),
       account: "manual",
       currency_code: "byn",
       balance: 0,
-      type: "outcome",
       datetime: DateTime.utc_now(),
       lookup_hash: Ecto.UUID.generate()
     }

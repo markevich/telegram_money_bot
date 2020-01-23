@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.ParseCurrencyCode do
-  @regex ~r/Сумма:.*\(?\d+\.\d+\s?(?<currency_code>\w+)\)?/
+  @regex ~r/Сумма:.*\(?\d+\.?\d*\s?(?<currency_code>\w+)\)?/
 
   def call(%{input_message: input_message} = payload) do
     payload
