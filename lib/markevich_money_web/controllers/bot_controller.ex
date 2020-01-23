@@ -40,7 +40,6 @@ defmodule MarkevichMoneyWeb.BotController do
       |> Pipelines.call()
     rescue
       e ->
-        exception_message = Exception.message(e)
         Logger.error(Exception.format(:error, e, __STACKTRACE__))
         message = "Случилось что то страшное и я не смог обработать запрос. Детали в логах"
 
