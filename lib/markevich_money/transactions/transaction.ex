@@ -33,7 +33,8 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :balance,
       :datetime,
       :transaction_category_id,
-      :lookup_hash
+      :lookup_hash,
+      :user_id
     ])
   end
 
