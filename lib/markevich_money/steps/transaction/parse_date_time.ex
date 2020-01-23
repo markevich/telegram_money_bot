@@ -4,11 +4,11 @@ defmodule MarkevichMoney.Steps.Transaction.ParseDateTime do
   def call(%{input_message: input_message} = payload) do
     payload
     |> Map.update!(:parsed_attributes, fn parsed_data ->
-      Map.put(parsed_data, :datetime, extract_account(input_message))
+      Map.put(parsed_data, :datetime, extract_datetime(input_message))
     end)
   end
 
-  defp extract_account(input_message) do
+  defp extract_datetime(input_message) do
     result = Regex.named_captures(@regex, input_message)
 
     ~s(#{result["year"]}-#{result["month"]}-#{result["day"]} #{result["time"]})

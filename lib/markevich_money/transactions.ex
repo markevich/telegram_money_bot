@@ -12,9 +12,9 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload([:transaction_category, :user])
   end
 
-  def upsert_transaction(user_id, account, type, amount, datetime) do
+  def upsert_transaction(user_id, account, amount, datetime) do
     lookup_hash =
-      :crypto.hash(:sha, "#{account}-#{type}-#{amount}-#{datetime}") |> Base.encode16()
+      :crypto.hash(:sha, "#{user_id}-#{account}-#{amount}-#{datetime}") |> Base.encode16()
 
     Repo.insert(
       %Transaction{user_id: user_id, lookup_hash: lookup_hash},
@@ -38,7 +38,7 @@ defmodule MarkevichMoney.Transactions do
       join: user in assoc(transaction, :user),
       join: category in assoc(transaction, :transaction_category),
       where: user.id == ^current_user.id,
-      where: transaction.type == "outcome",
+      where: transaction.amount < ^0,
       where: transaction.datetime > ^from,
       where: transaction.datetime <= ^to,
       group_by: category.name,

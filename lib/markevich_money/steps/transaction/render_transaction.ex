@@ -23,10 +23,10 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
     type =
-      case transaction.type do
-        "income" -> "Поступление"
-        "outcome" -> "Списание"
-        true -> "Неизвестно"
+      case Decimal.cmp(transaction.amount, 0) do
+        :gt -> "Поступление"
+        :lt -> "Списание"
+        :eq -> ""
       end
 
     """

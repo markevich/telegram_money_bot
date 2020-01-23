@@ -13,10 +13,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
     field :currency_code, :string
     field :balance, :decimal
     field :target, :string
-    field :type, :string
     field :lookup_hash, :string
-
-    field :status, :string
 
     belongs_to(:transaction_category, TransactionCategory)
     belongs_to(:user, User)
@@ -34,7 +31,6 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :account,
       :currency_code,
       :balance,
-      :type,
       :datetime,
       :transaction_category_id,
       :lookup_hash
@@ -50,9 +46,8 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :currency_code,
       :balance,
       :target,
-      :type,
       :transaction_category_id
     ])
-    |> validate_required([:account, :datetime, :amount, :currency_code, :balance, :target, :type])
+    |> validate_required([:account, :datetime, :amount, :currency_code, :balance, :target])
   end
 end
