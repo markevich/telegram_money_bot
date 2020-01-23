@@ -42,7 +42,8 @@ defmodule MarkevichMoney.Transactions do
       where: transaction.datetime > ^from,
       where: transaction.datetime <= ^to,
       group_by: category.name,
-      select: {sum(transaction.amount), category.name}
+      select: {sum(transaction.amount), category.name},
+      order_by: [asc: 1]
     )
     |> Repo.all()
   end

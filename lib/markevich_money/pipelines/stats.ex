@@ -89,13 +89,13 @@ defmodule MarkevichMoney.Pipelines.Stats do
         Enum.reduce(transactions, 0, fn {amount, _category}, acc ->
           acc + Decimal.to_float(amount)
         end)
+        |> abs()
 
       header = ["Всего:", Float.ceil(total, 2)]
 
       table =
         transactions
-        |> Enum.map(fn {amount, category_name} -> [category_name, Decimal.to_float(amount)] end)
-        |> Enum.sort(fn [_, amount1], [_, amount2] -> amount1 >= amount2 end)
+        |> Enum.map(fn {amount, category_name} -> [category_name, abs(Decimal.to_float(amount))] end)
         |> TableRex.Table.new(header)
         |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
