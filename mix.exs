@@ -60,7 +60,9 @@ defmodule MarkevichMoney.MixProject do
       {:nadia, git: "https://github.com/zhyu/nadia.git"},
       {:table_rex, "~> 2.0.0"},
       {:timex, "~> 3.5"},
-      {:receivex, "~> 0.8", github: "markevich/receivex"}
+      {:receivex, "~> 0.8", github: "markevich/receivex"},
+      {:mock, "~> 0.3.0", only: :test},
+      {:ex_machina, "~> 2.3", only: :test}
     ]
   end
 

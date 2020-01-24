@@ -1,5 +1,6 @@
 defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
   use Timex
+  alias MarkevichMoney.Transactions.Transaction
 
   def call(%{transaction: transaction} = payload) do
     payload
@@ -7,7 +8,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
     |> insert_buttons()
   end
 
-  defp render_table(transaction) do
+  defp render_table(%Transaction{} = transaction) do
     category = if transaction.transaction_category_id, do: transaction.transaction_category.name
 
     table =
@@ -26,7 +27,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       case Decimal.cmp(transaction.amount, 0) do
         :gt -> "Поступление"
         :lt -> "Списание"
-        :eq -> ""
+        true -> ""
       end
 
     """

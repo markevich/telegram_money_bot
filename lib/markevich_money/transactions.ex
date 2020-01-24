@@ -7,6 +7,11 @@ defmodule MarkevichMoney.Transactions do
 
   import Ecto.Query, only: [from: 2]
 
+  def list_transactions do
+    Transaction
+    |> Repo.all()
+  end
+
   def get_transaction!(id) do
     Transaction
     |> Repo.get!(id)
