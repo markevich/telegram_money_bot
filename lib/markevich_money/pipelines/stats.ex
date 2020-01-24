@@ -95,7 +95,9 @@ defmodule MarkevichMoney.Pipelines.Stats do
 
       table =
         transactions
-        |> Enum.map(fn {amount, category_name} -> [category_name, abs(Decimal.to_float(amount))] end)
+        |> Enum.map(fn {amount, category_name} ->
+          [category_name, abs(Decimal.to_float(amount))]
+        end)
         |> TableRex.Table.new(header)
         |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 

@@ -34,7 +34,6 @@ defmodule MarkevichMoneyWeb.BotController do
         conn,
         %{"message" => %{"text" => input_message, "chat" => %{"id" => chat_id}}}
       ) do
-
     try do
       %MessageData{message: input_message, chat_id: chat_id}
       |> Pipelines.call()
