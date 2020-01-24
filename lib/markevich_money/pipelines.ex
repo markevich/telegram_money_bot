@@ -1,5 +1,6 @@
 defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.{CallbackData, MessageData}
+  alias MarkevichMoney.Pipelines.AddTransaction, as: AddTransactionPipeline
   alias MarkevichMoney.Pipelines.ChooseCategory, as: ChooseCategoryPipeline
   alias MarkevichMoney.Pipelines.Compliment, as: ComplimentPipeline
   alias MarkevichMoney.Pipelines.Help, as: HelpPipeline
@@ -7,9 +8,8 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.Pipelines.SetCategory, as: SetCategoryPipeline
   alias MarkevichMoney.Pipelines.Start, as: StartPipeline
   alias MarkevichMoney.Pipelines.Stats, as: StatsPipeline
-  alias MarkevichMoney.Pipelines.AddTransaction, as: AddTransactionPipeline
-  alias MarkevichMoney.Users
   alias MarkevichMoney.Steps.Telegram.SendMessage
+  alias MarkevichMoney.Users
 
   def call(%CallbackData{chat_id: chat_id, current_user: nil} = callback_data)
       when is_integer(chat_id) do

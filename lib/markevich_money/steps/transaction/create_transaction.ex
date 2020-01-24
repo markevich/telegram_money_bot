@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Steps.Transaction.CreateTransaction do
+  alias MarkevichMoney.Repo
   alias MarkevichMoney.Transactions
   alias MarkevichMoney.Transactions.Transaction
-  alias MarkevichMoney.Repo
 
   def call(%{parsed_attributes: parsed_attributes} = payload) do
     payload
