@@ -24,6 +24,7 @@ defmodule MarkevichMoney.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import MarkevichMoney.DataCase
+      import MarkevichMoney.Factory
     end
   end
 

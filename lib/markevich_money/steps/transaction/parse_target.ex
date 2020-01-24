@@ -11,6 +11,6 @@ defmodule MarkevichMoney.Steps.Transaction.ParseTarget do
   defp extract_account(input_message) do
     result = Regex.named_captures(@regex, input_message)
 
-    result["target"]
+    String.trim(result["target"])
   end
 end
