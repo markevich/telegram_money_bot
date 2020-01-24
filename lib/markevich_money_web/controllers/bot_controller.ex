@@ -2,7 +2,7 @@ defmodule MarkevichMoneyWeb.BotController do
   require Logger
   use MarkevichMoneyWeb, :controller
   alias MarkevichMoney.{CallbackData, MessageData, Pipelines}
-  alias MarkevichMoney.Steps.Telegram
+  alias MarkevichMoney.Steps.Telegram.SendMessage
 
   action_fallback MarkevichMoneyWeb.FallbackController
 
