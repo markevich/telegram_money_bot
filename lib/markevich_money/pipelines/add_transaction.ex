@@ -1,8 +1,8 @@
 defmodule MarkevichMoney.Pipelines.AddTransaction do
   alias MarkevichMoney.Steps.Transaction.{
+    CreateTransaction,
     ParseCustomTransactionMessage,
     PredictCategory,
-    CreateTransaction,
     RenderTransaction
   }
 

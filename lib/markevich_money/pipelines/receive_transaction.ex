@@ -2,6 +2,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
   alias MarkevichMoney.Steps.Telegram.{SendMessage}
 
   alias MarkevichMoney.Steps.Transaction.{
+    CalculateAmountSign,
     FindOrCreateTransaction,
     ParseAccount,
     ParseAmount,
@@ -9,7 +10,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     ParseCurrencyCode,
     ParseDateTime,
     ParseTarget,
-    CalculateAmountSign,
     PredictCategory,
     RenderTransaction,
     UpdateTransaction

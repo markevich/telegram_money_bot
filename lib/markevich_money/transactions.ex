@@ -8,7 +8,8 @@ defmodule MarkevichMoney.Transactions do
   import Ecto.Query, only: [from: 2]
 
   def get_transaction!(id) do
-    Repo.get!(Transaction, id)
+    Transaction
+    |> Repo.get!(id)
     |> Repo.preload([:transaction_category, :user])
   end
 
@@ -24,7 +25,7 @@ defmodule MarkevichMoney.Transactions do
     )
   end
 
-  def get_categories(), do: Repo.all(TransactionCategory)
+  def get_categories, do: Repo.all(TransactionCategory)
 
   def update_transaction(%Transaction{} = transaction, attrs) do
     {:ok, _} =
@@ -34,18 +35,20 @@ defmodule MarkevichMoney.Transactions do
   end
 
   def stats(current_user, from, to) do
-    from(transaction in Transaction,
-      join: user in assoc(transaction, :user),
-      join: category in assoc(transaction, :transaction_category),
-      where: user.id == ^current_user.id,
-      where: transaction.amount < ^0,
-      where: transaction.datetime > ^from,
-      where: transaction.datetime <= ^to,
-      group_by: category.name,
-      select: {sum(transaction.amount), category.name},
-      order_by: [asc: 1]
-    )
-    |> Repo.all()
+    query =
+      from(transaction in Transaction,
+        join: user in assoc(transaction, :user),
+        join: category in assoc(transaction, :transaction_category),
+        where: user.id == ^current_user.id,
+        where: transaction.amount < ^0,
+        where: transaction.datetime > ^from,
+        where: transaction.datetime <= ^to,
+        group_by: category.name,
+        select: {sum(transaction.amount), category.name},
+        order_by: [asc: 1]
+      )
+
+    Repo.all(query)
   end
 
   def predict_category_id(target) do

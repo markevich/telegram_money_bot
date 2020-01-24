@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Pipelines.Stats do
-  alias MarkevichMoney.Steps.Telegram.{AnswerCallback, UpdateMessage, SendMessage}
+  alias MarkevichMoney.Steps.Telegram.{AnswerCallback, SendMessage, UpdateMessage}
   alias MarkevichMoney.Transactions
   alias MarkevichMoney.{CallbackData, MessageData}
 
@@ -89,9 +89,8 @@ defmodule MarkevichMoney.Pipelines.Stats do
         Enum.reduce(transactions, 0, fn {amount, _category}, acc ->
           acc + Decimal.to_float(amount)
         end)
-        |> abs()
 
-      header = ["Всего:", Float.ceil(total, 2)]
+      header = ["Всего:", Float.ceil(abs(total), 2)]
 
       table =
         transactions
