@@ -17,23 +17,22 @@ defmodule MarkevichMoney.Pipelines do
     call(%CallbackData{callback_data | current_user: user})
   end
 
-  def call(%CallbackData{callback_data: %{"pipeline" => pipeline}} = callback_data) do
-    case pipeline do
-      "choose_category" ->
-        callback_data
-        |> ChooseCategoryPipeline.call()
+  def call(%CallbackData{callback_data: %{"pipeline" => "choose_category"}} = callback_data) do
+    callback_data
+    |> ChooseCategoryPipeline.call()
+  end
 
-      "stats" ->
-        callback_data
-        |> StatsPipeline.call()
+  def call(%CallbackData{callback_data: %{"pipeline" => "stats"}} = callback_data) do
+    callback_data
+    |> StatsPipeline.call()
+  end
 
-      "set_category" ->
-        callback_data
-        |> SetCategoryPipeline.call()
+  def call(%CallbackData{callback_data: %{"pipeline" => "set_category"}} = callback_data) do
+    callback_data
+    |> SetCategoryPipeline.call()
+  end
 
-      _ ->
-        nil
-    end
+  def call(%CallbackData{callback_data: %{"pipeline" => _}}) do
   end
 
   def call(%MessageData{current_user: nil, username: username} = message_data)
