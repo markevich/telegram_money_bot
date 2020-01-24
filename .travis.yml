@@ -14,9 +14,6 @@ env:
 services:
   - postgresql
 
-addons:
-  postgresql: "11.0"
-
 install:
   - cp config/test.secret.example.exs config/test.secret.exs
   - mix local.rebar --force
