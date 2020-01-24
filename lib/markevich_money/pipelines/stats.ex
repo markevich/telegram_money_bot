@@ -59,7 +59,7 @@ defmodule MarkevichMoney.Pipelines.Stats do
         ],
         [
           %Nadia.Model.InlineKeyboardButton{
-            text: "Предыдущий месяц",
+            text: "Прошлый месяц",
             callback_data: Jason.encode!(%{pipeline: :stats, type: :p_month})
           },
           %Nadia.Model.InlineKeyboardButton{

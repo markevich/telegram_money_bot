@@ -46,7 +46,7 @@ defmodule MarkevichMoney.Transactions do
         join: category in assoc(transaction, :transaction_category),
         where: user.id == ^current_user.id,
         where: transaction.amount < ^0,
-        where: transaction.datetime > ^from,
+        where: transaction.datetime >= ^from,
         where: transaction.datetime <= ^to,
         group_by: category.name,
         select: {sum(transaction.amount), category.name},
