@@ -61,8 +61,8 @@ defmodule MarkevichMoney.MixProject do
       {:table_rex, "~> 2.0.0"},
       {:timex, "~> 3.5"},
       {:receivex, "~> 0.8", github: "markevich/receivex"},
-      {:mock, "~> 0.3.0", only: :test},
-      {:ex_machina, "~> 2.3", only: :test}
+      {:ex_machina, "~> 2.3", only: :test},
+      {:mecks_unit, "~> 0.1.8", only: :test}
     ]
   end
 

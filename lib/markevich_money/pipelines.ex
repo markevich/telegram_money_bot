@@ -2,7 +2,6 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.{CallbackData, MessageData}
   alias MarkevichMoney.Pipelines.AddTransaction, as: AddTransactionPipeline
   alias MarkevichMoney.Pipelines.ChooseCategory, as: ChooseCategoryPipeline
-  alias MarkevichMoney.Pipelines.Compliment, as: ComplimentPipeline
   alias MarkevichMoney.Pipelines.Help, as: HelpPipeline
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
   alias MarkevichMoney.Pipelines.SetCategory, as: SetCategoryPipeline
@@ -13,17 +12,13 @@ defmodule MarkevichMoney.Pipelines do
 
   def call(%CallbackData{chat_id: chat_id, current_user: nil} = callback_data)
       when is_integer(chat_id) do
-    user = Users.get_user_by_chat_id(chat_id)
+    user = Users.get_user_by_chat_id!(chat_id)
 
     call(%CallbackData{callback_data | current_user: user})
   end
 
   def call(%CallbackData{callback_data: %{"pipeline" => pipeline}} = callback_data) do
     case pipeline do
-      "compliment" ->
-        callback_data
-        |> ComplimentPipeline.call()
-
       "choose_category" ->
         callback_data
         |> ChooseCategoryPipeline.call()

@@ -1,9 +1,14 @@
 defmodule MarkevichMoney.MailgunProcessorTest do
   @moduledoc false
-  import Mock
   use MarkevichMoney.DataCase, async: true
+  use MecksUnit.Case
   alias MarkevichMoney.MailgunProcessor
   alias MarkevichMoney.Transactions
+
+  defmock Nadia, preserve: true do
+    def send_message(_chat_id, _message, _opts) do
+    end
+  end
 
   describe "when mail is from known user" do
     setup do
@@ -22,53 +27,51 @@ defmodule MarkevichMoney.MailgunProcessorTest do
       {:ok, %{mail: mail, user: user}}
     end
 
-    test "correctly renders telegram message", %{mail: mail, user: user} do
-      with_mock Nadia, send_message: fn _chat_id, _message, _opts -> "" end do
-        MailgunProcessor.process(mail)
+    mocked_test "correctly renders telegram message", %{mail: mail, user: user} do
+      MailgunProcessor.process(mail)
 
-        transactions = Transactions.list_transactions()
-        [transaction] = transactions
+      transactions = Transactions.list_transactions()
+      [transaction] = transactions
 
-        assert("BY06ALFA30143400080030270000" = transaction.account)
-        assert(Decimal.from_float(-18.26) == transaction.amount)
-        assert(Decimal.from_float(450.56) == transaction.balance)
-        assert("BYN" = transaction.currency_code)
-        assert("BLR/MINSK/PIZZERIA" = transaction.target)
-        assert(user.id == transaction.user_id)
+      assert("BY06ALFA30143400080030270000" = transaction.account)
+      assert(Decimal.from_float(-18.26) == transaction.amount)
+      assert(Decimal.from_float(450.56) == transaction.balance)
+      assert("BYN" = transaction.currency_code)
+      assert("BLR/MINSK/PIZZERIA" = transaction.target)
+      assert(user.id == transaction.user_id)
 
-        expected_message = """
-        Транзакция №#{transaction.id}(Списание)
-        ```
+      expected_message = """
+      Транзакция №#{transaction.id}(Списание)
+      ```
 
-         Сумма       -18.26 BYN
-         Категория
-         Кому        BLR/MINSK/PIZZERIA
-         Остаток     450.56
-         Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Сумма       -18.26 BYN
+       Категория
+       Кому        BLR/MINSK/PIZZERIA
+       Остаток     450.56
+       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
-        ```
-        """
+      ```
+      """
 
-        assert_called(
-          Nadia.send_message(
-            user.telegram_chat_id,
-            expected_message,
-            reply_markup: %Nadia.Model.InlineKeyboardMarkup{
-              inline_keyboard: [
-                [
-                  %Nadia.Model.InlineKeyboardButton{
-                    callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
-                    switch_inline_query: nil,
-                    text: "Выбрать категорию",
-                    url: nil
-                  }
-                ]
+      assert_called(
+        Nadia.send_message(
+          user.telegram_chat_id,
+          expected_message,
+          reply_markup: %Nadia.Model.InlineKeyboardMarkup{
+            inline_keyboard: [
+              [
+                %Nadia.Model.InlineKeyboardButton{
+                  callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+                  switch_inline_query: nil,
+                  text: "Выбрать категорию",
+                  url: nil
+                }
               ]
-            },
-            parse_mode: "Markdown"
-          )
+            ]
+          },
+          parse_mode: "Markdown"
         )
-      end
+      )
     end
   end
 
@@ -88,12 +91,10 @@ defmodule MarkevichMoney.MailgunProcessorTest do
     end
 
     test "do nothing", %{mail: mail} do
-      with_mock Nadia, send_message: fn _chat_id, _message, _opts -> "" end do
-        MailgunProcessor.process(mail)
+      MailgunProcessor.process(mail)
 
-        transactions = Transactions.list_transactions()
-        assert [] = transactions
-      end
+      transactions = Transactions.list_transactions()
+      assert [] = transactions
     end
   end
 end
