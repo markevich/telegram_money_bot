@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.ParseAccount do
-  @regex ~r/(?<account>\w{2}\d{2}\w{4}\d{20})/
+  @regex ~r/(?<account>\w{2}\d{2}\w{4}.{20})/
 
   def call(%{input_message: input_message} = payload) do
     payload
