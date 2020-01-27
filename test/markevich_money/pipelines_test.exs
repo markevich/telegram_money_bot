@@ -629,4 +629,20 @@ defmodule MarkevichMoney.PipelinesTest do
       assert_called(Nadia.send_message(user.telegram_chat_id, expected_message, parse_mode: "Markdown"))
     end
   end
+
+  describe "/start message" do
+    setup do
+      user = insert(:user)
+
+      %{user: user}
+    end
+
+    mocked_test "Renders help message", %{user: user} do
+      expected_message = "FIXME or REMOVEME"
+
+      Pipelines.call(%MessageData{message: "/start", chat_id: user.telegram_chat_id})
+
+      assert_called(Nadia.send_message(user.telegram_chat_id, expected_message, parse_mode: "Markdown"))
+    end
+  end
 end
