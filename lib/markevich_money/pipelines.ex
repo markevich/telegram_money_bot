@@ -41,6 +41,8 @@ defmodule MarkevichMoney.Pipelines do
 
     if user do
       call(%MessageData{message_data | current_user: user})
+    else
+      message_data
     end
   end
 
@@ -87,6 +89,7 @@ defmodule MarkevichMoney.Pipelines do
     AddTransactionPipeline.call(%MessageData{message: message, current_user: user})
   end
 
-  def call(%MessageData{message: _message}) do
+  def call(%MessageData{message: _message} = message_data) do
+    message_data
   end
 end
