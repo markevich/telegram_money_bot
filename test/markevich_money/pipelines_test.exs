@@ -56,7 +56,7 @@ defmodule MarkevichMoney.PipelinesTest do
        }}
     end
 
-    mocked_test "sets the transaction category", context do
+    mocked_test "renders categories to choose from", context do
       transaction = context.transaction
       Pipelines.call(context.callback_data)
 
@@ -90,6 +90,86 @@ defmodule MarkevichMoney.PipelinesTest do
               text: context.category2.name,
               url: nil
             }
+          ]
+        ]
+      }
+
+      assert_called(
+        Nadia.edit_message_text(
+          context.user.telegram_chat_id,
+          context.message_id,
+          nil,
+          expected_message,
+          reply_markup: expected_markup,
+          parse_mode: "Markdown"
+        )
+      )
+
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+    end
+  end
+
+  describe "set_category callback" do
+    setup do
+      user = insert(:user)
+      transaction = insert(:transaction)
+      insert(:transaction_category, name: "Food")
+      category = insert(:transaction_category, name: "Home")
+
+      message_id = 123
+      callback_id = 234
+
+      callback_data = %CallbackData{
+        callback_data: %{
+          "id" => transaction.id,
+          "pipeline" => "set_category",
+          "c_id" => category.id
+        },
+        callback_id: callback_id,
+        chat_id: user.telegram_chat_id,
+        current_user: user,
+        message_id: message_id,
+        message_text: "doesn't matter"
+      }
+
+      {:ok,
+       %{
+         user: user,
+         callback_data: callback_data,
+         chosen_category: category,
+         transaction: transaction,
+         message_id: message_id,
+         callback_id: callback_id
+       }}
+    end
+
+    mocked_test "sets the transaction category", context do
+      transaction = context.transaction
+      Pipelines.call(context.callback_data)
+
+      expected_message = """
+      Транзакция №#{transaction.id}(Списание)
+      ```
+
+       Сумма       #{transaction.amount} #{transaction.currency_code}
+       Категория   #{context.chosen_category.name}
+       Кому        #{transaction.target}
+       Остаток     #{transaction.balance}
+       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+
+      ```
+      """
+
+      expected_markup = %Nadia.Model.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data:
+                "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+              switch_inline_query: nil,
+              text: "Выбрать категорию",
+              url: nil
+            },
           ]
         ]
       }
