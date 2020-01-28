@@ -32,7 +32,8 @@ defmodule MarkevichMoney.Pipelines do
     |> SetCategoryPipeline.call()
   end
 
-  def call(%CallbackData{callback_data: %{"pipeline" => _}}) do
+  def call(%CallbackData{callback_data: %{"pipeline" => _}} = callback_data) do
+    callback_data
   end
 
   def call(%MessageData{current_user: nil, username: username} = message_data)
