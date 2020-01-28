@@ -550,7 +550,7 @@ defmodule MarkevichMoney.PipelinesTest do
     test "does nothing", %{callback_data: callback_data} do
       result = Pipelines.call(callback_data)
 
-      assert(result == nil)
+      assert(result == callback_data)
     end
   end
 
@@ -608,6 +608,26 @@ defmodule MarkevichMoney.PipelinesTest do
       Pipelines.call(%MessageData{chat_id: -1, current_user: nil})
 
       assert_called(Nadia.send_message(-1, "Unauthorized", parse_mode: "Markdown"))
+    end
+  end
+
+  describe "callback data with chat_id" do
+    setup do
+      user = insert(:user)
+
+      %{user: user}
+    end
+
+    test "puts current user into payload when user exists", %{user: user} do
+      callback_data = %CallbackData{
+        chat_id: user.telegram_chat_id,
+        callback_data: %{"pipeline" => "_unexisting"}
+      }
+
+      result = Pipelines.call(callback_data)
+
+      assert(%{current_user: current_user} = result)
+      assert(current_user == user)
     end
   end
 
@@ -680,6 +700,224 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория
        Кому        #{transaction.target}
        Остаток     #{transaction.balance}
+       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+
+      ```
+      """
+
+      expected_reply_markup = %Nadia.Model.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+              switch_inline_query: nil,
+              text: "Выбрать категорию",
+              url: nil
+            }
+          ]
+        ]
+      }
+
+      assert_called(
+        Nadia.send_message(user.telegram_chat_id, expected_message,
+          reply_markup: expected_reply_markup,
+          parse_mode: "Markdown"
+        )
+      )
+    end
+  end
+
+  describe "Карта message" do
+    setup do
+      user = insert(:user)
+      amount = 11.30
+      balance = 522.05
+      target = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
+      currency = "BYN"
+
+      input_message = """
+      Карта 5.9737
+      Со счёта: BY06ALFA30143400080030270000
+      Оплата товаров/услуг
+      Успешно
+      Сумма:#{amount} #{currency}
+      Остаток:#{balance} #{currency}
+      На время:15:14:35
+      #{target}
+      28.01.2020 15:14:35
+      """
+
+      %{
+        user: user,
+        input_message: input_message,
+        amount: amount,
+        currency: currency,
+        balance: balance,
+        target: target
+      }
+    end
+
+    mocked_test "insert and renders transaction", %{user: user} = context do
+      Pipelines.call(%MessageData{message: context.input_message, chat_id: user.telegram_chat_id})
+
+      user_id = user.id
+      amount = -context.amount
+
+      query =
+        from(transaction in Transaction,
+          where: transaction.user_id == ^user_id,
+          where: transaction.amount == ^amount
+        )
+
+      transaction = Repo.one!(query)
+
+      expected_message = """
+      Транзакция №#{transaction.id}(Списание)
+      ```
+
+       Сумма       #{amount} #{context.currency}
+       Категория
+       Кому        #{context.target}
+       Остаток     #{context.balance}
+       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+
+      ```
+      """
+
+      expected_reply_markup = %Nadia.Model.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+              switch_inline_query: nil,
+              text: "Выбрать категорию",
+              url: nil
+            }
+          ]
+        ]
+      }
+
+      assert_called(
+        Nadia.send_message(user.telegram_chat_id, expected_message,
+          reply_markup: expected_reply_markup,
+          parse_mode: "Markdown"
+        )
+      )
+    end
+  end
+
+  describe "✉️ <click@alfa-bank.by> message" do
+    setup do
+      user = insert(:user)
+      amount = 11.30
+      balance = 522.05
+      target = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
+      currency = "BYN"
+
+      input_message = """
+      ✉️ <click@alfa-bank.by>
+      5.9737/Оплата товаров/услуг
+
+      Карта 5.9737
+      Со счёта: BY06ALFA30143400080030270000
+      Оплата товаров/услуг
+      Успешно
+      Сумма:#{amount} #{currency}
+      Остаток:#{balance} #{currency}
+      На время:15:14:35
+      #{target}
+      28.01.2020 15:14:35
+      """
+
+      %{
+        user: user,
+        input_message: input_message,
+        amount: amount,
+        currency: currency,
+        balance: balance,
+        target: target
+      }
+    end
+
+    mocked_test "insert and renders transaction", %{user: user} = context do
+      Pipelines.call(%MessageData{message: context.input_message, chat_id: user.telegram_chat_id})
+
+      user_id = user.id
+      amount = -context.amount
+
+      query =
+        from(transaction in Transaction,
+          where: transaction.user_id == ^user_id,
+          where: transaction.amount == ^amount
+        )
+
+      transaction = Repo.one!(query)
+
+      expected_message = """
+      Транзакция №#{transaction.id}(Списание)
+      ```
+
+       Сумма       #{amount} #{context.currency}
+       Категория
+       Кому        #{context.target}
+       Остаток     #{context.balance}
+       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+
+      ```
+      """
+
+      expected_reply_markup = %Nadia.Model.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+              switch_inline_query: nil,
+              text: "Выбрать категорию",
+              url: nil
+            }
+          ]
+        ]
+      }
+
+      assert_called(
+        Nadia.send_message(user.telegram_chat_id, expected_message,
+          reply_markup: expected_reply_markup,
+          parse_mode: "Markdown"
+        )
+      )
+    end
+
+    mocked_test "insert and renders transaction when category is known",
+                %{user: user} = context do
+
+      category = insert(:transaction_category)
+
+      insert(:transaction_category_prediction,
+        prediction: context.target,
+        transaction_category_id: category.id
+      )
+
+      Pipelines.call(%MessageData{message: context.input_message, chat_id: user.telegram_chat_id})
+
+      user_id = user.id
+      amount = -context.amount
+
+      query =
+        from(transaction in Transaction,
+          where: transaction.user_id == ^user_id,
+          where: transaction.amount == ^amount
+        )
+
+      transaction = Repo.one!(query)
+
+      expected_message = """
+      Транзакция №#{transaction.id}(Списание)
+      ```
+
+       Сумма       #{amount} #{context.currency}
+       Категория   #{category.name}
+       Кому        #{context.target}
+       Остаток     #{context.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
