@@ -11,9 +11,10 @@ defmodule MarkevichMoney.Steps.Transaction.CalculateAmountSign do
   defp sign(input_message) do
     result = Regex.named_captures(@regex, input_message)
 
-    cond do
-      String.trim(result["income"]) != "" -> 1
-      String.trim(result["outcome"]) != "" -> -1
+    if String.trim(result["income"]) != "" do
+      1
+    else
+      -1
     end
   end
 end
