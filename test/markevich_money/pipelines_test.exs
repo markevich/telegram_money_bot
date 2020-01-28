@@ -7,6 +7,7 @@ defmodule MarkevichMoney.PipelinesTest do
   alias MarkevichMoney.Pipelines
   alias MarkevichMoney.Transactions.Transaction
 
+  # credo:disable-for-this-file Credo.Check.Design.DuplicatedCode
   defmock Nadia, preserve: true do
     def send_message(_chat_id, _message, _opts) do
     end
