@@ -25,8 +25,8 @@ defmodule MarkevichMoney.Factory do
       name: sequence(:name, &"category#{&1}")
     }
   end
+
   def transaction_category_prediction_factory do
-    %MarkevichMoney.Transactions.TransactionCategoryPrediction{
-    }
+    %MarkevichMoney.Transactions.TransactionCategoryPrediction{}
   end
 end

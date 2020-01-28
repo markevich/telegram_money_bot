@@ -14,7 +14,6 @@ defmodule MarkevichMoney.Steps.Transaction.CalculateAmountSign do
     cond do
       String.trim(result["income"]) != "" -> 1
       String.trim(result["outcome"]) != "" -> -1
-      true -> -1
     end
   end
 end
