@@ -5,6 +5,7 @@ defmodule MarkevichMoney.PipelinesTest do
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
+  alias MarkevichMoney.Transactions.Transaction
 
   defmock Nadia, preserve: true do
     def send_message(_chat_id, _message, _opts) do
@@ -659,12 +660,49 @@ defmodule MarkevichMoney.PipelinesTest do
     end
 
     mocked_test "insert and renders transaction", %{user: user} do
-      expected_message = "FIXME or REMOVEME"
+      Pipelines.call(%MessageData{message: "/add 50 something", chat_id: user.telegram_chat_id})
 
-      Pipelines.call(%MessageData{message: "/start", chat_id: user.telegram_chat_id})
+      user_id = user.id
+
+      query =
+        from(transaction in Transaction,
+          where: transaction.user_id == ^user_id,
+          where: transaction.amount == ^(-50)
+        )
+
+      transaction = Repo.one!(query)
+
+      expected_message = """
+      Транзакция №#{transaction.id}(Списание)
+      ```
+
+       Сумма       #{transaction.amount} #{transaction.currency_code}
+       Категория
+       Кому        #{transaction.target}
+       Остаток     #{transaction.balance}
+       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+
+      ```
+      """
+
+      expected_reply_markup = %Nadia.Model.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+              switch_inline_query: nil,
+              text: "Выбрать категорию",
+              url: nil
+            }
+          ]
+        ]
+      }
 
       assert_called(
-        Nadia.send_message(user.telegram_chat_id, expected_message, parse_mode: "Markdown")
+        Nadia.send_message(user.telegram_chat_id, expected_message,
+          reply_markup: expected_reply_markup,
+          parse_mode: "Markdown"
+        )
       )
     end
   end
