@@ -1070,6 +1070,85 @@ defmodule MarkevichMoney.PipelinesTest do
     end
   end
 
+    describe "Карта message with income without time" do
+    setup do
+      user = insert(:user)
+      amount = 11.30
+      balance = 522.05
+      target = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
+      currency = "BYN"
+
+      input_message = """
+      Карта 5.9737
+      На счёт: BY06ALFA30143400080030270000
+      Перевод (Поступление)
+      Успешно
+      Сумма:#{amount} #{currency}
+      Остаток:#{balance} #{currency}
+      На время:15:14:35
+      #{target}
+      28.01.2020
+      """
+
+      %{
+        user: user,
+        input_message: input_message,
+        amount: amount,
+        currency: currency,
+        balance: balance,
+        target: target
+      }
+    end
+
+    mocked_test "insert and renders transaction", %{user: user} = context do
+      Pipelines.call(%MessageData{message: context.input_message, chat_id: user.telegram_chat_id})
+
+      user_id = user.id
+      amount = context.amount
+
+      query =
+        from(transaction in Transaction,
+          where: transaction.user_id == ^user_id,
+          where: transaction.amount == ^amount
+        )
+
+      transaction = Repo.one!(query)
+
+      expected_message = """
+      Транзакция №#{transaction.id}(Поступление)
+      ```
+
+       Сумма       #{amount} #{context.currency}
+       Категория
+       Кому        #{context.target}
+       Остаток     #{context.balance}
+       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+
+      ```
+      """
+
+      expected_reply_markup = %Nadia.Model.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+              switch_inline_query: nil,
+              text: "Выбрать категорию",
+              url: nil
+            }
+          ]
+        ]
+      }
+
+      assert_called(
+        Nadia.send_message(user.telegram_chat_id, expected_message,
+          reply_markup: expected_reply_markup,
+          parse_mode: "Markdown"
+        )
+      )
+    end
+  end
+
   describe "✉️ <click@alfa-bank.by> message" do
     setup do
       user = insert(:user)
