@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.ParseTarget do
-  @regex ~r/На время.*\n(?<target>.*)\n/
+  @regex ~r/На время.*\n(?<target>.*)\n?/
 
   def call(%{input_message: input_message} = payload) do
     payload

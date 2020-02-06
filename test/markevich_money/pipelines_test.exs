@@ -1070,12 +1070,11 @@ defmodule MarkevichMoney.PipelinesTest do
     end
   end
 
-    describe "Карта message with income without time" do
+  describe "Карта message with income without time" do
     setup do
       user = insert(:user)
       amount = 11.30
       balance = 522.05
-      target = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
       currency = "BYN"
 
       input_message = """
@@ -1086,7 +1085,6 @@ defmodule MarkevichMoney.PipelinesTest do
       Сумма:#{amount} #{currency}
       Остаток:#{balance} #{currency}
       На время:15:14:35
-      #{target}
       28.01.2020
       """
 
@@ -1095,8 +1093,7 @@ defmodule MarkevichMoney.PipelinesTest do
         input_message: input_message,
         amount: amount,
         currency: currency,
-        balance: balance,
-        target: target
+        balance: balance
       }
     end
 
@@ -1120,7 +1117,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
        Сумма       #{amount} #{context.currency}
        Категория
-       Кому        #{context.target}
+       Кому        28.01.2020
        Остаток     #{context.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
