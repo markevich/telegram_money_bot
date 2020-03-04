@@ -6,6 +6,17 @@ defmodule MarkevichMoney.Release do
     |> changelog()
     |> send_to_all_users()
   end
+
+  def changelog("0.1.2") do
+    """
+    🔥🔥🔥🔥🔥🔥🔥
+
+    MoneyBot updated to version `0.1.2` 🍾🍾
+
+      Fixes:
+        - Reduce padding for category statistics table
+    """
+  end
   def changelog("0.1.1") do
     """
     MoneyBot updated to version `0.1.1` 🍾🍾

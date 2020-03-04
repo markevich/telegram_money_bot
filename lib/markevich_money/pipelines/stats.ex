@@ -198,8 +198,6 @@ defmodule MarkevichMoney.Pipelines.Stats do
         |> abs()
         |> Float.ceil(2)
 
-      header = ["Всего:", total]
-
       table =
         transactions
         |> Enum.map(fn {target, amount, datetime} ->
@@ -207,12 +205,14 @@ defmodule MarkevichMoney.Pipelines.Stats do
           datetime = Timex.format!(datetime, "{0D}.{0M} {h24}:{m}")
           [number, target, datetime]
         end)
-        |> TableRex.Table.new(header)
+        |> TableRex.Table.new()
+        |> TableRex.Table.put_column_meta(:all, align: :left, padding: 1)
         |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
       result = """
       Расходы "#{category.name}" c `#{from}` по `#{to}`:
       ```
+        Всего: #{total}
 
       #{table}
       ```
