@@ -16,4 +16,8 @@ defmodule MarkevichMoney.Users do
   def get_user_by_username(username) do
     Repo.one(from u in User, where: u.name == ^String.downcase(username))
   end
+
+  def all_users() do
+    Repo.all(User)
+  end
 end
