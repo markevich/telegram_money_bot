@@ -31,6 +31,7 @@ defmodule MarkevichMoney.Transactions do
   end
 
   def get_categories, do: Repo.all(TransactionCategory)
+  def get_category!(id), do: Repo.get(TransactionCategory, id)
 
   def update_transaction(%Transaction{} = transaction, attrs) do
     {:ok, _} =
@@ -48,10 +49,25 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.amount < ^0,
         where: transaction.datetime >= ^from,
         where: transaction.datetime <= ^to,
-        group_by: category.name,
-        select: {sum(transaction.amount), category.name},
+        group_by: [category.name, category.id],
+        select: {sum(transaction.amount), category.name, category.id},
         order_by: [asc: 1]
       )
+
+    Repo.all(query)
+  end
+
+  def stats(current_user, from, to, category_id) do
+    query = from(transaction in Transaction,
+      join: user in assoc(transaction, :user),
+      where: user.id == ^current_user.id,
+      where: transaction.amount < ^0,
+      where: transaction.datetime >= ^from,
+      where: transaction.datetime <= ^to,
+      where: transaction.transaction_category_id == ^category_id,
+      select: {transaction.target, transaction.amount, transaction.datetime},
+      order_by: [asc: transaction.datetime]
+    )
 
     Repo.all(query)
   end
