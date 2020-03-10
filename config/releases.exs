@@ -42,6 +42,16 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
   ],
   secret_key_base: secret_key_base
 
+config :sentry,
+  dsn: Helpers.get_env("SENTRY_URL"),
+  environment_name: :prod,
+  enable_source_code_context: true,
+  root_source_code_path: File.cwd!,
+  tags: %{
+    env: "production"
+  },
+  included_environments: [:prod]
+
 # ## Using releases (Elixir v1.9+)
 #
 # If you are doing OTP releases, you need to instruct Phoenix
@@ -50,6 +60,7 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
 config :markevich_money, MarkevichMoneyWeb.Endpoint, server: true
 config :nadia, token: Helpers.get_env("TELEGRAM_TOKEN")
 config :markevich_money, mailgun_api_key: Helpers.get_env("MAILGUN_API_KEY")
+
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.

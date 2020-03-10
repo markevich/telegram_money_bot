@@ -1,5 +1,9 @@
 defmodule MarkevichMoneyWeb.Router do
   use MarkevichMoneyWeb, :router
+  #sentry
+  use Plug.ErrorHandler
+  use Sentry.Plug
+  #
 
   pipeline :browser do
     plug :accepts, ["html"]

@@ -7,6 +7,16 @@ defmodule MarkevichMoney.Release do
     |> send_to_all_users()
   end
 
+  def changelog("0.1.3") do
+    """
+    🔥🔥🔥🔥🔥🔥🔥
+
+    MoneyBot updated to version `0.1.3` 🍾🍾
+
+      New:
+        - Added integration with https://sentry.io. Errors shall not pass!! [GH#15](https://github.com/markevich/markevich_money/issues/15)
+    """
+  end
   def changelog("0.1.2") do
     """
     🔥🔥🔥🔥🔥🔥🔥

@@ -4,7 +4,7 @@ defmodule MarkevichMoney.MixProject do
   def project do
     [
       app: :markevich_money,
-      version: "0.1.2",
+      version: "0.1.3",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -53,7 +53,6 @@ defmodule MarkevichMoney.MixProject do
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
@@ -62,7 +61,9 @@ defmodule MarkevichMoney.MixProject do
       {:timex, "~> 3.5"},
       {:receivex, "~> 0.8", github: "markevich/receivex"},
       {:ex_machina, "~> 2.3", only: :test},
-      {:mecks_unit, "~> 0.1.8", only: :test}
+      {:mecks_unit, "~> 0.1.8", only: :test},
+      {:sentry, "~> 7.0"},
+      {:jason, "~> 1.1"},
     ]
   end
 

@@ -1,5 +1,8 @@
 defmodule MarkevichMoneyWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :markevich_money
+  #sentry
+  use Sentry.Phoenix.Endpoint
+  #
 
   socket "/socket", MarkevichMoneyWeb.UserSocket,
     websocket: true,
