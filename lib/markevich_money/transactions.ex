@@ -58,16 +58,17 @@ defmodule MarkevichMoney.Transactions do
   end
 
   def stats(current_user, from, to, category_id) do
-    query = from(transaction in Transaction,
-      join: user in assoc(transaction, :user),
-      where: user.id == ^current_user.id,
-      where: transaction.amount < ^0,
-      where: transaction.datetime >= ^from,
-      where: transaction.datetime <= ^to,
-      where: transaction.transaction_category_id == ^category_id,
-      select: {transaction.target, transaction.amount, transaction.datetime},
-      order_by: [asc: transaction.datetime]
-    )
+    query =
+      from(transaction in Transaction,
+        join: user in assoc(transaction, :user),
+        where: user.id == ^current_user.id,
+        where: transaction.amount < ^0,
+        where: transaction.datetime >= ^from,
+        where: transaction.datetime <= ^to,
+        where: transaction.transaction_category_id == ^category_id,
+        select: {transaction.target, transaction.amount, transaction.datetime},
+        order_by: [asc: transaction.datetime]
+      )
 
     Repo.all(query)
   end

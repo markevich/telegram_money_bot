@@ -113,6 +113,7 @@ defmodule MarkevichMoney.Pipelines.Stats do
     |> Map.put(:stat_to, Timex.shift(Timex.now(), days: 1))
   end
 
+  # credo:disable-for-next-line
   defp render_all_categories_table(payload, current_user, stat_from, stat_to) do
     transactions = Transactions.stats(current_user, stat_from, stat_to)
 
@@ -180,6 +181,7 @@ defmodule MarkevichMoney.Pipelines.Stats do
     end
   end
 
+  # credo:disable-for-next-line
   defp render_category_table(current_user, stat_from, stat_to, category_id) do
     transactions = Transactions.stats(current_user, stat_from, stat_to, category_id)
     category = Transactions.get_category!(category_id)
@@ -217,6 +219,7 @@ defmodule MarkevichMoney.Pipelines.Stats do
       #{table}
       ```
       """
+
       result
     end
   end

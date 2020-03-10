@@ -257,25 +257,26 @@ defmodule MarkevichMoney.PipelinesTest do
       Детализированная статистика 👇👇
       """
 
-      expected_markup =
-        %Nadia.Model.InlineKeyboardMarkup{
-          inline_keyboard: [
-            [
-              %Nadia.Model.InlineKeyboardButton{
-                callback_data: "{\"c_id\":#{context.category2.id},\"pipeline\":\"stats\",\"type\":\"c_week\"}",
-                switch_inline_query: nil,
-                text: "Home",
-                 url: nil
-              },
-              %Nadia.Model.InlineKeyboardButton{
-                callback_data: "{\"c_id\":#{context.category1.id},\"pipeline\":\"stats\",\"type\":\"c_week\"}",
-                switch_inline_query: nil,
-                text: "Food",
-                url: nil
-              }
-            ]
+      expected_markup = %Nadia.Model.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data:
+                "{\"c_id\":#{context.category2.id},\"pipeline\":\"stats\",\"type\":\"c_week\"}",
+              switch_inline_query: nil,
+              text: "Home",
+              url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data:
+                "{\"c_id\":#{context.category1.id},\"pipeline\":\"stats\",\"type\":\"c_week\"}",
+              switch_inline_query: nil,
+              text: "Food",
+              url: nil
+            }
           ]
-        }
+        ]
+      }
 
       assert_called(
         Nadia.edit_message_text(
@@ -416,25 +417,26 @@ defmodule MarkevichMoney.PipelinesTest do
       Детализированная статистика 👇👇
       """
 
-      expected_markup =
-        %Nadia.Model.InlineKeyboardMarkup{
-          inline_keyboard: [
-            [
-              %Nadia.Model.InlineKeyboardButton{
-                callback_data: "{\"c_id\":#{context.category2.id},\"pipeline\":\"stats\",\"type\":\"c_month\"}",
-                switch_inline_query: nil,
-                text: "Home",
-                 url: nil
-              },
-              %Nadia.Model.InlineKeyboardButton{
-                callback_data: "{\"c_id\":#{context.category1.id},\"pipeline\":\"stats\",\"type\":\"c_month\"}",
-                switch_inline_query: nil,
-                text: "Food",
-                url: nil
-              }
-            ]
+      expected_markup = %Nadia.Model.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data:
+                "{\"c_id\":#{context.category2.id},\"pipeline\":\"stats\",\"type\":\"c_month\"}",
+              switch_inline_query: nil,
+              text: "Home",
+              url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data:
+                "{\"c_id\":#{context.category1.id},\"pipeline\":\"stats\",\"type\":\"c_month\"}",
+              switch_inline_query: nil,
+              text: "Food",
+              url: nil
+            }
           ]
-        }
+        ]
+      }
 
       assert_called(
         Nadia.edit_message_text(
@@ -529,25 +531,26 @@ defmodule MarkevichMoney.PipelinesTest do
       Детализированная статистика 👇👇
       """
 
-      expected_markup =
-        %Nadia.Model.InlineKeyboardMarkup{
-          inline_keyboard: [
-            [
-              %Nadia.Model.InlineKeyboardButton{
-                callback_data: "{\"c_id\":#{context.category2.id},\"pipeline\":\"stats\",\"type\":\"p_month\"}",
-                switch_inline_query: nil,
-                text: "Home",
-                 url: nil
-              },
-              %Nadia.Model.InlineKeyboardButton{
-                callback_data: "{\"c_id\":#{context.category1.id},\"pipeline\":\"stats\",\"type\":\"p_month\"}",
-                switch_inline_query: nil,
-                text: "Food",
-                url: nil
-              }
-            ]
+      expected_markup = %Nadia.Model.InlineKeyboardMarkup{
+        inline_keyboard: [
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data:
+                "{\"c_id\":#{context.category2.id},\"pipeline\":\"stats\",\"type\":\"p_month\"}",
+              switch_inline_query: nil,
+              text: "Home",
+              url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data:
+                "{\"c_id\":#{context.category1.id},\"pipeline\":\"stats\",\"type\":\"p_month\"}",
+              switch_inline_query: nil,
+              text: "Food",
+              url: nil
+            }
           ]
-        }
+        ]
+      }
 
       assert_called(
         Nadia.edit_message_text(
@@ -677,12 +680,12 @@ defmodule MarkevichMoney.PipelinesTest do
           transaction_category_id: category2.id
         )
 
-        insert(:transaction,
-          user_id: user.id,
-          amount: -105,
-          datetime: Timex.shift(Timex.now(), days: -20),
-          transaction_category_id: category2.id
-        )
+      insert(:transaction,
+        user_id: user.id,
+        amount: -105,
+        datetime: Timex.shift(Timex.now(), days: -20),
+        transaction_category_id: category2.id
+      )
 
       message_id = 123
       callback_id = 234
@@ -721,11 +724,10 @@ defmodule MarkevichMoney.PipelinesTest do
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
+        Всего: 70.0
 
-       Всего:   70.0
-
-       55.0     #{context.transaction2.target}   #{transaction2_datetime}
-       15.0     #{context.transaction1.target}   #{transaction1_datetime}
+       55.0   #{context.transaction2.target}   #{transaction2_datetime}
+       15.0   #{context.transaction1.target}   #{transaction1_datetime}
 
       ```
       """
@@ -773,12 +775,12 @@ defmodule MarkevichMoney.PipelinesTest do
           transaction_category_id: category2.id
         )
 
-        insert(:transaction,
-          user_id: user.id,
-          amount: -105,
-          datetime: Timex.shift(Timex.now(), days: -40),
-          transaction_category_id: category2.id
-        )
+      insert(:transaction,
+        user_id: user.id,
+        amount: -105,
+        datetime: Timex.shift(Timex.now(), days: -40),
+        transaction_category_id: category2.id
+      )
 
       message_id = 123
       callback_id = 234
@@ -817,11 +819,10 @@ defmodule MarkevichMoney.PipelinesTest do
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
+        Всего: 70.0
 
-       Всего:   70.0
-
-       55.0     #{context.transaction2.target}   #{transaction2_datetime}
-       15.0     #{context.transaction1.target}   #{transaction1_datetime}
+       55.0   #{context.transaction2.target}   #{transaction2_datetime}
+       15.0   #{context.transaction1.target}   #{transaction1_datetime}
 
       ```
       """
@@ -871,12 +872,12 @@ defmodule MarkevichMoney.PipelinesTest do
           transaction_category_id: category2.id
         )
 
-        insert(:transaction,
-          user_id: user.id,
-          amount: -105,
-          datetime: Timex.shift(Timex.now(), days: -40),
-          transaction_category_id: category2.id
-        )
+      insert(:transaction,
+        user_id: user.id,
+        amount: -105,
+        datetime: Timex.shift(Timex.now(), days: -40),
+        transaction_category_id: category2.id
+      )
 
       message_id = 123
       callback_id = 234
@@ -916,11 +917,10 @@ defmodule MarkevichMoney.PipelinesTest do
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
+        Всего: 70.0
 
-       Всего:   70.0
-
-       55.0     #{context.transaction2.target}   #{transaction2_datetime}
-       15.0     #{context.transaction1.target}   #{transaction1_datetime}
+       55.0   #{context.transaction2.target}   #{transaction2_datetime}
+       15.0   #{context.transaction1.target}   #{transaction1_datetime}
 
       ```
       """

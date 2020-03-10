@@ -22,12 +22,11 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-#sentry
+# sentry
 config :logger,
   backends: [:console, Sentry.LoggerBackend]
 
-config :logger, Sentry.LoggerBackend,
-  ignore_plug: true
+config :logger, Sentry.LoggerBackend, ignore_plug: true
 #
 
 # Use Jason for JSON parsing in Phoenix
