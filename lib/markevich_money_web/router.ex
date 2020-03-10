@@ -1,6 +1,6 @@
 defmodule MarkevichMoneyWeb.Router do
   use MarkevichMoneyWeb, :router
-  #sentry
+  # sentry
   use Plug.ErrorHandler
   use Sentry.Plug
   #

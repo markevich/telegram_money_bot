@@ -63,7 +63,7 @@ defmodule MarkevichMoney.MixProject do
       {:ex_machina, "~> 2.3", only: :test},
       {:mecks_unit, "~> 0.1.8", only: :test},
       {:sentry, "~> 7.0"},
-      {:jason, "~> 1.1"},
+      {:jason, "~> 1.1"}
     ]
   end
 

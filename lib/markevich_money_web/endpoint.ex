@@ -1,6 +1,6 @@
 defmodule MarkevichMoneyWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :markevich_money
-  #sentry
+  # sentry
   use Sentry.Phoenix.Endpoint
   #
 

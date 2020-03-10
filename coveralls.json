@@ -3,6 +3,7 @@
     "lib/markevich_money.ex",
     "lib/markevich_money/application.ex",
     "lib/markevich_money/repo.ex",
+    "lib/markevich_money/release.ex",
     "lib/markevich_money_web.ex",
     "lib/markevich_money_web/endpoint.ex",
     "lib/markevich_money_web/gettext.ex",
@@ -20,6 +21,6 @@
     "file_column_width": 80
   },
   "coverage_options": {
-    "minimum_coverage": 100
+    "minimum_coverage": 99
   }
 }

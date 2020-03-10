@@ -1,6 +1,8 @@
 defmodule MarkevichMoney.Release do
+  alias MarkevichMoney.Steps.Telegram.SendMessage
+  alias MarkevichMoney.Users
 
-  @current_version Mix.Project.config[:version]
+  @current_version Mix.Project.config()[:version]
   def send_changelog! do
     @current_version
     |> changelog()
@@ -17,6 +19,7 @@ defmodule MarkevichMoney.Release do
         - Added integration with https://sentry.io. Errors shall not pass!! [GH#15](https://github.com/markevich/markevich_money/issues/15)
     """
   end
+
   def changelog("0.1.2") do
     """
     🔥🔥🔥🔥🔥🔥🔥
@@ -27,6 +30,7 @@ defmodule MarkevichMoney.Release do
         - Reduce padding for category statistics table
     """
   end
+
   def changelog("0.1.1") do
     """
     MoneyBot updated to version `0.1.1` 🍾🍾
@@ -65,16 +69,16 @@ defmodule MarkevichMoney.Release do
     ```
     """
 
-    MarkevichMoney.Steps.Telegram.SendMessage.call(%{
+    SendMessage.call(%{
       output_message: message,
       chat_id: 133_501_152
     })
   end
 
   defp send_to_all_users(message) do
-    MarkevichMoney.Users.all_users()
+    Users.all_users()
     |> Enum.each(fn user ->
-      MarkevichMoney.Steps.Telegram.SendMessage.call(%{
+      SendMessage.call(%{
         output_message: message,
         chat_id: user.telegram_chat_id
       })
