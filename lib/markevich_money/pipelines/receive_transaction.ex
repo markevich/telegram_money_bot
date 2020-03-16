@@ -8,7 +8,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     ParseAmount,
     ParseBalance,
     ParseCurrencyCode,
-    ParseDateTime,
+    ParseIssuedAt,
     ParseTo,
     PredictCategory,
     RenderTransaction,
@@ -24,7 +24,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     |> ParseCurrencyCode.call()
     |> ParseBalance.call()
     |> ParseTo.call()
-    |> ParseDateTime.call()
+    |> ParseIssuedAt.call()
     |> PredictCategory.call()
     |> FindOrCreateTransaction.call()
     |> UpdateTransaction.call()

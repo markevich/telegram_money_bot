@@ -11,7 +11,7 @@ defmodule MarkevichMoney.Factory do
   def transaction_factory do
     %MarkevichMoney.Transactions.Transaction{
       account: "BY06ALFA30143400080030270000",
-      datetime: DateTime.utc_now(),
+      issued_at: DateTime.utc_now(),
       amount: Decimal.new(-100),
       currency_code: "BYN",
       balance: "1000",

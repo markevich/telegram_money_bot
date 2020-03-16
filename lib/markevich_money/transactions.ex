@@ -18,9 +18,9 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload([:transaction_category, :user])
   end
 
-  def upsert_transaction(user_id, account, amount, datetime) do
+  def upsert_transaction(user_id, account, amount, issued_at) do
     lookup_hash =
-      :crypto.hash(:sha, "#{user_id}-#{account}-#{amount}-#{datetime}") |> Base.encode16()
+      :crypto.hash(:sha, "#{user_id}-#{account}-#{amount}-#{issued_at}") |> Base.encode16()
 
     Repo.insert(
       %Transaction{user_id: user_id, lookup_hash: lookup_hash},
@@ -47,8 +47,8 @@ defmodule MarkevichMoney.Transactions do
         join: category in assoc(transaction, :transaction_category),
         where: user.id == ^current_user.id,
         where: transaction.amount < ^0,
-        where: transaction.datetime >= ^from,
-        where: transaction.datetime <= ^to,
+        where: transaction.issued_at >= ^from,
+        where: transaction.issued_at <= ^to,
         group_by: [category.name, category.id],
         select: {sum(transaction.amount), category.name, category.id},
         order_by: [asc: 1]
@@ -63,11 +63,11 @@ defmodule MarkevichMoney.Transactions do
         join: user in assoc(transaction, :user),
         where: user.id == ^current_user.id,
         where: transaction.amount < ^0,
-        where: transaction.datetime >= ^from,
-        where: transaction.datetime <= ^to,
+        where: transaction.issued_at >= ^from,
+        where: transaction.issued_at <= ^to,
         where: transaction.transaction_category_id == ^category_id,
-        select: {transaction.to, transaction.amount, transaction.datetime},
-        order_by: [asc: transaction.datetime]
+        select: {transaction.to, transaction.amount, transaction.issued_at},
+        order_by: [asc: transaction.issued_at]
       )
 
     Repo.all(query)

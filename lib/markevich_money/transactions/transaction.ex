@@ -8,7 +8,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
 
   schema "transactions" do
     field :account, :string
-    field :datetime, :naive_datetime
+    field :issued_at, :naive_datetime
     field :amount, :decimal
     field :currency_code, :string
     field :balance, :decimal
@@ -31,7 +31,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :account,
       :currency_code,
       :balance,
-      :datetime,
+      :issued_at,
       :transaction_category_id,
       :lookup_hash,
       :user_id
@@ -42,13 +42,13 @@ defmodule MarkevichMoney.Transactions.Transaction do
     transaction
     |> cast(attrs, [
       :account,
-      :datetime,
+      :issued_at,
       :amount,
       :currency_code,
       :balance,
       :to,
       :transaction_category_id
     ])
-    |> validate_required([:account, :datetime, :amount, :currency_code, :balance, :to])
+    |> validate_required([:account, :issued_at, :amount, :currency_code, :balance, :to])
   end
 end

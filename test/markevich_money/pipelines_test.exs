@@ -62,7 +62,7 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория
        Кому        #{transaction.to}
        Остаток     #{transaction.balance}
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
@@ -149,7 +149,7 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория   #{context.chosen_category.name}
        Кому        #{transaction.to}
        Остаток     #{transaction.balance}
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
@@ -192,7 +192,7 @@ defmodule MarkevichMoney.PipelinesTest do
         insert(:transaction,
           user_id: user.id,
           amount: -10,
-          datetime: Timex.shift(Timex.now(), days: -6),
+          issued_at: Timex.shift(Timex.now(), days: -6),
           transaction_category_id: category1.id
         )
 
@@ -200,14 +200,14 @@ defmodule MarkevichMoney.PipelinesTest do
         insert(:transaction,
           user_id: user.id,
           amount: -15,
-          datetime: Timex.now(),
+          issued_at: Timex.now(),
           transaction_category_id: category2.id
         )
 
       insert(:transaction,
         user_id: user.id,
         amount: -105,
-        datetime: Timex.shift(Timex.now(), days: -20),
+        issued_at: Timex.shift(Timex.now(), days: -20),
         transaction_category_id: category2.id
       )
 
@@ -352,7 +352,7 @@ defmodule MarkevichMoney.PipelinesTest do
         insert(:transaction,
           user_id: user.id,
           amount: -10,
-          datetime: Timex.beginning_of_month(Timex.now()),
+          issued_at: Timex.beginning_of_month(Timex.now()),
           transaction_category_id: category1.id
         )
 
@@ -360,14 +360,14 @@ defmodule MarkevichMoney.PipelinesTest do
         insert(:transaction,
           user_id: user.id,
           amount: -15,
-          datetime: Timex.end_of_month(Timex.now()),
+          issued_at: Timex.end_of_month(Timex.now()),
           transaction_category_id: category2.id
         )
 
       insert(:transaction,
         user_id: user.id,
         amount: -105,
-        datetime: Timex.shift(Timex.now(), days: -45),
+        issued_at: Timex.shift(Timex.now(), days: -45),
         transaction_category_id: category2.id
       )
 
@@ -465,7 +465,7 @@ defmodule MarkevichMoney.PipelinesTest do
         insert(:transaction,
           user_id: user.id,
           amount: -10,
-          datetime: Timex.beginning_of_month(previous_month),
+          issued_at: Timex.beginning_of_month(previous_month),
           transaction_category_id: category1.id
         )
 
@@ -473,14 +473,14 @@ defmodule MarkevichMoney.PipelinesTest do
         insert(:transaction,
           user_id: user.id,
           amount: -15,
-          datetime: Timex.end_of_month(previous_month),
+          issued_at: Timex.end_of_month(previous_month),
           transaction_category_id: category2.id
         )
 
       insert(:transaction,
         user_id: user.id,
         amount: -105,
-        datetime: Timex.now(),
+        issued_at: Timex.now(),
         transaction_category_id: category2.id
       )
 
@@ -577,7 +577,7 @@ defmodule MarkevichMoney.PipelinesTest do
         insert(:transaction,
           user_id: user.id,
           amount: -10,
-          datetime: Timex.shift(Timex.now(), years: -1),
+          issued_at: Timex.shift(Timex.now(), years: -1),
           transaction_category_id: category1.id
         )
 
@@ -585,7 +585,7 @@ defmodule MarkevichMoney.PipelinesTest do
         insert(:transaction,
           user_id: user.id,
           amount: -15,
-          datetime: Timex.now(),
+          issued_at: Timex.now(),
           transaction_category_id: category2.id
         )
 
@@ -658,7 +658,7 @@ defmodule MarkevichMoney.PipelinesTest do
       insert(:transaction,
         user_id: user.id,
         amount: -10,
-        datetime: Timex.shift(Timex.now(), days: -6),
+        issued_at: Timex.shift(Timex.now(), days: -6),
         transaction_category_id: category1.id
       )
 
@@ -667,7 +667,7 @@ defmodule MarkevichMoney.PipelinesTest do
           user_id: user.id,
           to: "Pizza",
           amount: -15,
-          datetime: Timex.now(),
+          issued_at: Timex.now(),
           transaction_category_id: category2.id
         )
 
@@ -676,14 +676,14 @@ defmodule MarkevichMoney.PipelinesTest do
           user_id: user.id,
           to: "Foods",
           amount: -55,
-          datetime: Timex.shift(Timex.now(), days: -1),
+          issued_at: Timex.shift(Timex.now(), days: -1),
           transaction_category_id: category2.id
         )
 
       insert(:transaction,
         user_id: user.id,
         amount: -105,
-        datetime: Timex.shift(Timex.now(), days: -20),
+        issued_at: Timex.shift(Timex.now(), days: -20),
         transaction_category_id: category2.id
       )
 
@@ -718,16 +718,20 @@ defmodule MarkevichMoney.PipelinesTest do
       stat_to = Timex.shift(Timex.now(), days: 1)
       from = Timex.format!(stat_from, "{0D}.{0M}.{YYYY}")
       to = Timex.format!(stat_to, "{0D}.{0M}.{YYYY}")
-      transaction1_datetime = Timex.format!(context.transaction1.datetime, "{0D}.{0M} {h24}:{m}")
-      transaction2_datetime = Timex.format!(context.transaction2.datetime, "{0D}.{0M} {h24}:{m}")
+
+      transaction1_issued_at =
+        Timex.format!(context.transaction1.issued_at, "{0D}.{0M} {h24}:{m}")
+
+      transaction2_issued_at =
+        Timex.format!(context.transaction2.issued_at, "{0D}.{0M} {h24}:{m}")
 
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
         Всего: 70.0
 
-       55.0   #{context.transaction2.to}   #{transaction2_datetime}
-       15.0   #{context.transaction1.to}   #{transaction1_datetime}
+       55.0   #{context.transaction2.to}   #{transaction2_issued_at}
+       15.0   #{context.transaction1.to}   #{transaction1_issued_at}
 
       ```
       """
@@ -753,7 +757,7 @@ defmodule MarkevichMoney.PipelinesTest do
       insert(:transaction,
         user_id: user.id,
         amount: -10,
-        datetime: Timex.shift(Timex.now(), days: -6),
+        issued_at: Timex.shift(Timex.now(), days: -6),
         transaction_category_id: category1.id
       )
 
@@ -762,7 +766,7 @@ defmodule MarkevichMoney.PipelinesTest do
           user_id: user.id,
           to: "Pizza",
           amount: -15,
-          datetime: Timex.now(),
+          issued_at: Timex.now(),
           transaction_category_id: category2.id
         )
 
@@ -771,14 +775,14 @@ defmodule MarkevichMoney.PipelinesTest do
           user_id: user.id,
           to: "Foods",
           amount: -55,
-          datetime: Timex.shift(Timex.now(), days: -1),
+          issued_at: Timex.shift(Timex.now(), days: -1),
           transaction_category_id: category2.id
         )
 
       insert(:transaction,
         user_id: user.id,
         amount: -105,
-        datetime: Timex.shift(Timex.now(), days: -40),
+        issued_at: Timex.shift(Timex.now(), days: -40),
         transaction_category_id: category2.id
       )
 
@@ -813,16 +817,20 @@ defmodule MarkevichMoney.PipelinesTest do
       stat_to = Timex.end_of_month(Timex.now())
       from = Timex.format!(stat_from, "{0D}.{0M}.{YYYY}")
       to = Timex.format!(stat_to, "{0D}.{0M}.{YYYY}")
-      transaction1_datetime = Timex.format!(context.transaction1.datetime, "{0D}.{0M} {h24}:{m}")
-      transaction2_datetime = Timex.format!(context.transaction2.datetime, "{0D}.{0M} {h24}:{m}")
+
+      transaction1_issued_at =
+        Timex.format!(context.transaction1.issued_at, "{0D}.{0M} {h24}:{m}")
+
+      transaction2_issued_at =
+        Timex.format!(context.transaction2.issued_at, "{0D}.{0M} {h24}:{m}")
 
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
         Всего: 70.0
 
-       55.0   #{context.transaction2.to}   #{transaction2_datetime}
-       15.0   #{context.transaction1.to}   #{transaction1_datetime}
+       55.0   #{context.transaction2.to}   #{transaction2_issued_at}
+       15.0   #{context.transaction1.to}   #{transaction1_issued_at}
 
       ```
       """
@@ -850,7 +858,7 @@ defmodule MarkevichMoney.PipelinesTest do
       insert(:transaction,
         user_id: user.id,
         amount: -10,
-        datetime: previous_month,
+        issued_at: previous_month,
         transaction_category_id: category1.id
       )
 
@@ -859,7 +867,7 @@ defmodule MarkevichMoney.PipelinesTest do
           user_id: user.id,
           to: "Pizza",
           amount: -15,
-          datetime: Timex.shift(previous_month, days: 5),
+          issued_at: Timex.shift(previous_month, days: 5),
           transaction_category_id: category2.id
         )
 
@@ -868,14 +876,14 @@ defmodule MarkevichMoney.PipelinesTest do
           user_id: user.id,
           to: "Foods",
           amount: -55,
-          datetime: previous_month,
+          issued_at: previous_month,
           transaction_category_id: category2.id
         )
 
       insert(:transaction,
         user_id: user.id,
         amount: -105,
-        datetime: Timex.shift(previous_month, months: -1),
+        issued_at: Timex.shift(previous_month, months: -1),
         transaction_category_id: category2.id
       )
 
@@ -911,16 +919,20 @@ defmodule MarkevichMoney.PipelinesTest do
       stat_to = Timex.end_of_month(previous_month)
       from = Timex.format!(stat_from, "{0D}.{0M}.{YYYY}")
       to = Timex.format!(stat_to, "{0D}.{0M}.{YYYY}")
-      transaction1_datetime = Timex.format!(context.transaction1.datetime, "{0D}.{0M} {h24}:{m}")
-      transaction2_datetime = Timex.format!(context.transaction2.datetime, "{0D}.{0M} {h24}:{m}")
+
+      transaction1_issued_at =
+        Timex.format!(context.transaction1.issued_at, "{0D}.{0M} {h24}:{m}")
+
+      transaction2_issued_at =
+        Timex.format!(context.transaction2.issued_at, "{0D}.{0M} {h24}:{m}")
 
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
         Всего: 70.0
 
-       55.0   #{context.transaction2.to}   #{transaction2_datetime}
-       15.0   #{context.transaction1.to}   #{transaction1_datetime}
+       55.0   #{context.transaction2.to}   #{transaction2_issued_at}
+       15.0   #{context.transaction1.to}   #{transaction1_issued_at}
 
       ```
       """
@@ -1213,7 +1225,7 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория
        Кому        #{transaction.to}
        Остаток     #{transaction.balance}
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
@@ -1292,7 +1304,7 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория
        Кому        #{context.to}
        Остаток     #{context.balance}
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
@@ -1371,7 +1383,7 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория
        Кому        #{context.to}
        Остаток     #{context.balance}
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
@@ -1450,7 +1462,7 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория
        Кому        #{context.to}
        Остаток     #{context.balance}
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
@@ -1526,7 +1538,7 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория
        Кому        28.01.2020
        Остаток     #{context.balance}
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
@@ -1608,7 +1620,7 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория
        Кому        #{context.to}
        Остаток     #{context.balance}
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
@@ -1664,7 +1676,7 @@ defmodule MarkevichMoney.PipelinesTest do
        Категория   #{category.name}
        Кому        #{context.to}
        Остаток     #{context.balance}
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """

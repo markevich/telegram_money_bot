@@ -8,11 +8,11 @@ defmodule MarkevichMoney.Steps.Transaction.FindOrCreateTransaction do
   end
 
   defp find_or_create_transaction(%{
-         parsed_attributes: %{account: account, amount: amount, datetime: datetime},
+         parsed_attributes: %{account: account, amount: amount, issued_at: issued_at},
          current_user: current_user
        }) do
     {:ok, transaction} =
-      Transactions.upsert_transaction(current_user.id, account, amount, datetime)
+      Transactions.upsert_transaction(current_user.id, account, amount, issued_at)
 
     Transactions.get_transaction!(transaction.id)
   end

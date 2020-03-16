@@ -16,7 +16,7 @@ defmodule MarkevichMoney.Release do
     MoneyBot updated to version `0.1.5` 🍾🍾
 
       New:
-        - Rename some database columns. [GH#3](https://github.com/markevich/markevich_money/issues/3)
+        - Rename some database columns. [GH#3](https://github.com/markevich/markevich_money/issues/3) [GH#4](https://github.com/markevich/markevich_money/issues/4)
     """
   end
 

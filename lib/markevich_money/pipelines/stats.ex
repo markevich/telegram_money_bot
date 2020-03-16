@@ -194,7 +194,7 @@ defmodule MarkevichMoney.Pipelines.Stats do
     else
       total =
         transactions
-        |> Enum.reduce(0, fn {_to, amount, _datetime}, acc ->
+        |> Enum.reduce(0, fn {_to, amount, _issued_at}, acc ->
           acc + Decimal.to_float(amount)
         end)
         |> abs()
@@ -202,10 +202,10 @@ defmodule MarkevichMoney.Pipelines.Stats do
 
       table =
         transactions
-        |> Enum.map(fn {to, amount, datetime} ->
+        |> Enum.map(fn {to, amount, issued_at} ->
           number = amount |> Decimal.to_float() |> abs() |> Float.ceil(2)
-          datetime = Timex.format!(datetime, "{0D}.{0M} {h24}:{m}")
-          [number, to, datetime]
+          issued_at = Timex.format!(issued_at, "{0D}.{0M} {h24}:{m}")
+          [number, to, issued_at]
         end)
         |> TableRex.Table.new()
         |> TableRex.Table.put_column_meta(:all, align: :left, padding: 1)

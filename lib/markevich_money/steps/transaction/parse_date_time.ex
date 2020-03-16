@@ -1,17 +1,17 @@
-defmodule MarkevichMoney.Steps.Transaction.ParseDateTime do
+defmodule MarkevichMoney.Steps.Transaction.ParseIssuedAt do
   @regex ~r/\n(?<day>\d+)\.(?<month>\d+)\.(?<year>\d{4})\s?(?<hour>\d+)?:?(?<minute>\d+)?:?(?<second>\d+)?/
 
   def call(%{input_message: input_message} = payload) do
     payload
     |> Map.update!(:parsed_attributes, fn parsed_data ->
-      Map.put(parsed_data, :datetime, extract_datetime(input_message))
+      Map.put(parsed_data, :issued_at, extract_issued_at(input_message))
     end)
   end
 
-  defp extract_datetime(input_message) do
+  defp extract_issued_at(input_message) do
     result = Regex.named_captures(@regex, input_message)
 
-    {:ok, datetime} =
+    {:ok, issued_at} =
       if result["hour"] != "" do
         NaiveDateTime.new(
           String.to_integer(result["year"]),
@@ -32,6 +32,6 @@ defmodule MarkevichMoney.Steps.Transaction.ParseDateTime do
         )
       end
 
-    datetime
+    issued_at
   end
 end
