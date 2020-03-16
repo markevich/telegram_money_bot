@@ -16,21 +16,29 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
   }
 
   def call(payload) do
-    payload
-    |> Map.put(:parsed_attributes, %{})
-    |> ParseAccount.call()
-    |> ParseAmount.call()
-    |> CalculateAmountSign.call()
-    |> ParseCurrencyCode.call()
-    |> ParseBalance.call()
-    |> ParseTo.call()
-    |> ParseIssuedAt.call()
-    |> PredictCategory.call()
-    |> FindOrCreateTransaction.call()
-    |> UpdateTransaction.call()
-    |> insert_buttons()
-    |> RenderTransaction.call()
-    |> SendMessage.call()
+    if valid?(payload[:input_message]) do
+      payload
+      |> Map.put(:parsed_attributes, %{})
+      |> ParseAccount.call()
+      |> ParseAmount.call()
+      |> CalculateAmountSign.call()
+      |> ParseCurrencyCode.call()
+      |> ParseBalance.call()
+      |> ParseTo.call()
+      |> ParseIssuedAt.call()
+      |> PredictCategory.call()
+      |> FindOrCreateTransaction.call()
+      |> UpdateTransaction.call()
+      |> insert_buttons()
+      |> RenderTransaction.call()
+      |> SendMessage.call()
+    else
+      payload
+    end
+  end
+
+  def valid?(message) do
+    message =~ "Успешно"
   end
 
   def insert_buttons(%{transaction: %{id: transaction_id}} = payload) do
