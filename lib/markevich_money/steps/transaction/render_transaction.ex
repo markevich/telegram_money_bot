@@ -18,7 +18,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
         ["Кому", transaction.to],
         ["Остаток", transaction.balance],
         # ["Счет", transaction.account],
-        ["Дата", Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")]
+        ["Дата", Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")]
       ]
       |> TableRex.Table.new()
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)

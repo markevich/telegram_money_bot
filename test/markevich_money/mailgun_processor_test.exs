@@ -48,7 +48,7 @@ defmodule MarkevichMoney.MailgunProcessorTest do
        Категория
        Кому        BLR/MINSK/PIZZERIA
        Остаток     450.56
-       Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
