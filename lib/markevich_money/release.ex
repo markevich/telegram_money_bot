@@ -9,6 +9,17 @@ defmodule MarkevichMoney.Release do
     |> send_to_all_users()
   end
 
+  def changelog("0.1.6") do
+    """
+    🔥🔥🔥🔥🔥🔥
+
+    MoneyBot updated to version `0.1.6` 🍾🍾
+
+      Fixes:
+        - Bot won't parse unsuccessful transactions anymore. [GH#17](https://github.com/markevich/markevich_money/issues/17)
+    """
+  end
+
   def changelog("0.1.5") do
     """
     🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️
