@@ -19,6 +19,7 @@ defmodule MarkevichMoney.Release do
         - Elixir and Javascript packages updated to latest versions. [GH#18](https://github.com/markevich/markevich_money/issues/18)
     """
   end
+
   def changelog("0.1.3") do
     """
     🔥🔥🔥🔥🔥🔥🔥
