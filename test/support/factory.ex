@@ -15,7 +15,7 @@ defmodule MarkevichMoney.Factory do
       amount: Decimal.new(-100),
       currency_code: "BYN",
       balance: "1000",
-      target: "Pizza",
+      to: "Pizza",
       lookup_hash: Ecto.UUID.generate()
     }
   end

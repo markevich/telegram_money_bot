@@ -31,7 +31,7 @@ defmodule MarkevichMoney.Pipelines.SetCategory do
   end
 
   defp save_prediction(%{transaction: transaction} = payload) do
-    Transactions.create_prediction(transaction.target, transaction.transaction_category_id)
+    Transactions.create_prediction(transaction.to, transaction.transaction_category_id)
 
     payload
   end

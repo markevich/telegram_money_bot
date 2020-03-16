@@ -60,7 +60,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
        Сумма       #{transaction.amount} #{transaction.currency_code}
        Категория
-       Кому        #{transaction.target}
+       Кому        #{transaction.to}
        Остаток     #{transaction.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
@@ -147,7 +147,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
        Сумма       #{transaction.amount} #{transaction.currency_code}
        Категория   #{context.chosen_category.name}
-       Кому        #{transaction.target}
+       Кому        #{transaction.to}
        Остаток     #{transaction.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
@@ -665,7 +665,7 @@ defmodule MarkevichMoney.PipelinesTest do
       transaction1 =
         insert(:transaction,
           user_id: user.id,
-          target: "Pizza",
+          to: "Pizza",
           amount: -15,
           datetime: Timex.now(),
           transaction_category_id: category2.id
@@ -674,7 +674,7 @@ defmodule MarkevichMoney.PipelinesTest do
       transaction2 =
         insert(:transaction,
           user_id: user.id,
-          target: "Foods",
+          to: "Foods",
           amount: -55,
           datetime: Timex.shift(Timex.now(), days: -1),
           transaction_category_id: category2.id
@@ -726,8 +726,8 @@ defmodule MarkevichMoney.PipelinesTest do
       ```
         Всего: 70.0
 
-       55.0   #{context.transaction2.target}   #{transaction2_datetime}
-       15.0   #{context.transaction1.target}   #{transaction1_datetime}
+       55.0   #{context.transaction2.to}   #{transaction2_datetime}
+       15.0   #{context.transaction1.to}   #{transaction1_datetime}
 
       ```
       """
@@ -760,7 +760,7 @@ defmodule MarkevichMoney.PipelinesTest do
       transaction1 =
         insert(:transaction,
           user_id: user.id,
-          target: "Pizza",
+          to: "Pizza",
           amount: -15,
           datetime: Timex.now(),
           transaction_category_id: category2.id
@@ -769,7 +769,7 @@ defmodule MarkevichMoney.PipelinesTest do
       transaction2 =
         insert(:transaction,
           user_id: user.id,
-          target: "Foods",
+          to: "Foods",
           amount: -55,
           datetime: Timex.shift(Timex.now(), days: -1),
           transaction_category_id: category2.id
@@ -821,8 +821,8 @@ defmodule MarkevichMoney.PipelinesTest do
       ```
         Всего: 70.0
 
-       55.0   #{context.transaction2.target}   #{transaction2_datetime}
-       15.0   #{context.transaction1.target}   #{transaction1_datetime}
+       55.0   #{context.transaction2.to}   #{transaction2_datetime}
+       15.0   #{context.transaction1.to}   #{transaction1_datetime}
 
       ```
       """
@@ -857,7 +857,7 @@ defmodule MarkevichMoney.PipelinesTest do
       transaction1 =
         insert(:transaction,
           user_id: user.id,
-          target: "Pizza",
+          to: "Pizza",
           amount: -15,
           datetime: Timex.shift(previous_month, days: 5),
           transaction_category_id: category2.id
@@ -866,7 +866,7 @@ defmodule MarkevichMoney.PipelinesTest do
       transaction2 =
         insert(:transaction,
           user_id: user.id,
-          target: "Foods",
+          to: "Foods",
           amount: -55,
           datetime: previous_month,
           transaction_category_id: category2.id
@@ -919,8 +919,8 @@ defmodule MarkevichMoney.PipelinesTest do
       ```
         Всего: 70.0
 
-       55.0   #{context.transaction2.target}   #{transaction2_datetime}
-       15.0   #{context.transaction1.target}   #{transaction1_datetime}
+       55.0   #{context.transaction2.to}   #{transaction2_datetime}
+       15.0   #{context.transaction1.to}   #{transaction1_datetime}
 
       ```
       """
@@ -1211,7 +1211,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
        Сумма       #{transaction.amount} #{transaction.currency_code}
        Категория
-       Кому        #{transaction.target}
+       Кому        #{transaction.to}
        Остаток     #{transaction.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
@@ -1245,7 +1245,7 @@ defmodule MarkevichMoney.PipelinesTest do
       user = insert(:user)
       amount = 11.30
       balance = 522.05
-      target = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
+      to = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
       currency = "BYN"
 
       input_message = """
@@ -1256,7 +1256,7 @@ defmodule MarkevichMoney.PipelinesTest do
       Сумма:#{amount} #{currency}
       Остаток:#{balance} #{currency}
       На время:15:14:35
-      #{target}
+      #{to}
       28.01.2020 15:14:35
       """
 
@@ -1266,7 +1266,7 @@ defmodule MarkevichMoney.PipelinesTest do
         amount: amount,
         currency: currency,
         balance: balance,
-        target: target
+        to: to
       }
     end
 
@@ -1290,7 +1290,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
        Сумма       #{amount} #{context.currency}
        Категория
-       Кому        #{context.target}
+       Кому        #{context.to}
        Остаток     #{context.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
@@ -1324,7 +1324,7 @@ defmodule MarkevichMoney.PipelinesTest do
       user = insert(:user)
       amount = 11.30
       balance = 522.05
-      target = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
+      to = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
       currency = "BYN"
 
       input_message = """
@@ -1335,7 +1335,7 @@ defmodule MarkevichMoney.PipelinesTest do
       Сумма:1.00 USD (#{amount} #{currency})
       Остаток:#{balance} #{currency}
       На время:15:14:35
-      #{target}
+      #{to}
       28.01.2020 15:14:35
       """
 
@@ -1345,7 +1345,7 @@ defmodule MarkevichMoney.PipelinesTest do
         amount: amount,
         currency: currency,
         balance: balance,
-        target: target
+        to: to
       }
     end
 
@@ -1369,7 +1369,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
        Сумма       #{amount} #{context.currency}
        Категория
-       Кому        #{context.target}
+       Кому        #{context.to}
        Остаток     #{context.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
@@ -1403,7 +1403,7 @@ defmodule MarkevichMoney.PipelinesTest do
       user = insert(:user)
       amount = 11.30
       balance = 522.05
-      target = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
+      to = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
       currency = "BYN"
 
       input_message = """
@@ -1414,7 +1414,7 @@ defmodule MarkevichMoney.PipelinesTest do
       Сумма:#{amount} #{currency}
       Остаток:#{balance} #{currency}
       На время:15:14:35
-      #{target}
+      #{to}
       28.01.2020 15:14:35
       """
 
@@ -1424,7 +1424,7 @@ defmodule MarkevichMoney.PipelinesTest do
         amount: amount,
         currency: currency,
         balance: balance,
-        target: target
+        to: to
       }
     end
 
@@ -1448,7 +1448,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
        Сумма       #{amount} #{context.currency}
        Категория
-       Кому        #{context.target}
+       Кому        #{context.to}
        Остаток     #{context.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
@@ -1558,7 +1558,7 @@ defmodule MarkevichMoney.PipelinesTest do
       user = insert(:user)
       amount = 11.30
       balance = 522.05
-      target = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
+      to = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
       currency = "BYN"
 
       input_message = """
@@ -1572,7 +1572,7 @@ defmodule MarkevichMoney.PipelinesTest do
       Сумма:#{amount} #{currency}
       Остаток:#{balance} #{currency}
       На время:15:14:35
-      #{target}
+      #{to}
       28.01.2020 15:14:35
       """
 
@@ -1582,7 +1582,7 @@ defmodule MarkevichMoney.PipelinesTest do
         amount: amount,
         currency: currency,
         balance: balance,
-        target: target
+        to: to
       }
     end
 
@@ -1606,7 +1606,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
        Сумма       #{amount} #{context.currency}
        Категория
-       Кому        #{context.target}
+       Кому        #{context.to}
        Остаток     #{context.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
@@ -1639,7 +1639,7 @@ defmodule MarkevichMoney.PipelinesTest do
       category = insert(:transaction_category)
 
       insert(:transaction_category_prediction,
-        prediction: context.target,
+        prediction: context.to,
         transaction_category_id: category.id
       )
 
@@ -1662,7 +1662,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
        Сумма       #{amount} #{context.currency}
        Категория   #{category.name}
-       Кому        #{context.target}
+       Кому        #{context.to}
        Остаток     #{context.balance}
        Дата        #{Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")}
 

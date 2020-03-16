@@ -15,7 +15,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       [
         ["Сумма", "#{transaction.amount} #{transaction.currency_code}"],
         ["Категория", category],
-        ["Кому", transaction.target],
+        ["Кому", transaction.to],
         ["Остаток", transaction.balance],
         # ["Счет", transaction.account],
         ["Дата", Timex.format!(transaction.datetime, "{0D}.{0M}.{YY} {h24}:{0m}")]
