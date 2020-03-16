@@ -66,15 +66,15 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.datetime >= ^from,
         where: transaction.datetime <= ^to,
         where: transaction.transaction_category_id == ^category_id,
-        select: {transaction.target, transaction.amount, transaction.datetime},
+        select: {transaction.to, transaction.amount, transaction.datetime},
         order_by: [asc: transaction.datetime]
       )
 
     Repo.all(query)
   end
 
-  def predict_category_id(target) do
-    with query <- predict_category_query(target),
+  def predict_category_id(transaction_to) do
+    with query <- predict_category_query(transaction_to),
          %TransactionCategoryPrediction{} = prediction <- Repo.one(query) do
       prediction.transaction_category_id
     else
@@ -82,17 +82,17 @@ defmodule MarkevichMoney.Transactions do
     end
   end
 
-  def create_prediction(target, transaction_category_id) do
+  def create_prediction(transaction_to, transaction_category_id) do
     %TransactionCategoryPrediction{
-      prediction: target,
+      prediction: transaction_to,
       transaction_category_id: transaction_category_id
     }
     |> Repo.insert!()
   end
 
-  defp predict_category_query(target) do
+  defp predict_category_query(transaction_to) do
     from p in TransactionCategoryPrediction,
-      where: p.prediction == ^target,
+      where: p.prediction == ^transaction_to,
       order_by: [desc: p.id],
       limit: 1
   end

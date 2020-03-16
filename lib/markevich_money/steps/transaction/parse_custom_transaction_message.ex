@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessage do
-  @regex ~r/\/add\s(?<amount>\d+\.?\d*)\s(?<target>\w+)/u
+  @regex ~r/\/add\s(?<amount>\d+\.?\d*)\s(?<to>\w+)/u
 
   def call(%{message: input_message, current_user: current_user} = payload) do
     payload
@@ -12,7 +12,7 @@ defmodule MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessage do
 
     %{
       amount: -float_amount,
-      target: to_string(result["target"]),
+      to: to_string(result["to"]),
       account: "manual",
       currency_code: "byn",
       user_id: current_user.id,

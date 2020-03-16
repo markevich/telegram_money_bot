@@ -12,7 +12,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
     field :amount, :decimal
     field :currency_code, :string
     field :balance, :decimal
-    field :target, :string
+    field :to, :string
     field :lookup_hash, :string
 
     belongs_to(:transaction_category, TransactionCategory)
@@ -27,7 +27,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
     |> cast(attrs, [
       :account,
       :amount,
-      :target,
+      :to,
       :account,
       :currency_code,
       :balance,
@@ -46,9 +46,9 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :amount,
       :currency_code,
       :balance,
-      :target,
+      :to,
       :transaction_category_id
     ])
-    |> validate_required([:account, :datetime, :amount, :currency_code, :balance, :target])
+    |> validate_required([:account, :datetime, :amount, :currency_code, :balance, :to])
   end
 end

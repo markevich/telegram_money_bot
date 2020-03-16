@@ -37,7 +37,7 @@ defmodule MarkevichMoney.MailgunProcessorTest do
       assert(Decimal.from_float(-18.26) == transaction.amount)
       assert(Decimal.from_float(450.56) == transaction.balance)
       assert("BYN" = transaction.currency_code)
-      assert("BLR/MINSK/PIZZERIA" = transaction.target)
+      assert("BLR/MINSK/PIZZERIA" = transaction.to)
       assert(user.id == transaction.user_id)
 
       expected_message = """
