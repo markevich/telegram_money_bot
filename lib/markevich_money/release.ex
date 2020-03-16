@@ -17,6 +17,7 @@ defmodule MarkevichMoney.Release do
 
       New:
         - Rename some database columns. [GH#3](https://github.com/markevich/markevich_money/issues/3) [GH#4](https://github.com/markevich/markevich_money/issues/4)
+        - Add not null constraints to some critical columns. [GH#6](https://github.com/markevich/markevich_money/issues/3) [GH#4](https://github.com/markevich/markevich_money/issues/6)
     """
   end
 

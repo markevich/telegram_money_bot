@@ -16,7 +16,8 @@ defmodule MarkevichMoney.Factory do
       currency_code: "BYN",
       balance: "1000",
       to: "Pizza",
-      lookup_hash: Ecto.UUID.generate()
+      lookup_hash: Ecto.UUID.generate(),
+      user: build(:user)
     }
   end
 

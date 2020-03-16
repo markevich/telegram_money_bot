@@ -190,7 +190,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction1 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           amount: -10,
           issued_at: Timex.shift(Timex.now(), days: -6),
           transaction_category_id: category1.id
@@ -198,14 +198,14 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction2 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           amount: -15,
           issued_at: Timex.now(),
           transaction_category_id: category2.id
         )
 
       insert(:transaction,
-        user_id: user.id,
+        user: user,
         amount: -105,
         issued_at: Timex.shift(Timex.now(), days: -20),
         transaction_category_id: category2.id
@@ -350,7 +350,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction1 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           amount: -10,
           issued_at: Timex.beginning_of_month(Timex.now()),
           transaction_category_id: category1.id
@@ -358,14 +358,14 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction2 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           amount: -15,
           issued_at: Timex.end_of_month(Timex.now()),
           transaction_category_id: category2.id
         )
 
       insert(:transaction,
-        user_id: user.id,
+        user: user,
         amount: -105,
         issued_at: Timex.shift(Timex.now(), days: -45),
         transaction_category_id: category2.id
@@ -463,7 +463,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction1 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           amount: -10,
           issued_at: Timex.beginning_of_month(previous_month),
           transaction_category_id: category1.id
@@ -471,14 +471,14 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction2 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           amount: -15,
           issued_at: Timex.end_of_month(previous_month),
           transaction_category_id: category2.id
         )
 
       insert(:transaction,
-        user_id: user.id,
+        user: user,
         amount: -105,
         issued_at: Timex.now(),
         transaction_category_id: category2.id
@@ -575,7 +575,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction1 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           amount: -10,
           issued_at: Timex.shift(Timex.now(), years: -1),
           transaction_category_id: category1.id
@@ -583,7 +583,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction2 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           amount: -15,
           issued_at: Timex.now(),
           transaction_category_id: category2.id
@@ -656,7 +656,7 @@ defmodule MarkevichMoney.PipelinesTest do
       category2 = insert(:transaction_category, name: "Food")
 
       insert(:transaction,
-        user_id: user.id,
+        user: user,
         amount: -10,
         issued_at: Timex.shift(Timex.now(), days: -6),
         transaction_category_id: category1.id
@@ -664,7 +664,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction1 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           to: "Pizza",
           amount: -15,
           issued_at: Timex.now(),
@@ -673,7 +673,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction2 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           to: "Foods",
           amount: -55,
           issued_at: Timex.shift(Timex.now(), days: -1),
@@ -681,7 +681,7 @@ defmodule MarkevichMoney.PipelinesTest do
         )
 
       insert(:transaction,
-        user_id: user.id,
+        user: user,
         amount: -105,
         issued_at: Timex.shift(Timex.now(), days: -20),
         transaction_category_id: category2.id
@@ -755,7 +755,7 @@ defmodule MarkevichMoney.PipelinesTest do
       category2 = insert(:transaction_category, name: "Food")
 
       insert(:transaction,
-        user_id: user.id,
+        user: user,
         amount: -10,
         issued_at: Timex.shift(Timex.now(), days: -6),
         transaction_category_id: category1.id
@@ -763,7 +763,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction1 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           to: "Pizza",
           amount: -15,
           issued_at: Timex.now(),
@@ -772,7 +772,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction2 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           to: "Foods",
           amount: -55,
           issued_at: Timex.shift(Timex.now(), days: -1),
@@ -780,7 +780,7 @@ defmodule MarkevichMoney.PipelinesTest do
         )
 
       insert(:transaction,
-        user_id: user.id,
+        user: user,
         amount: -105,
         issued_at: Timex.shift(Timex.now(), days: -40),
         transaction_category_id: category2.id
@@ -856,7 +856,7 @@ defmodule MarkevichMoney.PipelinesTest do
       previous_month = Timex.shift(Timex.now(), months: -1)
 
       insert(:transaction,
-        user_id: user.id,
+        user: user,
         amount: -10,
         issued_at: previous_month,
         transaction_category_id: category1.id
@@ -864,7 +864,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction1 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           to: "Pizza",
           amount: -15,
           issued_at: Timex.shift(previous_month, days: 5),
@@ -873,7 +873,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
       transaction2 =
         insert(:transaction,
-          user_id: user.id,
+          user: user,
           to: "Foods",
           amount: -55,
           issued_at: previous_month,
@@ -881,7 +881,7 @@ defmodule MarkevichMoney.PipelinesTest do
         )
 
       insert(:transaction,
-        user_id: user.id,
+        user: user,
         amount: -105,
         issued_at: Timex.shift(previous_month, months: -1),
         transaction_category_id: category2.id
