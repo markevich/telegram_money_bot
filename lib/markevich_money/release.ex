@@ -9,6 +9,17 @@ defmodule MarkevichMoney.Release do
     |> send_to_all_users()
   end
 
+  def changelog("0.1.5") do
+    """
+    🛠️🛠️🛠️🛠️🛠️🛠️🛠️🛠️
+
+    MoneyBot updated to version `0.1.5` 🍾🍾
+
+      New:
+        - Rename some database columns. [GH#3](https://github.com/markevich/markevich_money/issues/3)
+    """
+  end
+
   def changelog("0.1.4") do
     """
     🔥🔥🔥🔥🔥🔥🔥
