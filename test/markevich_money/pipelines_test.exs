@@ -875,7 +875,7 @@ defmodule MarkevichMoney.PipelinesTest do
       insert(:transaction,
         user_id: user.id,
         amount: -105,
-        datetime: Timex.shift(Timex.now(), days: -40),
+        datetime: Timex.shift(previous_month, months: -1),
         transaction_category_id: category2.id
       )
 
