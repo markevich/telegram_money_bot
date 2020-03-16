@@ -21,6 +21,6 @@
     "file_column_width": 80
   },
   "coverage_options": {
-    "minimum_coverage": 99
+    "minimum_coverage": 100
   }
 }

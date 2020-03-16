@@ -649,6 +649,61 @@ defmodule MarkevichMoney.PipelinesTest do
     end
   end
 
+  describe "stats callback by category without transactions" do
+    setup do
+      user = insert(:user)
+      category1 = insert(:transaction_category, name: "Home")
+
+      insert(:transaction,
+        user: user,
+        amount: -10,
+        issued_at: Timex.shift(Timex.now(), years: -1),
+        transaction_category_id: category1.id
+      )
+
+      message_id = 123
+      callback_id = 234
+
+      callback_data = %CallbackData{
+        callback_data: %{"pipeline" => "stats", "type" => "c_week", "c_id" => category1.id},
+        callback_id: callback_id,
+        chat_id: user.telegram_chat_id,
+        current_user: user,
+        message_id: message_id,
+        message_text: "Выберите тип"
+      }
+
+      {:ok,
+       %{
+         user: user,
+         callback_data: callback_data,
+         message_id: message_id,
+         callback_id: callback_id
+       }}
+    end
+
+    mocked_test "current week stats callback by category", context do
+      Pipelines.call(context.callback_data)
+
+      stat_from = Timex.shift(Timex.now(), days: -7)
+      stat_to = Timex.shift(Timex.now(), days: 1)
+      from = Timex.format!(stat_from, "{0D}.{0M}.{YYYY}")
+      to = Timex.format!(stat_to, "{0D}.{0M}.{YYYY}")
+
+      expected_message = "Отсутствуют транзакции за период с #{from} по #{to}."
+
+      assert_called(
+        Nadia.send_message(
+          context.user.telegram_chat_id,
+          expected_message,
+          parse_mode: "Markdown"
+        )
+      )
+
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+    end
+  end
+
   describe "current week stats callback by category" do
     setup do
       user = insert(:user)
