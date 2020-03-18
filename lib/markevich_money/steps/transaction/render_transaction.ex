@@ -27,7 +27,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       case Decimal.cmp(transaction.amount, 0) do
         :gt -> "Поступление"
         :lt -> "Списание"
-        true -> ""
+        _ -> "Сомнительная"
       end
 
     """
