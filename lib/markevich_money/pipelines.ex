@@ -3,6 +3,7 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.Pipelines.AddTransaction, as: AddTransactionPipeline
   alias MarkevichMoney.Pipelines.ChooseCategory, as: ChooseCategoryPipeline
   alias MarkevichMoney.Pipelines.Help, as: HelpPipeline
+  alias MarkevichMoney.Pipelines.IgnoreTransaction, as: IgnoreTransactionPipeline
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
   alias MarkevichMoney.Pipelines.SetCategory, as: SetCategoryPipeline
   alias MarkevichMoney.Pipelines.Start, as: StartPipeline
@@ -31,6 +32,11 @@ defmodule MarkevichMoney.Pipelines do
   def call(%CallbackData{callback_data: %{"pipeline" => "set_category"}} = callback_data) do
     callback_data
     |> SetCategoryPipeline.call()
+  end
+
+  def call(%CallbackData{callback_data: %{"pipeline" => "ignore_transaction"}} = callback_data) do
+    callback_data
+    |> IgnoreTransactionPipeline.call()
   end
 
   def call(%CallbackData{callback_data: %{"pipeline" => _}} = callback_data) do
