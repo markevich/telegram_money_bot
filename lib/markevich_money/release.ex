@@ -9,6 +9,18 @@ defmodule MarkevichMoney.Release do
     |> send_to_all_users()
   end
 
+  def changelog("0.1.7") do
+    """
+    🔥🔥🔥🔥🔥🔥
+
+    MoneyBot updated to version `0.1.7` 🍾🍾
+
+      Fixes:
+        - Fixed zero amount transactions weren't rendered.
+        - Stats pipeline optimized. [GH#12](https://github.com/markevich/markevich_money/issues/12)
+    """
+  end
+
   def changelog("0.1.6") do
     """
     🔥🔥🔥🔥🔥🔥
