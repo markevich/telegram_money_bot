@@ -2,11 +2,31 @@ defmodule MarkevichMoney.Release do
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Users
 
-  @current_version Mix.Project.config()[:version]
   def send_changelog! do
-    @current_version
+    Mix.Project.config()[:version]
     |> changelog()
     |> send_to_all_users()
+  end
+
+  # Added
+  # Changed
+  # Deprecated
+  # Removed
+  # Fixed
+  # Security
+
+  def changelog("0.2.0") do
+    """
+    *Version `0.2.0` shipped 🚢*
+
+    *Released on March 19 2020*
+
+    *Added*
+      *- Transactions can be deleted using telegram bot.*
+
+    *Removed*
+      *- "Ignore" category disappeared in favor of new `Delete` feature.*
+    """
   end
 
   def changelog("0.1.7") do

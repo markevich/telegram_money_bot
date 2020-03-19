@@ -92,7 +92,7 @@ defmodule MarkevichMoney.PipelinesTest do
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
-          nil,
+          "",
           expected_message,
           reply_markup: expected_markup,
           parse_mode: "Markdown"
@@ -162,6 +162,12 @@ defmodule MarkevichMoney.PipelinesTest do
               switch_inline_query: nil,
               text: "Выбрать категорию",
               url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"ignore_transaction\"}",
+              switch_inline_query: nil,
+              text: "❌ Удалить ❌",
+              url: nil
             }
           ]
         ]
@@ -171,7 +177,7 @@ defmodule MarkevichMoney.PipelinesTest do
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
-          nil,
+          "",
           expected_message,
           reply_markup: expected_markup,
           parse_mode: "Markdown"
@@ -282,7 +288,7 @@ defmodule MarkevichMoney.PipelinesTest do
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
-          nil,
+          "",
           expected_message,
           reply_markup: expected_markup,
           parse_mode: "Markdown"
@@ -332,7 +338,7 @@ defmodule MarkevichMoney.PipelinesTest do
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
-          nil,
+          "",
           expected_message,
           reply_markup: %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: []},
           parse_mode: "Markdown"
@@ -443,7 +449,7 @@ defmodule MarkevichMoney.PipelinesTest do
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
-          nil,
+          "",
           expected_message,
           reply_markup: expected_markup,
           parse_mode: "Markdown"
@@ -557,7 +563,7 @@ defmodule MarkevichMoney.PipelinesTest do
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
-          nil,
+          "",
           expected_message,
           reply_markup: expected_markup,
           parse_mode: "Markdown"
@@ -640,7 +646,7 @@ defmodule MarkevichMoney.PipelinesTest do
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
-          nil,
+          "",
           expected_message,
           parse_mode: "Markdown"
         )
@@ -1044,7 +1050,7 @@ defmodule MarkevichMoney.PipelinesTest do
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
-          nil,
+          "",
           expected_message,
           reply_markup: %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: []},
           parse_mode: "Markdown"
@@ -1295,6 +1301,12 @@ defmodule MarkevichMoney.PipelinesTest do
               switch_inline_query: nil,
               text: "Выбрать категорию",
               url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"ignore_transaction\"}",
+              switch_inline_query: nil,
+              text: "❌ Удалить ❌",
+              url: nil
             }
           ]
         ]
@@ -1373,6 +1385,12 @@ defmodule MarkevichMoney.PipelinesTest do
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
               text: "Выбрать категорию",
+              url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"ignore_transaction\"}",
+              switch_inline_query: nil,
+              text: "❌ Удалить ❌",
               url: nil
             }
           ]
@@ -1494,6 +1512,12 @@ defmodule MarkevichMoney.PipelinesTest do
               switch_inline_query: nil,
               text: "Выбрать категорию",
               url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"ignore_transaction\"}",
+              switch_inline_query: nil,
+              text: "❌ Удалить ❌",
+              url: nil
             }
           ]
         ]
@@ -1573,6 +1597,12 @@ defmodule MarkevichMoney.PipelinesTest do
               switch_inline_query: nil,
               text: "Выбрать категорию",
               url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"ignore_transaction\"}",
+              switch_inline_query: nil,
+              text: "❌ Удалить ❌",
+              url: nil
             }
           ]
         ]
@@ -1648,6 +1678,12 @@ defmodule MarkevichMoney.PipelinesTest do
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
               text: "Выбрать категорию",
+              url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"ignore_transaction\"}",
+              switch_inline_query: nil,
+              text: "❌ Удалить ❌",
               url: nil
             }
           ]
@@ -1731,6 +1767,12 @@ defmodule MarkevichMoney.PipelinesTest do
               switch_inline_query: nil,
               text: "Выбрать категорию",
               url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"ignore_transaction\"}",
+              switch_inline_query: nil,
+              text: "❌ Удалить ❌",
+              url: nil
             }
           ]
         ]
@@ -1787,6 +1829,12 @@ defmodule MarkevichMoney.PipelinesTest do
               switch_inline_query: nil,
               text: "Выбрать категорию",
               url: nil
+            },
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"ignore_transaction\"}",
+              switch_inline_query: nil,
+              text: "❌ Удалить ❌",
+              url: nil
             }
           ]
         ]
@@ -1798,6 +1846,57 @@ defmodule MarkevichMoney.PipelinesTest do
           parse_mode: "Markdown"
         )
       )
+    end
+  end
+
+  describe "ignore_transaction callback" do
+    setup do
+      user = insert(:user)
+      transaction = insert(:transaction)
+
+      message_id = 123
+      callback_id = 234
+
+      callback_data = %CallbackData{
+        callback_data: %{
+          "id" => transaction.id,
+          "pipeline" => "ignore_transaction"
+        },
+        callback_id: callback_id,
+        chat_id: user.telegram_chat_id,
+        current_user: user,
+        message_id: message_id,
+        message_text: "doesn't matter"
+      }
+
+      {:ok,
+       %{
+         user: user,
+         callback_data: callback_data,
+         transaction: transaction,
+         message_id: message_id,
+         callback_id: callback_id
+       }}
+    end
+
+    mocked_test "deletes the transaction", context do
+      transaction = context.transaction
+      Pipelines.call(context.callback_data)
+
+      query = from t in Transaction, where: t.id == ^transaction.id
+      refute(Repo.exists?(query))
+
+      assert_called(
+        Nadia.edit_message_text(
+          context.user.telegram_chat_id,
+          context.message_id,
+          "",
+          "Удалено",
+          parse_mode: "Markdown"
+        )
+      )
+
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
     end
   end
 end

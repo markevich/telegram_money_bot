@@ -40,14 +40,16 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
   end
 
   defp insert_buttons(%{transaction: %{id: transaction_id}} = payload) do
-    callback_data = Jason.encode!(%{pipeline: "choose_category", id: transaction_id})
-
     reply_markup = %Nadia.Model.InlineKeyboardMarkup{
       inline_keyboard: [
         [
           %Nadia.Model.InlineKeyboardButton{
             text: "Выбрать категорию",
-            callback_data: callback_data
+            callback_data: Jason.encode!(%{pipeline: "choose_category", id: transaction_id})
+          },
+          %Nadia.Model.InlineKeyboardButton{
+            text: "❌ Удалить ❌",
+            callback_data: Jason.encode!(%{pipeline: "ignore_transaction", id: transaction_id})
           }
         ]
       ]

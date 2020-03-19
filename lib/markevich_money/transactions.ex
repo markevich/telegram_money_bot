@@ -18,6 +18,10 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload([:transaction_category, :user])
   end
 
+  def delete_transaction(id) do
+    from(t in Transaction, where: t.id == ^id) |> Repo.delete_all()
+  end
+
   def upsert_transaction(user_id, account, amount, issued_at) do
     lookup_hash =
       :crypto.hash(:sha, "#{user_id}-#{account}-#{amount}-#{issued_at}") |> Base.encode16()
