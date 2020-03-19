@@ -334,6 +334,7 @@ defmodule MarkevichMoney.PipelinesTest do
           context.message_id,
           nil,
           expected_message,
+          reply_markup: %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: []},
           parse_mode: "Markdown"
         )
       )
@@ -1045,6 +1046,7 @@ defmodule MarkevichMoney.PipelinesTest do
           context.message_id,
           nil,
           expected_message,
+          reply_markup: %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: []},
           parse_mode: "Markdown"
         )
       )

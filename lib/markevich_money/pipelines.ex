@@ -6,7 +6,8 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
   alias MarkevichMoney.Pipelines.SetCategory, as: SetCategoryPipeline
   alias MarkevichMoney.Pipelines.Start, as: StartPipeline
-  alias MarkevichMoney.Pipelines.Stats, as: StatsPipeline
+  alias MarkevichMoney.Pipelines.Stats.Callbacks, as: StatsCallbacksPipeline
+  alias MarkevichMoney.Pipelines.Stats.Messages, as: StatsMessagesPipeline
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Users
 
@@ -24,7 +25,7 @@ defmodule MarkevichMoney.Pipelines do
 
   def call(%CallbackData{callback_data: %{"pipeline" => "stats"}} = callback_data) do
     callback_data
-    |> StatsPipeline.call()
+    |> StatsCallbacksPipeline.call()
   end
 
   def call(%CallbackData{callback_data: %{"pipeline" => "set_category"}} = callback_data) do
@@ -83,7 +84,7 @@ defmodule MarkevichMoney.Pipelines do
   end
 
   def call(%MessageData{message: "/stats", current_user: user}) do
-    StatsPipeline.call(%MessageData{current_user: user})
+    StatsMessagesPipeline.call(%MessageData{current_user: user})
   end
 
   def call(%MessageData{message: "/add" <> _rest = message, current_user: user}) do
