@@ -15,6 +15,18 @@ defmodule MarkevichMoney.Release do
   # Fixed
   # Security
 
+  def changelog("0.2.1") do
+    """
+    *Version `0.2.1` shipped 🚢*
+
+    *Released on March 24 2020*
+
+    *Changed*
+      *- "Выбрать категорию" renamed to "Категория".*
+      *- Pushing any "stats" button will send new message instead of updating the original one* [#29](https://github.com/markevich/telegram_money_bot/issues/29)
+    """
+  end
+
   def changelog("0.2.0") do
     """
     *Version `0.2.0` shipped 🚢*
