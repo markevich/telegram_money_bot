@@ -2,8 +2,9 @@ defmodule MarkevichMoney.Release do
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Users
 
+  @version Mix.Project.config()[:version]
   def send_changelog! do
-    Mix.Project.config()[:version]
+    @version
     |> changelog()
     |> send_to_all_users()
   end
