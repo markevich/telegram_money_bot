@@ -160,7 +160,7 @@ defmodule MarkevichMoney.PipelinesTest do
             %Nadia.Model.InlineKeyboardButton{
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
-              text: "Выбрать категорию",
+              text: "Категория",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
@@ -285,10 +285,8 @@ defmodule MarkevichMoney.PipelinesTest do
       }
 
       assert_called(
-        Nadia.edit_message_text(
+        Nadia.send_message(
           context.user.telegram_chat_id,
-          context.message_id,
-          "",
           expected_message,
           reply_markup: expected_markup,
           parse_mode: "Markdown"
@@ -335,10 +333,8 @@ defmodule MarkevichMoney.PipelinesTest do
       expected_message = "Отсутствуют транзакции за период с #{from} по #{to}."
 
       assert_called(
-        Nadia.edit_message_text(
+        Nadia.send_message(
           context.user.telegram_chat_id,
-          context.message_id,
-          "",
           expected_message,
           reply_markup: %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: []},
           parse_mode: "Markdown"
@@ -446,10 +442,8 @@ defmodule MarkevichMoney.PipelinesTest do
       }
 
       assert_called(
-        Nadia.edit_message_text(
+        Nadia.send_message(
           context.user.telegram_chat_id,
-          context.message_id,
-          "",
           expected_message,
           reply_markup: expected_markup,
           parse_mode: "Markdown"
@@ -560,10 +554,8 @@ defmodule MarkevichMoney.PipelinesTest do
       }
 
       assert_called(
-        Nadia.edit_message_text(
+        Nadia.send_message(
           context.user.telegram_chat_id,
-          context.message_id,
-          "",
           expected_message,
           reply_markup: expected_markup,
           parse_mode: "Markdown"
@@ -643,10 +635,8 @@ defmodule MarkevichMoney.PipelinesTest do
       """
 
       assert_called(
-        Nadia.edit_message_text(
+        Nadia.send_message(
           context.user.telegram_chat_id,
-          context.message_id,
-          "",
           expected_message,
           parse_mode: "Markdown"
         )
@@ -1047,10 +1037,8 @@ defmodule MarkevichMoney.PipelinesTest do
       expected_message = "Отсутствуют транзакции за период с #{from} по #{to}."
 
       assert_called(
-        Nadia.edit_message_text(
+        Nadia.send_message(
           context.user.telegram_chat_id,
-          context.message_id,
-          "",
           expected_message,
           reply_markup: %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: []},
           parse_mode: "Markdown"
@@ -1299,7 +1287,7 @@ defmodule MarkevichMoney.PipelinesTest do
             %Nadia.Model.InlineKeyboardButton{
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
-              text: "Выбрать категорию",
+              text: "Категория",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
@@ -1384,7 +1372,7 @@ defmodule MarkevichMoney.PipelinesTest do
             %Nadia.Model.InlineKeyboardButton{
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
-              text: "Выбрать категорию",
+              text: "Категория",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
@@ -1510,7 +1498,7 @@ defmodule MarkevichMoney.PipelinesTest do
             %Nadia.Model.InlineKeyboardButton{
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
-              text: "Выбрать категорию",
+              text: "Категория",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
@@ -1595,7 +1583,7 @@ defmodule MarkevichMoney.PipelinesTest do
             %Nadia.Model.InlineKeyboardButton{
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
-              text: "Выбрать категорию",
+              text: "Категория",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
@@ -1677,7 +1665,7 @@ defmodule MarkevichMoney.PipelinesTest do
             %Nadia.Model.InlineKeyboardButton{
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
-              text: "Выбрать категорию",
+              text: "Категория",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
@@ -1765,7 +1753,7 @@ defmodule MarkevichMoney.PipelinesTest do
             %Nadia.Model.InlineKeyboardButton{
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
-              text: "Выбрать категорию",
+              text: "Категория",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
@@ -1827,7 +1815,7 @@ defmodule MarkevichMoney.PipelinesTest do
             %Nadia.Model.InlineKeyboardButton{
               callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
               switch_inline_query: nil,
-              text: "Выбрать категорию",
+              text: "Категория",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{

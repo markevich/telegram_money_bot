@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Pipelines.Stats.General do
-  alias MarkevichMoney.Steps.Telegram.{AnswerCallback, UpdateMessage}
+  alias MarkevichMoney.Steps.Telegram.{AnswerCallback, SendMessage}
   alias MarkevichMoney.Transactions
 
   def call(payload) do
@@ -8,7 +8,7 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
     |> put_stats_total()
     |> put_reply_markup()
     |> put_output_message()
-    |> UpdateMessage.call()
+    |> SendMessage.call()
     |> AnswerCallback.call()
   end
 

@@ -44,7 +44,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       inline_keyboard: [
         [
           %Nadia.Model.InlineKeyboardButton{
-            text: "Выбрать категорию",
+            text: "Категория",
             callback_data: Jason.encode!(%{pipeline: "choose_category", id: transaction_id})
           },
           %Nadia.Model.InlineKeyboardButton{

@@ -63,7 +63,7 @@ defmodule MarkevichMoney.MailgunProcessorTest do
                 %Nadia.Model.InlineKeyboardButton{
                   callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
                   switch_inline_query: nil,
-                  text: "Выбрать категорию",
+                  text: "Категория",
                   url: nil
                 },
                 %Nadia.Model.InlineKeyboardButton{
