@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Pipelines.IgnoreTransaction do
+defmodule MarkevichMoney.Pipelines.DeleteTransaction do
   alias MarkevichMoney.Steps.Transaction.DeleteTransaction
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, UpdateMessage}
 

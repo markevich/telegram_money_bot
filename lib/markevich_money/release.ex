@@ -16,6 +16,21 @@ defmodule MarkevichMoney.Release do
   # Fixed
   # Security
 
+  def changelog("0.2.2") do
+    """
+    *Version `0.2.2` shipped 🚢*
+
+    *Released on March 25 2020*
+
+    *Changed*
+      *- Tests optimizations [#32](https://github.com/markevich/telegram_money_bot/issues/32)*
+      *- update /help command message*
+
+    *Removed*
+      *- '/start' command removed*
+    """
+  end
+
   def changelog("0.2.1") do
     """
     *Version `0.2.1` shipped 🚢*

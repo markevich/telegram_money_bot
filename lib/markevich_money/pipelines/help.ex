@@ -2,10 +2,11 @@ defmodule MarkevichMoney.Pipelines.Help do
   alias MarkevichMoney.Steps.Telegram.{SendMessage}
 
   @output_message """
-  Я создан помогать Маркевичам следить за своим бюджетом
+  Я создан помогать следить за расходами.
 
-  /start - Начало работы
-  /help - Диалог помощи
+  */add 10 Еда* - Добавить собственный расход
+  */stats* - Статистика
+  */help* - Диалог помощи
   """
 
   def call(payload) do
