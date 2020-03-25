@@ -5,11 +5,6 @@ defmodule MarkevichMoney.MailgunProcessorTest do
   alias MarkevichMoney.MailgunProcessor
   alias MarkevichMoney.Transactions
 
-  defmock Nadia, preserve: true do
-    def send_message(_chat_id, _message, _opts) do
-    end
-  end
-
   describe "when mail is from known user" do
     setup do
       user = insert(:user)
@@ -25,6 +20,17 @@ defmodule MarkevichMoney.MailgunProcessorTest do
       }
 
       {:ok, %{mail: mail, user: user}}
+    end
+
+    defmock Nadia do
+      def send_message(_chat_id, _message, _opts) do
+      end
+
+      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
+      end
+
+      def answer_callback_query(_callback_id, _options) do
+      end
     end
 
     mocked_test "correctly renders telegram message", %{mail: mail, user: user} do
@@ -67,7 +73,7 @@ defmodule MarkevichMoney.MailgunProcessorTest do
                   url: nil
                 },
                 %Nadia.Model.InlineKeyboardButton{
-                  callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"ignore_transaction\"}",
+                  callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"delete_transaction\"}",
                   switch_inline_query: nil,
                   text: "❌ Удалить ❌",
                   url: nil

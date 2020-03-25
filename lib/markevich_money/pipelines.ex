@@ -2,11 +2,10 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.{CallbackData, MessageData}
   alias MarkevichMoney.Pipelines.AddTransaction, as: AddTransactionPipeline
   alias MarkevichMoney.Pipelines.ChooseCategory, as: ChooseCategoryPipeline
+  alias MarkevichMoney.Pipelines.DeleteTransaction, as: DeleteTransactionPipeline
   alias MarkevichMoney.Pipelines.Help, as: HelpPipeline
-  alias MarkevichMoney.Pipelines.IgnoreTransaction, as: IgnoreTransactionPipeline
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
   alias MarkevichMoney.Pipelines.SetCategory, as: SetCategoryPipeline
-  alias MarkevichMoney.Pipelines.Start, as: StartPipeline
   alias MarkevichMoney.Pipelines.Stats.Callbacks, as: StatsCallbacksPipeline
   alias MarkevichMoney.Pipelines.Stats.Messages, as: StatsMessagesPipeline
   alias MarkevichMoney.Steps.Telegram.SendMessage
@@ -34,9 +33,9 @@ defmodule MarkevichMoney.Pipelines do
     |> SetCategoryPipeline.call()
   end
 
-  def call(%CallbackData{callback_data: %{"pipeline" => "ignore_transaction"}} = callback_data) do
+  def call(%CallbackData{callback_data: %{"pipeline" => "delete_transaction"}} = callback_data) do
     callback_data
-    |> IgnoreTransactionPipeline.call()
+    |> DeleteTransactionPipeline.call()
   end
 
   def call(%CallbackData{callback_data: %{"pipeline" => _}} = callback_data) do
@@ -83,10 +82,6 @@ defmodule MarkevichMoney.Pipelines do
 
   def call(%MessageData{message: "/help", current_user: user}) do
     HelpPipeline.call(%MessageData{current_user: user})
-  end
-
-  def call(%MessageData{message: "/start", current_user: user}) do
-    StartPipeline.call(%MessageData{current_user: user})
   end
 
   def call(%MessageData{message: "/stats", current_user: user}) do

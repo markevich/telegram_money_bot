@@ -49,7 +49,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
           },
           %Nadia.Model.InlineKeyboardButton{
             text: "❌ Удалить ❌",
-            callback_data: Jason.encode!(%{pipeline: "ignore_transaction", id: transaction_id})
+            callback_data: Jason.encode!(%{pipeline: "delete_transaction", id: transaction_id})
           }
         ]
       ]
