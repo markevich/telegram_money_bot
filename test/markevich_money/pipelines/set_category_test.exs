@@ -77,9 +77,10 @@ defmodule MarkevichMoney.Pipelines.SetCategoryTest do
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
-              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"delete_transaction\"}",
+              callback_data:
+                "{\"action\":\"ask\",\"id\":#{transaction.id},\"pipeline\":\"dlt_trn\"}",
               switch_inline_query: nil,
-              text: "❌ Удалить ❌",
+              text: "Удалить",
               url: nil
             }
           ]
