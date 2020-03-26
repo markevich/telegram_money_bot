@@ -33,7 +33,7 @@ defmodule MarkevichMoney.Pipelines do
     |> SetCategoryPipeline.call()
   end
 
-  def call(%CallbackData{callback_data: %{"pipeline" => "delete_transaction"}} = callback_data) do
+  def call(%CallbackData{callback_data: %{"pipeline" => "dlt_trn"}} = callback_data) do
     callback_data
     |> DeleteTransactionPipeline.call()
   end

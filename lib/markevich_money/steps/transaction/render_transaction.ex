@@ -20,14 +20,14 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
         # ["Счет", transaction.account],
         ["Дата", Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")]
       ]
-      |> TableRex.Table.new()
+      |> TableRex.Table.new([], "")
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
     type =
       case Decimal.cmp(transaction.amount, 0) do
         :gt -> "Поступление"
         :lt -> "Списание"
-        _ -> "Сомнительная"
+        :eq -> "Сомнительная"
       end
 
     """
@@ -48,8 +48,9 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
             callback_data: Jason.encode!(%{pipeline: "choose_category", id: transaction_id})
           },
           %Nadia.Model.InlineKeyboardButton{
-            text: "❌ Удалить ❌",
-            callback_data: Jason.encode!(%{pipeline: "delete_transaction", id: transaction_id})
+            text: "Удалить",
+            callback_data:
+              Jason.encode!(%{pipeline: "dlt_trn", action: "ask", id: transaction_id})
           }
         ]
       ]

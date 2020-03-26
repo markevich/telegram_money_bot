@@ -9,25 +9,27 @@ defmodule MarkevichMoney.Release do
     |> send_to_all_users()
   end
 
-  # Added
-  # Changed
-  # Deprecated
-  # Removed
-  # Fixed
+  # Добавлено
+  # Изменено
+  # Удалено
+  # Исправлено
   # Security
 
   def changelog("0.2.2") do
     """
-    *Version `0.2.2` shipped 🚢*
+    *Релиз версии `0.2.2` 🚢*
 
-    *Released on March 25 2020*
+    *26 Марта 2020*
 
-    *Changed*
-      *- Tests optimizations [#32](https://github.com/markevich/telegram_money_bot/issues/32)*
-      *- update /help command message*
+    *Добавлено:*
+      *- Отныне бот будет удалять ваши транзакции только после повторного подтверждения.* [#30](https://github.com/markevich/telegram_money_bot/issues/30)
 
-    *Removed*
-      *- '/start' command removed*
+    *Изменено*
+      *- Изменен текст /help команды.*
+      *- Трудяга трудился и переписал все юнит тесты. * [#32](https://github.com/markevich/telegram_money_bot/issues/32)
+
+    *Удалено*
+      *- '/start' команды больше нет.*
     """
   end
 
