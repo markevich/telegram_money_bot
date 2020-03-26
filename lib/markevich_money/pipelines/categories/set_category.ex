@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Pipelines.SetCategory do
+defmodule MarkevichMoney.Pipelines.Categories.SetForTransaction do
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, UpdateMessage}
   alias MarkevichMoney.Steps.Transaction.{FetchTransaction, RenderTransaction}
 

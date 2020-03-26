@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Pipelines.SetCategoryTest do
+defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MecksUnit.Case
