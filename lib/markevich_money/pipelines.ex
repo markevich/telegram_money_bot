@@ -1,11 +1,10 @@
 defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.{CallbackData, MessageData}
   alias MarkevichMoney.Pipelines.AddTransaction, as: AddTransactionPipeline
-  alias MarkevichMoney.Pipelines.ChooseCategory, as: ChooseCategoryPipeline
+  alias MarkevichMoney.Pipelines.Categories.Callbacks, as: CategoriesCallbacksPipeline
   alias MarkevichMoney.Pipelines.DeleteTransaction, as: DeleteTransactionPipeline
   alias MarkevichMoney.Pipelines.Help, as: HelpPipeline
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
-  alias MarkevichMoney.Pipelines.SetCategory, as: SetCategoryPipeline
   alias MarkevichMoney.Pipelines.Stats.Callbacks, as: StatsCallbacksPipeline
   alias MarkevichMoney.Pipelines.Stats.Messages, as: StatsMessagesPipeline
   alias MarkevichMoney.Steps.Telegram.SendMessage
@@ -18,19 +17,17 @@ defmodule MarkevichMoney.Pipelines do
     call(%CallbackData{callback_data | current_user: user})
   end
 
-  def call(%CallbackData{callback_data: %{"pipeline" => "choose_category"}} = callback_data) do
+  def call(%CallbackData{callback_data: %{"pipeline" => pipeline}} = callback_data)
+      when pipeline in ["choose_category", "set_category"] do
     callback_data
-    |> ChooseCategoryPipeline.call()
+    |> CategoriesCallbacksPipeline.call()
   end
+
+
 
   def call(%CallbackData{callback_data: %{"pipeline" => "stats"}} = callback_data) do
     callback_data
     |> StatsCallbacksPipeline.call()
-  end
-
-  def call(%CallbackData{callback_data: %{"pipeline" => "set_category"}} = callback_data) do
-    callback_data
-    |> SetCategoryPipeline.call()
   end
 
   def call(%CallbackData{callback_data: %{"pipeline" => "dlt_trn"}} = callback_data) do
