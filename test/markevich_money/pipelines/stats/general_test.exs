@@ -5,8 +5,6 @@ defmodule MarkevichMoney.Stats.GeneralTest do
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
 
-  # credo:disable-for-this-file Credo.Check.Design.DuplicatedCode
-
   describe "current week stats callback" do
     setup do
       user = insert(:user)

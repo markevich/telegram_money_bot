@@ -5,8 +5,6 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
 
-  # credo:disable-for-this-file Credo.Check.Design.DuplicatedCode
-
   describe "stats callback by category without transactions" do
     setup do
       user = insert(:user)

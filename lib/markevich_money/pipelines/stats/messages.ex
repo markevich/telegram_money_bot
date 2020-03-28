@@ -29,6 +29,7 @@ defmodule MarkevichMoney.Pipelines.Stats.Messages do
     }
 
     payload
+    |> Map.from_struct()
     |> Map.put(:output_message, "Выберите тип")
     |> Map.put(:reply_markup, reply_markup)
     |> SendMessage.call()

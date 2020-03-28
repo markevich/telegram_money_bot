@@ -27,6 +27,14 @@ defmodule MarkevichMoney.Factory do
     }
   end
 
+  def transaction_category_limit_factory do
+    %MarkevichMoney.Gamification.TransactionCategoryLimit{
+      user: build(:user),
+      transaction_category: build(:transaction_category),
+      limit: 100
+    }
+  end
+
   def transaction_category_prediction_factory do
     %MarkevichMoney.Transactions.TransactionCategoryPrediction{}
   end

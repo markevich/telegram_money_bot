@@ -72,7 +72,7 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
         number = amount |> Decimal.to_float() |> abs() |> Float.ceil(2)
         [category_name, number]
       end)
-      |> TableRex.Table.new(header)
+      |> TableRex.Table.new(header, "")
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
     from = Timex.format!(stat_from, "{0D}.{0M}.{YYYY}")
