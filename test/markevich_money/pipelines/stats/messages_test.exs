@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Stats.MessagesTest do
+defmodule MarkevichMoney.Pipelines.Stats.MessagesTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MecksUnit.Case

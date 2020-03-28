@@ -69,7 +69,7 @@ defmodule MarkevichMoney.Pipelines.Stats.ByCategory do
         issued_at = Timex.format!(issued_at, "{0D}.{0M} {h24}:{m}")
         [number, to, issued_at]
       end)
-      |> TableRex.Table.new()
+      |> TableRex.Table.new([], "")
       |> TableRex.Table.put_column_meta(:all, align: :left, padding: 1)
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
