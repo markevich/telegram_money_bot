@@ -7,7 +7,10 @@ defmodule MarkevichMoney.Repo.Migrations.CreateTransactionCategoryLimitsTable do
       add(:user_id, references(:users, on_delete: :delete_all), null: false)
       add(:limit, :integer, default: 0, null: false)
 
+
       timestamps()
     end
+
+    create unique_index(:transaction_category_limits, [:transaction_category_id, :user_id])
   end
 end

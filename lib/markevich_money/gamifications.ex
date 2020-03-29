@@ -1,6 +1,7 @@
 defmodule MarkevichMoney.Gamifications do
   import Ecto.Query, only: [from: 2]
 
+  alias MarkevichMoney.Gamification.TransactionCategoryLimit
   alias MarkevichMoney.Repo
   alias MarkevichMoney.Transactions.TransactionCategory
   alias MarkevichMoney.Users.User
@@ -10,11 +11,33 @@ defmodule MarkevichMoney.Gamifications do
       from(category in TransactionCategory,
         left_join: category_limit in assoc(category, :transaction_category_limit),
         left_join: user in assoc(category_limit, :user),
-        where: user.id == ^user_id or is_nil(user.id),
+        where:
+          user.id == ^user_id or
+            is_nil(user.id),
         order_by: [asc: category.id],
         preload: [transaction_category_limit: category_limit]
       )
 
     Repo.all(query)
+  end
+
+  def set_transaction_category_limit!(transaction_category_id, user_id, limit) do
+    transaction_category_limit =
+      upsert_transaction_category_limit!(transaction_category_id, user_id)
+
+    TransactionCategoryLimit.changeset(transaction_category_limit, %{limit: limit})
+    |> Repo.update!()
+  end
+
+  def upsert_transaction_category_limit!(transaction_category_id, user_id) do
+    attrs = %{transaction_category_id: transaction_category_id, user_id: user_id}
+
+    %TransactionCategoryLimit{}
+    |> TransactionCategoryLimit.changeset(attrs)
+    |> Repo.insert!(
+      returning: true,
+      on_conflict: {:replace, [:transaction_category_id, :user_id]},
+      conflict_target: [:transaction_category_id, :user_id]
+    )
   end
 end
