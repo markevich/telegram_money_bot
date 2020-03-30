@@ -10,10 +10,7 @@ defmodule MarkevichMoney.Gamifications do
     query =
       from(category in TransactionCategory,
         left_join: category_limit in assoc(category, :transaction_category_limit),
-        left_join: user in assoc(category_limit, :user),
-        where:
-          user.id == ^user_id or
-            is_nil(user.id),
+          on: category_limit.user_id == ^user_id,
         order_by: [asc: category.id],
         preload: [transaction_category_limit: category_limit]
       )
