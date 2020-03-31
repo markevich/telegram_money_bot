@@ -27,6 +27,10 @@ defmodule MarkevichMoney.Pipelines.Stats.ByCategory do
     )
   end
 
+  defp put_category(%{callback_data: %{"c_id" => nil}} = payload) do
+    Map.put(payload, :transaction_category, %{name: "❓Без категории"})
+  end
+
   defp put_category(%{callback_data: %{"c_id" => category_id}} = payload) do
     Map.put(payload, :transaction_category, Transactions.get_category!(category_id))
   end
