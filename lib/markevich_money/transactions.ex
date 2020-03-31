@@ -48,13 +48,13 @@ defmodule MarkevichMoney.Transactions do
     query =
       from(transaction in Transaction,
         join: user in assoc(transaction, :user),
-        join: category in assoc(transaction, :transaction_category),
+        left_join: category in assoc(transaction, :transaction_category),
         where: user.id == ^current_user.id,
         where: transaction.amount < ^0,
         where: transaction.issued_at >= ^from,
         where: transaction.issued_at <= ^to,
         group_by: [category.name, category.id],
-        select: {sum(transaction.amount), category.name, category.id},
+        select: {sum(transaction.amount), coalesce(category.name, "❓Без категории"), category.id},
         order_by: [asc: 1]
       )
 
@@ -69,12 +69,24 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.amount < ^0,
         where: transaction.issued_at >= ^from,
         where: transaction.issued_at <= ^to,
-        where: transaction.transaction_category_id == ^category_id,
         select: {transaction.to, transaction.amount, transaction.issued_at},
         order_by: [asc: transaction.issued_at]
       )
 
-    Repo.all(query)
+    query_with_category =
+      if category_id do
+        from(
+          q in query,
+          where: q.transaction_category_id == ^category_id
+        )
+      else
+        from(
+          q in query,
+          where: is_nil(q.transaction_category_id)
+        )
+      end
+
+    Repo.all(query_with_category)
   end
 
   def get_category_monthly_spendings(user_id, category_id, exclude_transaction_ids \\ []) do
