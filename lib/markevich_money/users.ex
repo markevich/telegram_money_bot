@@ -5,6 +5,10 @@ defmodule MarkevichMoney.Users do
 
   import Ecto.Query, only: [from: 2]
 
+  def get_user!(id) do
+    Repo.get!(User, id)
+  end
+
   def get_user_by_chat_id(chat_id) do
     Repo.one(from u in User, where: u.telegram_chat_id == ^chat_id)
   end

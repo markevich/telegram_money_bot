@@ -1,6 +1,11 @@
 defmodule MarkevichMoney.Pipelines.Categories.SetForTransaction do
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, UpdateMessage}
-  alias MarkevichMoney.Steps.Transaction.{FetchTransaction, RenderTransaction}
+
+  alias MarkevichMoney.Steps.Transaction.{
+    FetchTransaction,
+    FireTransactionUpdatedEvent,
+    RenderTransaction
+  }
 
   alias MarkevichMoney.Transactions
 
@@ -15,6 +20,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransaction do
     |> RenderTransaction.call()
     |> UpdateMessage.call()
     |> AnswerCallback.call()
+    |> FireTransactionUpdatedEvent.call()
   end
 
   defp fetch_transaction_id(%{callback_data: %{"id" => transaction_id}} = payload) do
