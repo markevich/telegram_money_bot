@@ -2,6 +2,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MecksUnit.Case
+  use Oban.Testing, repo: MarkevichMoney.Repo
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
   alias MarkevichMoney.Transactions.Transaction
@@ -50,7 +51,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       end
     end
 
-    mocked_test "insert and renders transaction", %{user: user} = context do
+    mocked_test "insert and renders transaction, fire event", %{user: user} = context do
       Pipelines.call(%MessageData{message: context.input_message, chat_id: user.telegram_chat_id})
 
       user_id = user.id
@@ -102,6 +103,11 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
           reply_markup: expected_reply_markup,
           parse_mode: "Markdown"
         )
+      )
+
+      assert_enqueued(
+        worker: MarkevichMoney.Gamification.Events.Broadcaster,
+        args: %{event: "transaction_created", transaction_id: transaction.id, user_id: user_id}
       )
     end
   end

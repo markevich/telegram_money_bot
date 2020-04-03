@@ -1,6 +1,7 @@
 defmodule MarkevichMoney.Pipelines.AddTransaction do
   alias MarkevichMoney.Steps.Transaction.{
     CreateTransaction,
+    FireTransactionCreatedEvent,
     ParseCustomTransactionMessage,
     PredictCategory,
     RenderTransaction
@@ -16,5 +17,6 @@ defmodule MarkevichMoney.Pipelines.AddTransaction do
     |> CreateTransaction.call()
     |> RenderTransaction.call()
     |> SendMessage.call()
+    |> FireTransactionCreatedEvent.call()
   end
 end

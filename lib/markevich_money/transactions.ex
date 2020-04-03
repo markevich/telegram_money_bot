@@ -77,6 +77,29 @@ defmodule MarkevichMoney.Transactions do
     Repo.all(query)
   end
 
+  def get_category_monthly_spendings(user_id, category_id, exclude_transaction_ids \\ []) do
+    beginning_of_month = Timex.beginning_of_month(Timex.now())
+    end_of_month = Timex.end_of_month(Timex.now())
+
+    query =
+      from(transaction in Transaction,
+        join: user in assoc(transaction, :user),
+        join: category in assoc(transaction, :transaction_category),
+        where: user.id == ^user_id,
+        where: category.id == ^category_id,
+        where: transaction.amount < ^0,
+        where: transaction.issued_at >= ^beginning_of_month,
+        where: transaction.issued_at <= ^end_of_month,
+        where: transaction.id not in ^exclude_transaction_ids,
+        select: sum(transaction.amount)
+      )
+
+    case Repo.one(query) do
+      nil -> 0
+      decimal -> abs(Decimal.to_float(decimal))
+    end
+  end
+
   def predict_category_id(transaction_to) do
     with query <- predict_category_query(transaction_to),
          %TransactionCategoryPrediction{} = prediction <- Repo.one(query) do

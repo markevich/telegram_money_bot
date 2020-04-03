@@ -32,6 +32,11 @@ config :logger, Sentry.LoggerBackend, ignore_plug: true
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :markevich_money, Oban,
+  repo: MarkevichMoney.Repo,
+  prune: {:maxlen, 10_000},
+  queues: [events: 5, trackers: 5]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

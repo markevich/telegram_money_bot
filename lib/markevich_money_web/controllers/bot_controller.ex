@@ -1,5 +1,6 @@
 defmodule MarkevichMoneyWeb.BotController do
   use MarkevichMoneyWeb, :controller
+  require Logger
   alias MarkevichMoney.{CallbackData, MessageData, Pipelines}
   alias MarkevichMoney.Steps.Telegram.SendMessage
 
@@ -43,6 +44,8 @@ defmodule MarkevichMoneyWeb.BotController do
           stacktrace: __STACKTRACE__,
           extra: %{from: "bot_controller#webhook"}
         )
+
+        Logger.error(Exception.format(:error, e, __STACKTRACE__))
 
         message = "Случилось что то страшное и я не смог обработать запрос."
 

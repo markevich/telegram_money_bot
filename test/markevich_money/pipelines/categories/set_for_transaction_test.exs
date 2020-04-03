@@ -2,6 +2,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MecksUnit.Case
+  use Oban.Testing, repo: MarkevichMoney.Repo
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
 
@@ -53,7 +54,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
       end
     end
 
-    mocked_test "sets the transaction category", context do
+    mocked_test "sets the transaction category, fire event", context do
       transaction = context.transaction
       Pipelines.call(context.callback_data)
 
@@ -102,6 +103,15 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
       )
 
       assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+
+      assert_enqueued(
+        worker: MarkevichMoney.Gamification.Events.Broadcaster,
+        args: %{
+          event: "transaction_updated",
+          transaction_id: transaction.id,
+          user_id: context.user.id
+        }
+      )
     end
   end
 end
