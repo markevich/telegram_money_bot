@@ -57,7 +57,7 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
           total_without_current_percentage < el and el < total_with_current_percentage
         end)
 
-      if new_milestone do
+      if total_with_current > 100 || new_milestone do
         payload
         |> Map.put(:current_user, user)
         |> Map.put(:output_message, """
