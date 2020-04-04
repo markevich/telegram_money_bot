@@ -258,6 +258,52 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
     end
   end
 
+  describe "when category limit is 100 and new transaction jumps from 110% to > 120%" do
+    setup do
+      user = insert(:user)
+      category_limit = insert(:transaction_category_limit, user: user, limit: 100)
+      category = category_limit.transaction_category
+      transaction = insert(:transaction, user: user, amount: -10, transaction_category: category)
+      insert(:transaction, user: user, amount: -110, transaction_category: category)
+
+      %{
+        user: user,
+        transaction: transaction,
+        category: category,
+        category_limit: category_limit
+      }
+    end
+
+    defmock Nadia do
+      def send_message(_chat_id, _message, _opts) do
+        {:ok, nil}
+      end
+
+      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
+        {:ok, nil}
+      end
+
+      def answer_callback_query(_callback_id, _options) do
+        {:ok, nil}
+      end
+    end
+
+    mocked_test "send warning message", context do
+      {:ok, result} =
+        %{"transaction_id" => context.transaction.id}
+        |> LimitTracker.perform(%{})
+
+      assert(Map.has_key?(result, :output_message))
+
+      expected_message =
+        "*Внимание! В категории \"#{context.category.name}\" потрачено 120.0% (120.0 BYN) из установленного лимита в #{
+          context.category_limit.limit
+        } BYN*\n"
+
+      assert(result[:output_message] == expected_message)
+    end
+  end
+
   describe "when payload is unknown" do
     defmock Sentry do
       def capture_message(_, _) do
