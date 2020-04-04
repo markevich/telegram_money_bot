@@ -3,6 +3,7 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
   use Oban.Worker, queue: :trackers, max_attempts: 1
 
   alias MarkevichMoney.Gamifications
+  alias MarkevichMoney.ProgressBar
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Transactions
   alias MarkevichMoney.Users
@@ -58,15 +59,19 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
         end)
 
       if total_with_current > 100 || new_milestone do
+        progress_bar =
+          ProgressBar.call(total_with_current, category_limit, transaction.currency_code)
+
+        output_message = """
+        *Внимание! В категории \"#{transaction.transaction_category.name}\" потрачено #{
+          trunc(total_with_current_percentage)
+        }% месячного бюджета.*
+        #{progress_bar}
+        """
+
         payload
         |> Map.put(:current_user, user)
-        |> Map.put(:output_message, """
-        *Внимание! В категории "#{transaction.transaction_category.name}" потрачено #{
-          total_with_current_percentage
-        }% (#{total_with_current} #{String.upcase(transaction.currency_code)}) из установленного лимита в #{
-          category_limit
-        } #{String.upcase(transaction.currency_code)}*
-        """)
+        |> Map.put(:output_message, output_message)
         |> SendMessage.call()
       else
         payload

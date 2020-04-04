@@ -155,10 +155,14 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
       assert(Map.has_key?(result, :output_message))
 
-      expected_message =
-        "*Внимание! В категории \"#{context.category.name}\" потрачено 55.0% (55.0 BYN) из установленного лимита в #{
-          context.category_limit.limit
-        } BYN*\n"
+      expected_message = """
+      *Внимание! В категории \"#{context.category.name}\" потрачено 55% месячного бюджета.*
+      ```
+      |⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀|
+           55% (55/100) BYN
+      ```
+
+      """
 
       assert_called(
         Nadia.send_message(context.user.telegram_chat_id, expected_message, parse_mode: "Markdown")
@@ -203,10 +207,14 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
       assert(Map.has_key?(result, :output_message))
 
-      expected_message =
-        "*Внимание! В категории \"#{context.category.name}\" потрачено 75.0% (75.0 BYN) из установленного лимита в #{
-          context.category_limit.limit
-        } BYN*\n"
+      expected_message = """
+      *Внимание! В категории \"#{context.category.name}\" потрачено 75% месячного бюджета.*
+      ```
+      |⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣀⣀⣀⣀⣀⣀⣀|
+           75% (75/100) BYN
+      ```
+
+      """
 
       assert(result[:output_message] == expected_message)
     end
@@ -249,10 +257,14 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
       assert(Map.has_key?(result, :output_message))
 
-      expected_message =
-        "*Внимание! В категории \"#{context.category.name}\" потрачено 120.0% (120.0 BYN) из установленного лимита в #{
-          context.category_limit.limit
-        } BYN*\n"
+      expected_message = """
+      *Внимание! В категории \"#{context.category.name}\" потрачено 120% месячного бюджета.*
+      ```
+      |⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿|
+          120% (120/100) BYN
+      ```
+
+      """
 
       assert(result[:output_message] == expected_message)
     end
@@ -295,10 +307,14 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
       assert(Map.has_key?(result, :output_message))
 
-      expected_message =
-        "*Внимание! В категории \"#{context.category.name}\" потрачено 120.0% (120.0 BYN) из установленного лимита в #{
-          context.category_limit.limit
-        } BYN*\n"
+      expected_message = """
+      *Внимание! В категории \"#{context.category.name}\" потрачено 120% месячного бюджета.*
+      ```
+      |⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿|
+          120% (120/100) BYN
+      ```
+
+      """
 
       assert(result[:output_message] == expected_message)
     end
