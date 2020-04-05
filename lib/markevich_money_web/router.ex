@@ -3,6 +3,7 @@ defmodule MarkevichMoneyWeb.Router do
   # sentry
   use Plug.ErrorHandler
   use Sentry.Plug
+
   #
 
   pipeline :browser do
