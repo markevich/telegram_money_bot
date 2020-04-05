@@ -38,7 +38,8 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
     cipher_suite: :strong,
     keyfile: Helpers.get_env("CO2_OFFSET_SSL_KEY_PATH"),
     cacertfile: Helpers.get_env("CO2_OFFSET_SSL_CACERT_PATH"),
-    certfile: Helpers.get_env("CO2_OFFSET_SSL_CERT_PATH")
+    certfile: Helpers.get_env("CO2_OFFSET_SSL_CERT_PATH"),
+    transport_options: [socket_opts: [:inet6]]
   ],
   secret_key_base: secret_key_base
 
