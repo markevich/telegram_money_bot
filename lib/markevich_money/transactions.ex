@@ -5,7 +5,7 @@ defmodule MarkevichMoney.Transactions do
   alias MarkevichMoney.Transactions.TransactionCategory
   alias MarkevichMoney.Transactions.TransactionCategoryPrediction
 
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query, only: [from: 2, order_by: 2]
 
   def list_transactions do
     Transaction
@@ -34,7 +34,12 @@ defmodule MarkevichMoney.Transactions do
     )
   end
 
-  def get_categories, do: Repo.all(TransactionCategory)
+  def get_categories do
+    TransactionCategory
+    |> order_by(asc: :id)
+    |> Repo.all()
+  end
+
   def get_category!(id), do: Repo.get(TransactionCategory, id)
 
   def update_transaction(%Transaction{} = transaction, attrs) do
