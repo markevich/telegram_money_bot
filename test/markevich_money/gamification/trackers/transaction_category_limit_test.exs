@@ -1,6 +1,7 @@
 defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
+  use MarkevichMoney.MockNadia, async: true
   use MecksUnit.Case
   use Oban.Testing, repo: MarkevichMoney.Repo
   import ExUnit.CaptureLog
@@ -134,20 +135,6 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
       }
     end
 
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
-    end
-
     mocked_test "send warning message", context do
       {:ok, result} =
         %{"transaction_id" => context.transaction.id}
@@ -186,20 +173,6 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
       }
     end
 
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
-    end
-
     mocked_test "send warning message", context do
       {:ok, result} =
         %{"transaction_id" => context.transaction.id}
@@ -236,20 +209,6 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
       }
     end
 
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
-    end
-
     mocked_test "send warning message", context do
       {:ok, result} =
         %{"transaction_id" => context.transaction.id}
@@ -284,20 +243,6 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
         category: category,
         category_limit: category_limit
       }
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "send warning message", context do

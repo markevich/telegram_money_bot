@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
-  use MecksUnit.Case
+  use MarkevichMoney.MockNadia, async: true
   alias MarkevichMoney.Gamification.TransactionCategoryLimit
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
@@ -38,20 +38,6 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
         category_with_limit: category_with_limit,
         category_with_0_limit: category_with_0_limit
       }
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "Renders limits message", context do
@@ -96,20 +82,6 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
       }
     end
 
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
-    end
-
     mocked_test "Sets the limit with correct message", context do
       message = "/set_limit #{context.category.id} #{context.new_limit}"
       Pipelines.call(%MessageData{message: message, current_user: context.user})
@@ -137,20 +109,6 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
           parse_mode: "Markdown"
         )
       )
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "Returns support message if input message is invalid", context do

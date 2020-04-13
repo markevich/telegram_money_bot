@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
-  use MecksUnit.Case
+  use MarkevichMoney.MockNadia, async: true
   use Oban.Testing, repo: MarkevichMoney.Repo
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
@@ -38,20 +38,6 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
          message_id: message_id,
          callback_id: callback_id
        }}
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "sets the transaction category, fire event", context do

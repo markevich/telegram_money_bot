@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Stats.ByCategoryTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
-  use MecksUnit.Case
+  use MarkevichMoney.MockNadia, async: true
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
 
@@ -36,20 +36,6 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
          message_id: message_id,
          callback_id: callback_id
        }}
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "current week stats callback by category", context do
@@ -134,20 +120,6 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
          message_id: message_id,
          callback_id: callback_id
        }}
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "current week stats callback by category", context do
@@ -247,20 +219,6 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
          message_id: message_id,
          callback_id: callback_id
        }}
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "current month stats callback by category", context do
@@ -364,20 +322,6 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
        }}
     end
 
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
-    end
-
     mocked_test "previous month stats callback by category", context do
       Pipelines.call(context.callback_data)
 
@@ -439,20 +383,6 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
          message_id: message_id,
          callback_id: callback_id
        }}
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "renders 'no transactions' message", context do
@@ -521,20 +451,6 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
          message_id: message_id,
          callback_id: callback_id
        }}
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "previous month stats callback by empty category", context do

@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
-  use MecksUnit.Case
+  use MarkevichMoney.MockNadia, async: true
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
   alias MarkevichMoney.Transactions.Transaction
@@ -35,20 +35,6 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
          message_id: message_id,
          callback_id: callback_id
        }}
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "deletes the transaction", context do
@@ -101,20 +87,6 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
          message_id: message_id,
          callback_id: callback_id
        }}
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "render confirmation buttons", context do
@@ -199,20 +171,6 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
          message_id: message_id,
          callback_id: callback_id
        }}
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "cancel deletion and render transaction", context do

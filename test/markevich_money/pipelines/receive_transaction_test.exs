@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
-  use MecksUnit.Case
+  use MarkevichMoney.MockNadia, async: true
   use Oban.Testing, repo: MarkevichMoney.Repo
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
@@ -35,20 +35,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
         balance: balance,
         to: to
       }
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "insert and renders transaction, fire event", %{user: user} = context do
@@ -142,20 +128,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       }
     end
 
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
-    end
-
     mocked_test "do nothing", %{user: user} = context do
       message_data = %MessageData{message: context.input_message, chat_id: user.telegram_chat_id}
 
@@ -195,20 +167,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
         balance: balance,
         to: to
       }
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "insert and renders transaction", %{user: user} = context do
@@ -297,20 +255,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       }
     end
 
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
-    end
-
     mocked_test "insert and renders transaction", %{user: user} = context do
       Pipelines.call(%MessageData{message: context.input_message, chat_id: user.telegram_chat_id})
 
@@ -392,20 +336,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
         currency: currency,
         balance: balance
       }
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "insert and renders transaction", %{user: user} = context do
@@ -497,20 +427,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       }
     end
 
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
-    end
-
     mocked_test "insert and renders transaction", %{user: user} = context do
       Pipelines.call(%MessageData{message: context.input_message, chat_id: user.telegram_chat_id})
 
@@ -564,20 +480,6 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
           parse_mode: "Markdown"
         )
       )
-    end
-
-    defmock Nadia do
-      def send_message(_chat_id, _message, _opts) do
-        {:ok, nil}
-      end
-
-      def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
-        {:ok, nil}
-      end
-
-      def answer_callback_query(_callback_id, _options) do
-        {:ok, nil}
-      end
     end
 
     mocked_test "insert and renders transaction when category is known",
