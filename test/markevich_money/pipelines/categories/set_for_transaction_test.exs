@@ -5,6 +5,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
   use Oban.Testing, repo: MarkevichMoney.Repo
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
+  alias MarkevichMoney.Steps.Transaction.RenderTransaction
 
   describe "set_category callback" do
     setup do
@@ -40,50 +41,51 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
        }}
     end
 
+    defmock MarkevichMoney.Steps.Transaction.RenderTransaction do
+      def call(_) do
+        :passthrough
+      end
+    end
+
     mocked_test "sets the transaction category, fire event", context do
-      transaction = context.transaction
-      Pipelines.call(context.callback_data)
+      reply_payload = Pipelines.call(context.callback_data)
 
-      expected_message = """
-      Транзакция №#{transaction.id}(Списание)
-      ```
+      transaction = reply_payload[:transaction]
+      assert(transaction.id == context.transaction.id)
+      assert(transaction.transaction_category_id == context.chosen_category.id)
 
-       Сумма       #{transaction.amount} #{transaction.currency_code}
-       Категория   #{context.chosen_category.name}
-       Кому        #{transaction.to}
-       Остаток     #{transaction.balance}
-       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+      assert_called(RenderTransaction.call(_))
+      assert(Map.has_key?(reply_payload, :output_message))
 
-      ```
-      """
-
-      expected_markup = %Nadia.Model.InlineKeyboardMarkup{
-        inline_keyboard: [
-          [
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
-              switch_inline_query: nil,
-              text: "Категория",
-              url: nil
-            },
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data:
-                "{\"action\":\"ask\",\"id\":#{transaction.id},\"pipeline\":\"dlt_trn\"}",
-              switch_inline_query: nil,
-              text: "Удалить",
-              url: nil
-            }
+      assert(
+        reply_payload[:reply_markup] == %Nadia.Model.InlineKeyboardMarkup{
+          inline_keyboard: [
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+                switch_inline_query: nil,
+                text: "Категория",
+                url: nil
+              },
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"action\":\"ask\",\"id\":#{transaction.id},\"pipeline\":\"dlt_trn\"}",
+                switch_inline_query: nil,
+                text: "Удалить",
+                url: nil
+              }
+            ]
           ]
-        ]
-      }
+        }
+      )
 
       assert_called(
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
           "",
-          expected_message,
-          reply_markup: expected_markup,
+          _,
+          reply_markup: reply_payload[:reply_markup],
           parse_mode: "Markdown"
         )
       )
