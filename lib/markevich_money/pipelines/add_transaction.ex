@@ -11,6 +11,7 @@ defmodule MarkevichMoney.Pipelines.AddTransaction do
 
   def call(payload) do
     payload
+    |> Map.from_struct()
     |> Map.put(:parsed_attributes, %{})
     |> ParseCustomTransactionMessage.call()
     |> PredictCategory.call()
