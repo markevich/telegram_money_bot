@@ -2,8 +2,10 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
+  use MecksUnit.Case
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
+  alias MarkevichMoney.Steps.Transaction.RenderTransaction
   alias MarkevichMoney.Transactions.Transaction
 
   describe "delete_transaction with 'dlt' action callback" do
@@ -89,51 +91,51 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
        }}
     end
 
+    defmock MarkevichMoney.Steps.Transaction.RenderTransaction do
+      def call(_) do
+        :passthrough
+      end
+    end
+
     mocked_test "render confirmation buttons", context do
-      transaction = context.transaction
-      Pipelines.call(context.callback_data)
+      reply_payload = Pipelines.call(context.callback_data)
 
-      expected_message = """
-      Транзакция №#{transaction.id}(Списание)
-      ```
+      transaction = reply_payload[:transaction]
+      assert(transaction.id == context.transaction.id)
 
-       Сумма       #{transaction.amount} #{transaction.currency_code}
-       Категория
-       Кому        #{transaction.to}
-       Остаток     #{transaction.balance}
-       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+      assert_called(RenderTransaction.call(_))
+      assert(Map.has_key?(reply_payload, :output_message))
 
-      ```
-      """
-
-      expected_reply_markup = %Nadia.Model.InlineKeyboardMarkup{
-        inline_keyboard: [
-          [
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data:
-                "{\"action\":\"dlt\",\"id\":#{context.transaction.id},\"pipeline\":\"dlt_trn\"}",
-              switch_inline_query: nil,
-              text: "❌ Удалить ❌",
-              url: nil
-            },
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data:
-                "{\"action\":\"cnl\",\"id\":#{context.transaction.id},\"pipeline\":\"dlt_trn\"}",
-              switch_inline_query: nil,
-              text: "Отмена",
-              url: nil
-            }
+      assert(
+        reply_payload[:reply_markup] == %Nadia.Model.InlineKeyboardMarkup{
+          inline_keyboard: [
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"action\":\"dlt\",\"id\":#{context.transaction.id},\"pipeline\":\"dlt_trn\"}",
+                switch_inline_query: nil,
+                text: "❌ Удалить ❌",
+                url: nil
+              },
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"action\":\"cnl\",\"id\":#{context.transaction.id},\"pipeline\":\"dlt_trn\"}",
+                switch_inline_query: nil,
+                text: "Отмена",
+                url: nil
+              }
+            ]
           ]
-        ]
-      }
+        }
+      )
 
       assert_called(
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
           "",
-          expected_message,
-          reply_markup: expected_reply_markup,
+          _,
+          reply_markup: reply_payload[:reply_markup],
           parse_mode: "Markdown"
         )
       )
@@ -173,51 +175,51 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
        }}
     end
 
+    defmock MarkevichMoney.Steps.Transaction.RenderTransaction do
+      def call(_) do
+        :passthrough
+      end
+    end
+
     mocked_test "cancel deletion and render transaction", context do
-      transaction = context.transaction
-      Pipelines.call(context.callback_data)
+      reply_payload = Pipelines.call(context.callback_data)
 
-      expected_message = """
-      Транзакция №#{transaction.id}(Списание)
-      ```
+      transaction = reply_payload[:transaction]
+      assert(transaction.id == context.transaction.id)
 
-       Сумма       #{transaction.amount} #{transaction.currency_code}
-       Категория
-       Кому        #{transaction.to}
-       Остаток     #{transaction.balance}
-       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+      assert_called(RenderTransaction.call(_))
+      assert(Map.has_key?(reply_payload, :output_message))
 
-      ```
-      """
-
-      expected_reply_markup = %Nadia.Model.InlineKeyboardMarkup{
-        inline_keyboard: [
-          [
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data:
-                "{\"id\":#{context.transaction.id},\"pipeline\":\"choose_category\"}",
-              switch_inline_query: nil,
-              text: "Категория",
-              url: nil
-            },
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data:
-                "{\"action\":\"ask\",\"id\":#{context.transaction.id},\"pipeline\":\"dlt_trn\"}",
-              switch_inline_query: nil,
-              text: "Удалить",
-              url: nil
-            }
+      assert(
+        reply_payload[:reply_markup] == %Nadia.Model.InlineKeyboardMarkup{
+          inline_keyboard: [
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"id\":#{context.transaction.id},\"pipeline\":\"choose_category\"}",
+                switch_inline_query: nil,
+                text: "Категория",
+                url: nil
+              },
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"action\":\"ask\",\"id\":#{context.transaction.id},\"pipeline\":\"dlt_trn\"}",
+                switch_inline_query: nil,
+                text: "Удалить",
+                url: nil
+              }
+            ]
           ]
-        ]
-      }
+        }
+      )
 
       assert_called(
         Nadia.edit_message_text(
           context.user.telegram_chat_id,
           context.message_id,
           "",
-          expected_message,
-          reply_markup: expected_reply_markup,
+          _,
+          reply_markup: reply_payload[:reply_markup],
           parse_mode: "Markdown"
         )
       )
