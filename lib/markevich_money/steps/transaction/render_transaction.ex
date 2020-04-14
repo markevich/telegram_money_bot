@@ -4,11 +4,11 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
 
   def call(%{transaction: transaction} = payload) do
     payload
-    |> Map.put(:output_message, render_table(transaction))
-    |> insert_buttons()
+    |> Map.put(:output_message, render_message(transaction))
+    |> Map.put(:reply_markup, render_buttons(transaction))
   end
 
-  defp render_table(%Transaction{} = transaction) do
+  defp render_message(%Transaction{} = transaction) do
     category = if transaction.transaction_category_id, do: transaction.transaction_category.name
 
     table =
@@ -39,24 +39,21 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
     """
   end
 
-  defp insert_buttons(%{transaction: %{id: transaction_id}} = payload) do
-    reply_markup = %Nadia.Model.InlineKeyboardMarkup{
+  defp render_buttons(%Transaction{} = transaction) do
+    %Nadia.Model.InlineKeyboardMarkup{
       inline_keyboard: [
         [
           %Nadia.Model.InlineKeyboardButton{
             text: "Категория",
-            callback_data: Jason.encode!(%{pipeline: "choose_category", id: transaction_id})
+            callback_data: Jason.encode!(%{pipeline: "choose_category", id: transaction.id})
           },
           %Nadia.Model.InlineKeyboardButton{
             text: "Удалить",
             callback_data:
-              Jason.encode!(%{pipeline: "dlt_trn", action: "ask", id: transaction_id})
+              Jason.encode!(%{pipeline: "dlt_trn", action: "ask", id: transaction.id})
           }
         ]
       ]
     }
-
-    payload
-    |> Map.put(:reply_markup, reply_markup)
   end
 end
