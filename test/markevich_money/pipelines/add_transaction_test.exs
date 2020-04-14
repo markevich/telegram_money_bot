@@ -10,66 +10,47 @@ defmodule MarkevichMoney.Pipelines.AddTransactionTest do
   describe "/add message" do
     setup do
       user = insert(:user)
+      to = "Something great"
+      amount = 50.23
+      category = insert(:transaction_category)
 
-      %{user: user}
+      insert(:transaction_category_prediction,
+        prediction: to,
+        transaction_category_id: category.id
+      )
+
+      %{user: user, category: category, to: to, amount: amount}
     end
 
-    mocked_test "insert and renders transaction, fire event", %{user: user} do
-      Pipelines.call(%MessageData{message: "/add 50 something", chat_id: user.telegram_chat_id})
+    mocked_test "insert and renders transaction, fire event", context do
+      #  FYI: /add 50.23 Something great
+      reply_payload =
+        Pipelines.call(%MessageData{
+          message: "/add #{context.amount} #{context.to}",
+          chat_id: context.user.telegram_chat_id
+        })
 
-      user_id = user.id
+      transaction = reply_payload[:transaction]
 
-      query =
-        from(transaction in Transaction,
-          where: transaction.user_id == ^user_id,
-          where: transaction.amount == ^(-50)
-        )
+      assert(%Transaction{} = transaction)
+      assert(transaction.user_id == context.user.id)
+      assert(transaction.amount == Decimal.from_float(-context.amount))
+      assert(transaction.transaction_category_id == context.category.id)
+      assert(transaction.to == context.to)
+      assert(transaction.balance == Decimal.new(0))
 
-      transaction = Repo.one!(query)
+      assert(Map.has_key?(reply_payload, :output_message))
+      assert(Map.has_key?(reply_payload, :reply_markup))
 
-      expected_message = """
-      Транзакция №#{transaction.id}(Списание)
-      ```
-
-       Сумма       #{transaction.amount} #{transaction.currency_code}
-       Категория
-       Кому        #{transaction.to}
-       Остаток     #{transaction.balance}
-       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
-
-      ```
-      """
-
-      expected_reply_markup = %Nadia.Model.InlineKeyboardMarkup{
-        inline_keyboard: [
-          [
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
-              switch_inline_query: nil,
-              text: "Категория",
-              url: nil
-            },
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data:
-                "{\"action\":\"ask\",\"id\":#{transaction.id},\"pipeline\":\"dlt_trn\"}",
-              switch_inline_query: nil,
-              text: "Удалить",
-              url: nil
-            }
-          ]
-        ]
-      }
-
-      assert_called(
-        Nadia.send_message(user.telegram_chat_id, expected_message,
-          reply_markup: expected_reply_markup,
-          parse_mode: "Markdown"
-        )
-      )
+      assert_called(Nadia.send_message(context.user.telegram_chat_id, _, _))
 
       assert_enqueued(
         worker: MarkevichMoney.Gamification.Events.Broadcaster,
-        args: %{event: "transaction_created", transaction_id: transaction.id, user_id: user_id}
+        args: %{
+          event: "transaction_created",
+          transaction_id: transaction.id,
+          user_id: context.user.id
+        }
       )
     end
   end
