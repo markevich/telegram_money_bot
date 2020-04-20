@@ -5,6 +5,7 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
   alias MarkevichMoney.Gamification.TransactionCategoryLimit
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
+  alias MarkevichMoney.Steps.Limits.Render
 
   describe "/limits message" do
     setup do
@@ -40,29 +41,25 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
       }
     end
 
+    defmock MarkevichMoney.Steps.Limits.Render do
+      def call(_) do
+        :passthrough
+      end
+    end
+
     mocked_test "Renders limits message", context do
-      expected_message = """
-      ```
-        Лимиты по категориям
+      reply_payload = Pipelines.call(%MessageData{message: "/limits", current_user: context.user})
 
-       id   Категория    Лимит
+      assert_called(Render.call(_))
+      assert(Map.has_key?(reply_payload, :output_message))
 
-       #{context.category_without_limit.id}   #{context.category_without_limit.name}   ♾️
-       #{context.category_with_limit.id}   #{context.category_with_limit.name}   125
-       #{context.category_with_0_limit.id}   #{context.category_with_0_limit.name}   ♾️
-
-      ```
-      Для установки лимита используйте:
-
-      */set_limit id value*
-      """
-
-      Pipelines.call(%MessageData{message: "/limits", current_user: context.user})
+      assert(Map.has_key?(reply_payload, :limits))
+      assert(Enum.count(reply_payload[:limits]) == 3)
 
       assert_called(
         Nadia.send_message(
           context.user.telegram_chat_id,
-          expected_message,
+          _,
           parse_mode: "Markdown"
         )
       )
