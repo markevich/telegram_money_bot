@@ -57,7 +57,7 @@ defmodule MarkevichMoney.MixProject do
       {:credo, "~> 1.3.0", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:nadia, git: "https://github.com/zhyu/nadia.git"},
-      {:table_rex, "~> 2.0.0"},
+      {:table_rex, "~> 3.0.0"},
       {:timex, "~> 3.5"},
       {:receivex, "~> 0.8", github: "markevich/receivex"},
       {:ex_machina, "~> 2.3", only: :test},
