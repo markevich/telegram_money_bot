@@ -17,6 +17,7 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
       "--mode",
       "development",
       "--watch-stdin",
+      "--color",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
