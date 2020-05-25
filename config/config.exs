@@ -14,8 +14,8 @@ config :markevich_money,
 config :markevich_money, MarkevichMoneyWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "PlSrrESn3RAQLURO2d19ck+D+EnJcZ51nDad++Tg3Ulq8VaDcQep17Tb1bOSV18B",
-  render_errors: [view: MarkevichMoneyWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: MarkevichMoney.PubSub, adapter: Phoenix.PubSub.PG2],
+  render_errors: [view: MarkevichMoneyWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: MarkevichMoney.PubSub,
   live_view: [signing_salt: "aaaaaaaa"]
 
 # Configures Elixir's Logger

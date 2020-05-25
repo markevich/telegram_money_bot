@@ -52,7 +52,7 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/markevich_money_web/(live,views)/.*(ex)$",
+      ~r"lib/markevich_money_web/(live|views)/.*(ex)$",
       ~r"lib/markevich_money_web/templates/.*(eex)$"
     ]
   ]
