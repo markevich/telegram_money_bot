@@ -45,7 +45,8 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
     certfile: Helpers.get_env("CO2_OFFSET_SSL_CERT_PATH"),
     transport_options: [socket_opts: [:inet6]]
   ],
-  secret_key_base: secret_key_base
+  secret_key_base: secret_key_base,
+  live_view: [signing_salt: Helpers.get_env("MARKEVICH_MONEY_LIVE_VIEW_SALT")]
 
 config :sentry,
   dsn: Helpers.get_env("SENTRY_URL"),

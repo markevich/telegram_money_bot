@@ -16,7 +16,7 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
   secret_key_base: "PlSrrESn3RAQLURO2d19ck+D+EnJcZ51nDad++Tg3Ulq8VaDcQep17Tb1bOSV18B",
   render_errors: [view: MarkevichMoneyWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: MarkevichMoney.PubSub,
-  live_view: [signing_salt: "aaaaaaaa"]
+  live_view: [signing_salt: "aevz9FQT"]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -28,7 +28,6 @@ config :logger,
   backends: [:console, Sentry.LoggerBackend]
 
 config :logger, Sentry.LoggerBackend, ignore_plug: true
-#
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
