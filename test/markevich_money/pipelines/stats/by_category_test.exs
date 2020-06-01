@@ -186,7 +186,7 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
           user: user,
           to: "Nomis",
           amount: -55,
-          issued_at: Timex.shift(Timex.now(), days: -1),
+          issued_at: Timex.shift(Timex.now(), hours: -1),
           transaction_category_id: category2.id
         )
 
