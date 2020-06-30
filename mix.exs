@@ -4,8 +4,8 @@ defmodule MarkevichMoney.MixProject do
   def project do
     [
       app: :markevich_money,
-      version: "0.3.8",
-      elixir: "~> 1.10.2",
+      version: "0.3.9",
+      elixir: "~> 1.10.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -70,6 +70,7 @@ defmodule MarkevichMoney.MixProject do
       {:sentry, "~> 7.0"},
       {:jason, "~> 1.1"},
       {:oban, "~> 1.2"}
+      # {:oban_web, "~> 1.2", organization: "oban"}
     ]
   end
 
