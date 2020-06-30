@@ -1,4 +1,4 @@
-![Travis](https://travis-ci.com/markevich/markevich_money.svg?branch=master) [![Coverage Status](https://coveralls.io/repos/github/markevich/markevich_money/badge.svg?branch=master)](https://coveralls.io/github/markevich/markevich_money?branch=master)
+[![Test coverage](https://coveralls.io/repos/github/markevich/telegram_money_bot/badge.svg?branch=master)](https://coveralls.io/github/markevich/telegram_money_bot?branch=master)
 
 ---
 
