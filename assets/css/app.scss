@@ -3,15 +3,15 @@
 @import "../node_modules/nprogress/nprogress.css";
 
 /* LiveView specific classes for your customizations */
+.phx-no-feedback.invalid-feedback,
+.phx-no-feedback .invalid-feedback {
+  display: none;
+}
+
 .invalid-feedback {
   color: #a94442;
   display: block;
   margin: -1rem 0 2rem;
-}
-
-.phx-no-feedback.invalid-feedback,
-.phx-no-feedback .invalid-feedback {
-  display: none;
 }
 
 .phx-click-loading {
