@@ -1,3 +1,11 @@
 defmodule MarkevichMoney.CallbackData do
-  defstruct [:callback_data, :callback_id, :message_id, :message_text, :chat_id, :current_user]
+  defstruct [
+    :callback_data,
+    :callback_id,
+    :message_id,
+    :message_text,
+    :chat_id,
+    :current_user,
+    :from
+  ]
 end

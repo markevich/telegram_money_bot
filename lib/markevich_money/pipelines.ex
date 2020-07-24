@@ -9,10 +9,16 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.Pipelines.Limits.Callbacks, as: LimitsCallbacksPipeline
   alias MarkevichMoney.Pipelines.Limits.Messages, as: LimitsMessagesPipeline
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
+  alias MarkevichMoney.Pipelines.Start.Callbacks, as: StartCallbacksPipeline
+  alias MarkevichMoney.Pipelines.Start.Messages, as: StartMessagesPipeline
   alias MarkevichMoney.Pipelines.Stats.Callbacks, as: StatsCallbacksPipeline
   alias MarkevichMoney.Pipelines.Stats.Messages, as: StatsMessagesPipeline
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Users
+
+  def call(%CallbackData{callback_data: %{"pipeline" => "start"}} = callback_data) do
+    StartCallbacksPipeline.call(callback_data)
+  end
 
   def call(%CallbackData{chat_id: chat_id, current_user: nil} = callback_data)
       when is_integer(chat_id) do
@@ -58,6 +64,10 @@ defmodule MarkevichMoney.Pipelines do
     else
       message_data
     end
+  end
+
+  def call(%MessageData{message: "/start", chat_id: _chat_id} = message_data) do
+    StartMessagesPipeline.call(message_data)
   end
 
   def call(%MessageData{current_user: nil, chat_id: chat_id} = message_data)
