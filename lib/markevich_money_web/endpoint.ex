@@ -1,7 +1,7 @@
 defmodule MarkevichMoneyWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :markevich_money
   # sentry
-  use Sentry.Phoenix.Endpoint
+  use Sentry.PlugCapture
+  use Phoenix.Endpoint, otp_app: :markevich_money
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -48,6 +48,9 @@ defmodule MarkevichMoneyWeb.Endpoint do
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
+
+  # sentry
+  plug Sentry.PlugContext
 
   plug Plug.MethodOverride
   plug Plug.Head

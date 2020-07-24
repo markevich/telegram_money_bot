@@ -15,8 +15,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
     test "skip execution", context do
       {:ok, result} =
-        %{"transaction_id" => context.transaction.id}
-        |> LimitTracker.perform(%{})
+        LimitTracker
+        |> perform_job(%{"transaction_id" => context.transaction.id})
 
       refute(Map.has_key?(result, :output_message))
     end
@@ -32,8 +32,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
     test "skip execution", context do
       {:ok, result} =
-        %{"transaction_id" => context.transaction.id}
-        |> LimitTracker.perform(%{})
+        LimitTracker
+        |> perform_job(%{"transaction_id" => context.transaction.id})
 
       refute(Map.has_key?(result, :output_message))
     end
@@ -52,8 +52,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
     test "skip execution", context do
       {:ok, result} =
-        %{"transaction_id" => context.transaction.id}
-        |> LimitTracker.perform(%{})
+        LimitTracker
+        |> perform_job(%{"transaction_id" => context.transaction.id})
 
       refute(Map.has_key?(result, :output_message))
     end
@@ -82,8 +82,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
     mocked_test "skip execution", context do
       {:ok, result} =
-        %{"transaction_id" => context.transaction.id}
-        |> LimitTracker.perform(%{})
+        LimitTracker
+        |> perform_job(%{"transaction_id" => context.transaction.id})
 
       refute(Map.has_key?(result, :output_message))
     end
@@ -112,8 +112,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
     mocked_test "skip execution", context do
       {:ok, result} =
-        %{"transaction_id" => context.transaction.id}
-        |> LimitTracker.perform(%{})
+        LimitTracker
+        |> perform_job(%{"transaction_id" => context.transaction.id})
 
       refute(Map.has_key?(result, :output_message))
     end
@@ -137,8 +137,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
     mocked_test "send warning message", context do
       {:ok, result} =
-        %{"transaction_id" => context.transaction.id}
-        |> LimitTracker.perform(%{})
+        LimitTracker
+        |> perform_job(%{"transaction_id" => context.transaction.id})
 
       assert(Map.has_key?(result, :output_message))
 
@@ -175,8 +175,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
     mocked_test "send warning message", context do
       {:ok, result} =
-        %{"transaction_id" => context.transaction.id}
-        |> LimitTracker.perform(%{})
+        LimitTracker
+        |> perform_job(%{"transaction_id" => context.transaction.id})
 
       assert(Map.has_key?(result, :output_message))
 
@@ -211,8 +211,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
     mocked_test "send warning message", context do
       {:ok, result} =
-        %{"transaction_id" => context.transaction.id}
-        |> LimitTracker.perform(%{})
+        LimitTracker
+        |> perform_job(%{"transaction_id" => context.transaction.id})
 
       assert(Map.has_key?(result, :output_message))
 
@@ -247,8 +247,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
 
     mocked_test "send warning message", context do
       {:ok, result} =
-        %{"transaction_id" => context.transaction.id}
-        |> LimitTracker.perform(%{})
+        LimitTracker
+        |> perform_job(%{"transaction_id" => context.transaction.id})
 
       assert(Map.has_key?(result, :output_message))
 
@@ -266,17 +266,12 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
   end
 
   describe "when payload is unknown" do
-    defmock Sentry do
-      def capture_message(_, _) do
-      end
-    end
-
-    mocked_test "send message to sentry" do
-      assert capture_log(fn ->
-               LimitTracker.perform(%{"foo" => "bar"}, %{})
-
-               assert_called(Sentry.capture_message(_, _))
-             end) =~ "worker received unknown arguments"
+    test "sends error message to logger" do
+      assert(
+        capture_log(fn ->
+          assert :ok = perform_job(LimitTracker, %{"foo" => "bar"})
+        end) =~ "worker received unknown arguments"
+      )
     end
   end
 end
