@@ -19,7 +19,7 @@ defmodule MarkevichMoney.Gamification.Events.BroadcasterTest do
     end
 
     test "fires LimitTracker", context do
-      Broadcaster.perform(context.payload, %{})
+      assert :ok = perform_job(Broadcaster, context.payload)
 
       assert_enqueued(
         worker: LimitTracker,
@@ -39,7 +39,7 @@ defmodule MarkevichMoney.Gamification.Events.BroadcasterTest do
     end
 
     test "fires LimitTracker", context do
-      Broadcaster.perform(context.payload, %{})
+      assert :ok = perform_job(Broadcaster, context.payload)
 
       assert_enqueued(
         worker: MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit,
@@ -49,17 +49,12 @@ defmodule MarkevichMoney.Gamification.Events.BroadcasterTest do
   end
 
   describe "when event is unknown" do
-    defmock Sentry do
-      def capture_message(_, _) do
-      end
-    end
-
-    mocked_test "send message to sentry" do
-      assert capture_log(fn ->
-               Broadcaster.perform(%{"event" => "foobar"}, %{})
-
-               assert_called(Sentry.capture_message(_, _))
-             end) =~ "worker received unknown arguments"
+    test "sends error message to logger" do
+      assert(
+        capture_log(fn ->
+          assert :ok = perform_job(Broadcaster, %{"event" => "foobar"}, [])
+        end) =~ "worker received unknown arguments"
+      )
     end
   end
 end

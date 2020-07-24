@@ -2,12 +2,10 @@ defmodule MarkevichMoneyWeb.Router do
   use MarkevichMoneyWeb, :router
   import Plug.BasicAuth
   import Phoenix.LiveDashboard.Router
+  # import Oban.Web.Router
 
   # sentry
-  use Plug.ErrorHandler
-  use Sentry.Plug
-
-  #
+  use Sentry.PlugCapture
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -59,5 +57,6 @@ defmodule MarkevichMoneyWeb.Router do
     end
 
     live_dashboard "/dashboard", metrics: MarkevichMoneyWeb.Telemetry
+    # oban_dashboard("/oban_dashboard")
   end
 end

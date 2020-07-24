@@ -3,28 +3,24 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
   use Oban.Worker, queue: :trackers, max_attempts: 1
 
   alias MarkevichMoney.Gamifications
+  alias MarkevichMoney.LoggerWithSentry
   alias MarkevichMoney.ProgressBar
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Transactions
   alias MarkevichMoney.Users
 
   @impl Oban.Worker
-  def perform(%{"transaction_id" => _t_id} = payload, _job) do
+  def perform(%Job{args: %{"transaction_id" => _t_id} = payload}) do
     updated_payload = call(payload)
 
     {:ok, updated_payload}
   end
 
-  def perform(args, job) do
-    Sentry.capture_message("#{__MODULE__} worker received unknown arguments",
-      extra: %{args: args, job: job}
+  def perform(%Job{args: args}) do
+    LoggerWithSentry.log_message(
+      "'#{__MODULE__}' worker received unknown arguments.",
+      %{args: args}
     )
-
-    Logger.error("""
-    "#{__MODULE__} worker received unknown arguments".
-    args: #{inspect(args)}
-    job: #{inspect(job)}
-    """)
 
     :ok
   end

@@ -29,9 +29,9 @@ defmodule MarkevichMoney.Application do
 
     :telemetry.attach_many(
       "oban-errors",
-      [[:oban, :failure], [:oban, :trip_circuit]],
+      [[:oban, :job, :exception], [:oban, :circuit, :trip]],
       &ObanErrorReporter.handle_event/4,
-      nil
+      %{}
     )
 
     Supervisor.start_link(children, opts)

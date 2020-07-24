@@ -27,14 +27,20 @@ config :logger, :console,
 config :logger,
   backends: [:console, Sentry.LoggerBackend]
 
-config :logger, Sentry.LoggerBackend, ignore_plug: true
+config :logger, Sentry.LoggerBackend,
+  # Send messages like `Logger.error("error")` to Sentry
+  capture_log_messages: true,
+  # Do not exclude exceptions from Plug/Cowboy
+  excluded_domains: [],
+  metadata: [:extra]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
 config :markevich_money, Oban,
   repo: MarkevichMoney.Repo,
-  prune: {:maxlen, 10_000},
+  # plugins: [{Oban.Plugins.Pruner, max_age: 60}, Oban.Pro.Plugins.Lifeline, Oban.Web.Plugins.Stats],
+  plugins: [{Oban.Plugins.Pruner, max_age: 60}],
   queues: [events: 5, trackers: 5]
 
 # Import environment specific config. This must remain at the bottom
