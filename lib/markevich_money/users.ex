@@ -24,4 +24,10 @@ defmodule MarkevichMoney.Users do
   def all_users do
     Repo.all(User)
   end
+
+  def upsert_user!(attrs) do
+    get_user_by_chat_id(attrs[:telegram_chat_id]) ||
+      User.create_changeset(attrs)
+      |> Repo.insert!()
+  end
 end

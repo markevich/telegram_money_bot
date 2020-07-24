@@ -11,6 +11,7 @@ defmodule MarkevichMoneyWeb.BotController do
         "callback_query" => %{
           "data" => callback_data,
           "id" => callback_id,
+          "from" => from,
           "message" => %{
             "message_id" => message_id,
             "text" => message_text,
@@ -25,6 +26,7 @@ defmodule MarkevichMoneyWeb.BotController do
         chat_id: chat_id,
         callback_data: callback_data,
         callback_id: callback_id,
+        from: from,
         message_id: message_id,
         message_text: message_text
       }
