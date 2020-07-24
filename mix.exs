@@ -69,7 +69,7 @@ defmodule MarkevichMoney.MixProject do
       {:mecks_unit, "~> 0.1.8", only: :test},
       {:sentry, "~> 7.0"},
       {:jason, "~> 1.1"},
-      {:oban, "~> 1.2"}
+      {:oban, "~> 2.0"}
       # {:oban_web, "~> 1.2", organization: "oban"}
     ]
   end
