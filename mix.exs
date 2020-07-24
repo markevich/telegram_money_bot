@@ -67,7 +67,7 @@ defmodule MarkevichMoney.MixProject do
       {:receivex, "~> 0.8", github: "markevich/receivex"},
       {:ex_machina, "~> 2.3", only: :test},
       {:mecks_unit, "~> 0.1.8", only: :test},
-      {:sentry, "~> 7.0"},
+      {:sentry, "~> 8.0"},
       {:jason, "~> 1.1"},
       {:oban, "~> 1.2"}
       # {:oban_web, "~> 1.2", organization: "oban"}
