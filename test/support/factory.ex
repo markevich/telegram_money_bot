@@ -34,8 +34,4 @@ defmodule MarkevichMoney.Factory do
       limit: 100
     }
   end
-
-  def transaction_category_prediction_factory do
-    %MarkevichMoney.Transactions.TransactionCategoryPrediction{}
-  end
 end
