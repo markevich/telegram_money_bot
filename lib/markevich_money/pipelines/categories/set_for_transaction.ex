@@ -16,7 +16,6 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransaction do
     |> FetchTransaction.call()
     |> set_category()
     |> FetchTransaction.call()
-    |> save_prediction()
     |> RenderTransaction.call()
     |> UpdateMessage.call()
     |> AnswerCallback.call()
@@ -32,12 +31,6 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransaction do
          %{callback_data: %{"c_id" => category_id}, transaction: transaction} = payload
        ) do
     Transactions.update_transaction(transaction, %{transaction_category_id: category_id})
-
-    payload
-  end
-
-  defp save_prediction(%{transaction: transaction} = payload) do
-    Transactions.create_prediction(transaction.to, transaction.transaction_category_id)
 
     payload
   end

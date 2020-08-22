@@ -79,8 +79,10 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
 
       category = insert(:transaction_category)
 
-      insert(:transaction_category_prediction,
-        prediction: to,
+      # TODO: write separated tests for predictions
+      insert(:transaction,
+        to: to,
+        user: user,
         transaction_category_id: category.id
       )
 
@@ -287,8 +289,9 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
 
       category = insert(:transaction_category)
 
-      insert(:transaction_category_prediction,
-        prediction: to,
+      # prediction
+      insert(:transaction,
+        to: to,
         transaction_category_id: category.id
       )
 

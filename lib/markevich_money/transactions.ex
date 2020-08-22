@@ -3,7 +3,6 @@ defmodule MarkevichMoney.Transactions do
 
   alias MarkevichMoney.Transactions.Transaction
   alias MarkevichMoney.Transactions.TransactionCategory
-  alias MarkevichMoney.Transactions.TransactionCategoryPrediction
 
   import Ecto.Query, only: [from: 2, order_by: 2]
 
@@ -117,27 +116,24 @@ defmodule MarkevichMoney.Transactions do
     end
   end
 
-  def predict_category_id(transaction_to) do
-    with query <- predict_category_query(transaction_to),
-         %TransactionCategoryPrediction{} = prediction <- Repo.one(query) do
-      prediction.transaction_category_id
-    else
-      _ -> nil
-    end
-  end
+  def predict_category_id(transaction_to, user_id) do
+    query_for_current_user =
+      from t in Transaction,
+        select: t.transaction_category_id,
+        where: t.user_id == ^user_id,
+        where: t.to == ^transaction_to,
+        where: not is_nil(t.transaction_category_id),
+        order_by: [desc: t.id],
+        limit: 1
 
-  def create_prediction(transaction_to, transaction_category_id) do
-    %TransactionCategoryPrediction{
-      prediction: transaction_to,
-      transaction_category_id: transaction_category_id
-    }
-    |> Repo.insert!()
-  end
+    query_for_all_users =
+      from t in Transaction,
+        select: t.transaction_category_id,
+        where: t.to == ^transaction_to,
+        where: not is_nil(t.transaction_category_id),
+        order_by: [desc: t.id],
+        limit: 1
 
-  defp predict_category_query(transaction_to) do
-    from p in TransactionCategoryPrediction,
-      where: p.prediction == ^transaction_to,
-      order_by: [desc: p.id],
-      limit: 1
+    Repo.one(query_for_current_user) || Repo.one(query_for_all_users)
   end
 end

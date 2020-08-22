@@ -14,8 +14,11 @@ defmodule MarkevichMoney.Pipelines.AddTransactionTest do
       amount = 50.23
       category = insert(:transaction_category)
 
-      insert(:transaction_category_prediction,
-        prediction: to,
+      # prediction
+      insert(:transaction,
+        user: user,
+        to: to,
+        amount: 10,
         transaction_category_id: category.id
       )
 
