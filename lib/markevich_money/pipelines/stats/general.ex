@@ -6,8 +6,8 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
     payload
     |> put_stats()
     |> put_stats_total()
-    |> put_reply_markup()
     |> put_output_message()
+    |> put_details()
     |> SendMessage.call()
     |> AnswerCallback.call()
   end
@@ -30,11 +30,15 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
     Map.put(payload, :stats_total, total)
   end
 
-  defp put_reply_markup(%{callback_data: %{"type" => "all"}} = payload) do
+  defp put_details(%{callback_data: %{"type" => "all"}} = payload) do
     payload
   end
 
-  defp put_reply_markup(%{stats: stats, callback_data: %{"type" => type}} = payload) do
+  defp put_details(%{stats: stats} = payload) when stats == [] do
+    payload
+  end
+
+  defp put_details(%{stats: stats, callback_data: %{"type" => type}} = payload) do
     keyboard =
       stats
       |> Enum.map(fn {_, category_name, category_id} ->
@@ -50,8 +54,16 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
       end)
       |> Enum.chunk_every(2)
 
+    original_message = payload[:output_message]
+
+    message_with_details = """
+    #{original_message}
+    Детализированная статистика 👇👇
+    """
+
     payload
     |> Map.put(:reply_markup, %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: keyboard})
+    |> Map.put(:output_message, message_with_details)
   end
 
   defp put_output_message(%{stats: stats, stat_from: stat_from, stat_to: stat_to} = payload)
@@ -84,7 +96,6 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
 
     #{table}
     ```
-    Детализированная статистика 👇👇
     """
 
     Map.put(payload, :output_message, result_table)

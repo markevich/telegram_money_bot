@@ -399,7 +399,6 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
         Nadia.send_message(
           context.user.telegram_chat_id,
           expected_message,
-          reply_markup: %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: []},
           parse_mode: "Markdown"
         )
       )
