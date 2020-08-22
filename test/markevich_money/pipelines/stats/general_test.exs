@@ -91,6 +91,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
        #{context.category1.name}     10.0
 
       ```
+
       Детализированная статистика 👇👇
       """
 
@@ -167,7 +168,6 @@ defmodule MarkevichMoney.Stats.GeneralTest do
         Nadia.send_message(
           context.user.telegram_chat_id,
           expected_message,
-          reply_markup: %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: []},
           parse_mode: "Markdown"
         )
       )
@@ -248,6 +248,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
        #{context.category1.name}     10.0
 
       ```
+
       Детализированная статистика 👇👇
       """
 
@@ -360,6 +361,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
        #{context.category1.name}     10.0
 
       ```
+
       Детализированная статистика 👇👇
       """
 
@@ -462,7 +464,6 @@ defmodule MarkevichMoney.Stats.GeneralTest do
        #{context.category1.name}     10.0
 
       ```
-      Детализированная статистика 👇👇
       """
 
       assert_called(
@@ -540,7 +541,6 @@ defmodule MarkevichMoney.Stats.GeneralTest do
        kek              10.0
 
       ```
-      Детализированная статистика 👇👇
       """
 
       assert_called(
@@ -619,6 +619,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
        kek              10.0
 
       ```
+
       Детализированная статистика 👇👇
       """
 
