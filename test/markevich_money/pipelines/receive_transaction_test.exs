@@ -3,6 +3,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
   use Oban.Testing, repo: MarkevichMoney.Repo
+  use MarkevichMoney.Constants
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
   alias MarkevichMoney.Transactions.Transaction
@@ -61,7 +62,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       assert_enqueued(
         worker: MarkevichMoney.Gamification.Events.Broadcaster,
         args: %{
-          event: "transaction_created",
+          event: @transaction_created_event,
           transaction_id: transaction.id,
           user_id: context.user.id
         }
@@ -133,7 +134,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       assert_enqueued(
         worker: MarkevichMoney.Gamification.Events.Broadcaster,
         args: %{
-          event: "transaction_created",
+          event: @transaction_created_event,
           transaction_id: transaction.id,
           user_id: context.user.id
         }
@@ -239,14 +240,17 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
         inline_keyboard: [
           [
             %Nadia.Model.InlineKeyboardButton{
-              callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+              callback_data:
+                "{\"id\":#{transaction.id},\"pipeline\":\"#{@choose_category_callback}\"}",
               switch_inline_query: nil,
               text: "Категория",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"action\":\"ask\",\"id\":#{transaction.id},\"pipeline\":\"dlt_trn\"}",
+                "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{
+                  @delete_transaction_callback
+                }\"}",
               switch_inline_query: nil,
               text: "Удалить",
               url: nil
@@ -330,7 +334,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       assert_enqueued(
         worker: MarkevichMoney.Gamification.Events.Broadcaster,
         args: %{
-          event: "transaction_created",
+          event: @transaction_created_event,
           transaction_id: transaction.id,
           user_id: context.user.id
         }

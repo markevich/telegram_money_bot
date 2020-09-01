@@ -1,8 +1,11 @@
 defmodule MarkevichMoney.Pipelines.Stats.Callbacks do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines.Stats.{ByCategory, General}
 
-  def call(%CallbackData{callback_data: %{"type" => "c_week"}} = callback_data) do
+  def call(
+        %CallbackData{callback_data: %{"type" => @stats_callback_current_week}} = callback_data
+      ) do
     callback_data
     |> Map.from_struct()
     |> Map.put(:stat_from, Timex.shift(Timex.now(), days: -7))
@@ -10,7 +13,9 @@ defmodule MarkevichMoney.Pipelines.Stats.Callbacks do
     |> pcall()
   end
 
-  def call(%CallbackData{callback_data: %{"type" => "c_month"}} = callback_data) do
+  def call(
+        %CallbackData{callback_data: %{"type" => @stats_callback_current_month}} = callback_data
+      ) do
     callback_data
     |> Map.from_struct()
     |> Map.put(:stat_from, Timex.beginning_of_month(Timex.now()))
@@ -18,7 +23,9 @@ defmodule MarkevichMoney.Pipelines.Stats.Callbacks do
     |> pcall()
   end
 
-  def call(%CallbackData{callback_data: %{"type" => "p_month"}} = callback_data) do
+  def call(
+        %CallbackData{callback_data: %{"type" => @stats_callback_previous_month}} = callback_data
+      ) do
     previous_month = Timex.shift(Timex.now(), months: -1)
 
     callback_data
@@ -28,7 +35,7 @@ defmodule MarkevichMoney.Pipelines.Stats.Callbacks do
     |> pcall()
   end
 
-  def call(%CallbackData{callback_data: %{"type" => "all"}} = callback_data) do
+  def call(%CallbackData{callback_data: %{"type" => @stats_callback_lifetime}} = callback_data) do
     callback_data
     |> Map.from_struct()
     |> Map.put(:stat_from, Timex.parse!("2000-01-01T00:00:00+0000", "{ISO:Extended}"))

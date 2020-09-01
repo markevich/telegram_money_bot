@@ -2,6 +2,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
+  use MarkevichMoney.Constants
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
 
@@ -52,7 +53,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "c_week"},
+        callback_data: %{"pipeline" => @stats_callback, "type" => @stats_callback_current_week},
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -100,14 +101,18 @@ defmodule MarkevichMoney.Stats.GeneralTest do
           [
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category2.id},\"pipeline\":\"stats\",\"type\":\"c_week\"}",
+                "{\"c_id\":#{context.category2.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
+                  @stats_callback_current_week
+                }\"}",
               switch_inline_query: nil,
               text: "Home",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category1.id},\"pipeline\":\"stats\",\"type\":\"c_week\"}",
+                "{\"c_id\":#{context.category1.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
+                  @stats_callback_current_week
+                }\"}",
               switch_inline_query: nil,
               text: "Food",
               url: nil
@@ -137,7 +142,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "c_week"},
+        callback_data: %{"pipeline" => @stats_callback, "type" => @stats_callback_current_week},
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -209,7 +214,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "c_month"},
+        callback_data: %{"pipeline" => @stats_callback, "type" => @stats_callback_current_month},
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -257,14 +262,18 @@ defmodule MarkevichMoney.Stats.GeneralTest do
           [
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category2.id},\"pipeline\":\"stats\",\"type\":\"c_month\"}",
+                "{\"c_id\":#{context.category2.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
+                  @stats_callback_current_month
+                }\"}",
               switch_inline_query: nil,
               text: "Home",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category1.id},\"pipeline\":\"stats\",\"type\":\"c_month\"}",
+                "{\"c_id\":#{context.category1.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
+                  @stats_callback_current_month
+                }\"}",
               switch_inline_query: nil,
               text: "Food",
               url: nil
@@ -321,7 +330,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "p_month"},
+        callback_data: %{"pipeline" => @stats_callback, "type" => @stats_callback_previous_month},
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -370,14 +379,18 @@ defmodule MarkevichMoney.Stats.GeneralTest do
           [
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category2.id},\"pipeline\":\"stats\",\"type\":\"p_month\"}",
+                "{\"c_id\":#{context.category2.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
+                  @stats_callback_previous_month
+                }\"}",
               switch_inline_query: nil,
               text: "Home",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category1.id},\"pipeline\":\"stats\",\"type\":\"p_month\"}",
+                "{\"c_id\":#{context.category1.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
+                  @stats_callback_previous_month
+                }\"}",
               switch_inline_query: nil,
               text: "Food",
               url: nil
@@ -425,7 +438,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "all"},
+        callback_data: %{"pipeline" => @stats_callback, "type" => @stats_callback_lifetime},
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -503,7 +516,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "all"},
+        callback_data: %{"pipeline" => @stats_callback, "type" => @stats_callback_lifetime},
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -580,7 +593,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "p_month"},
+        callback_data: %{"pipeline" => @stats_callback, "type" => @stats_callback_previous_month},
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -627,14 +640,19 @@ defmodule MarkevichMoney.Stats.GeneralTest do
         inline_keyboard: [
           [
             %Nadia.Model.InlineKeyboardButton{
-              callback_data: "{\"c_id\":null,\"pipeline\":\"stats\",\"type\":\"p_month\"}",
+              callback_data:
+                "{\"c_id\":null,\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
+                  @stats_callback_previous_month
+                }\"}",
               switch_inline_query: nil,
               text: "❓Без категории",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category.id},\"pipeline\":\"stats\",\"type\":\"p_month\"}",
+                "{\"c_id\":#{context.category.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
+                  @stats_callback_previous_month
+                }\"}",
               switch_inline_query: nil,
               text: "kek",
               url: nil

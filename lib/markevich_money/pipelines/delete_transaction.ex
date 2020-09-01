@@ -1,9 +1,13 @@
 defmodule MarkevichMoney.Pipelines.DeleteTransaction do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Steps.Transaction.{DeleteTransaction, FetchTransaction, RenderTransaction}
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, UpdateMessage}
 
-  def call(%CallbackData{callback_data: %{"action" => "ask"}} = callback_data) do
+  def call(
+        %CallbackData{callback_data: %{"action" => @delete_transaction_callback_prompt}} =
+          callback_data
+      ) do
     callback_data
     |> Map.from_struct()
     |> fetch_transaction_id()
@@ -14,7 +18,10 @@ defmodule MarkevichMoney.Pipelines.DeleteTransaction do
     |> AnswerCallback.call()
   end
 
-  def call(%CallbackData{callback_data: %{"action" => "dlt"}} = callback_data) do
+  def call(
+        %CallbackData{callback_data: %{"action" => @delete_transaction_callback_confirm}} =
+          callback_data
+      ) do
     callback_data
     |> Map.from_struct()
     |> fetch_transaction_id()
@@ -24,7 +31,10 @@ defmodule MarkevichMoney.Pipelines.DeleteTransaction do
     |> AnswerCallback.call()
   end
 
-  def call(%CallbackData{callback_data: %{"action" => "cnl"}} = callback_data) do
+  def call(
+        %CallbackData{callback_data: %{"action" => @delete_transaction_callback_cancel}} =
+          callback_data
+      ) do
     callback_data
     |> Map.from_struct()
     |> fetch_transaction_id()
@@ -41,12 +51,20 @@ defmodule MarkevichMoney.Pipelines.DeleteTransaction do
           %Nadia.Model.InlineKeyboardButton{
             text: "❌ Удалить ❌",
             callback_data:
-              Jason.encode!(%{pipeline: "dlt_trn", action: "dlt", id: transaction_id})
+              Jason.encode!(%{
+                pipeline: @delete_transaction_callback,
+                action: @delete_transaction_callback_confirm,
+                id: transaction_id
+              })
           },
           %Nadia.Model.InlineKeyboardButton{
             text: "Отмена",
             callback_data:
-              Jason.encode!(%{pipeline: "dlt_trn", action: "cnl", id: transaction_id})
+              Jason.encode!(%{
+                pipeline: @delete_transaction_callback,
+                action: @delete_transaction_callback_cancel,
+                id: transaction_id
+              })
           }
         ]
       ]

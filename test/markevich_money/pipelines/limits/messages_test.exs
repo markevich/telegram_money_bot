@@ -2,12 +2,13 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
+  use MarkevichMoney.Constants
   alias MarkevichMoney.Gamification.TransactionCategoryLimit
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
   alias MarkevichMoney.Steps.Limits.Render
 
-  describe "/limits message" do
+  describe "#{@limits_message} message" do
     setup do
       user = insert(:user)
       unrelated_user = insert(:user)
@@ -48,7 +49,8 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
     end
 
     mocked_test "Renders limits message", context do
-      reply_payload = Pipelines.call(%MessageData{message: "/limits", current_user: context.user})
+      reply_payload =
+        Pipelines.call(%MessageData{message: @limits_message, current_user: context.user})
 
       assert_called(Render.call(_))
       assert(Map.has_key?(reply_payload, :output_message))
@@ -66,7 +68,7 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
     end
   end
 
-  describe "/set_limit message" do
+  describe "#{@set_limit_message} message" do
     setup do
       user = insert(:user)
       category = insert(:transaction_category)
@@ -80,7 +82,7 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
     end
 
     mocked_test "Sets the limit with correct message", context do
-      message = "/set_limit #{context.category.id} #{context.new_limit}"
+      message = "#{@set_limit_message} #{context.category.id} #{context.new_limit}"
       Pipelines.call(%MessageData{message: message, current_user: context.user})
 
       query =
@@ -96,7 +98,7 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
       expected_message = """
       Упешно!
 
-      Нажмите на /limits для просмотра обновленных лимитов
+      Нажмите на #{@limits_message} для просмотра обновленных лимитов
       """
 
       assert_called(
@@ -109,15 +111,15 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
     end
 
     mocked_test "Returns support message if input message is invalid", context do
-      message = "/set_limit blabla blabla"
+      message = "#{@set_limit_message} blabla blabla"
       Pipelines.call(%MessageData{message: message, current_user: context.user})
 
       expected_message = """
       Я не смог распознать эту команду
 
       Пример правильной команды:
-      */set_limit 1 150*
-        - *1* это *id* категории, которую можно подсмотреть с помощью команды /limits
+      *#{@set_limit_message} 1 150*
+        - *1* это *id* категории, которую можно подсмотреть с помощью команды #{@limits_message}
         - *150* это целочисленное значение лимита
       """
 

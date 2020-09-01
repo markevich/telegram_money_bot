@@ -1,5 +1,6 @@
 defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
   @moduledoc false
+  use MarkevichMoney.Constants
   use MarkevichMoney.DataCase, async: true
   alias MarkevichMoney.Steps.Transaction.RenderTransaction
 
@@ -28,14 +29,17 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
                inline_keyboard: [
                  [
                    %Nadia.Model.InlineKeyboardButton{
-                     callback_data: "{\"id\":#{transaction.id},\"pipeline\":\"choose_category\"}",
+                     callback_data:
+                       "{\"id\":#{transaction.id},\"pipeline\":\"#{@choose_category_callback}\"}",
                      switch_inline_query: nil,
                      text: "Категория",
                      url: nil
                    },
                    %Nadia.Model.InlineKeyboardButton{
                      callback_data:
-                       "{\"action\":\"ask\",\"id\":#{transaction.id},\"pipeline\":\"dlt_trn\"}",
+                       "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{
+                         transaction.id
+                       },\"pipeline\":\"#{@delete_transaction_callback}\"}",
                      switch_inline_query: nil,
                      text: "Удалить",
                      url: nil

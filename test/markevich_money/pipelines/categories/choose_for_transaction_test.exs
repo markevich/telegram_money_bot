@@ -2,6 +2,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
+  use MarkevichMoney.Constants
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
   alias MarkevichMoney.Steps.Transaction.RenderTransaction
@@ -17,7 +18,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"id" => transaction.id, "pipeline" => "choose_category"},
+        callback_data: %{"id" => transaction.id, "pipeline" => @choose_category_callback},
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -58,14 +59,18 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"c_id\":#{context.category1.id},\"id\":#{transaction.id},\"pipeline\":\"set_category\"}",
+                  "{\"c_id\":#{context.category1.id},\"id\":#{transaction.id},\"pipeline\":\"#{
+                    @set_category_callback
+                  }\"}",
                 switch_inline_query: nil,
                 text: context.category1.name,
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"c_id\":#{context.category2.id},\"id\":#{transaction.id},\"pipeline\":\"set_category\"}",
+                  "{\"c_id\":#{context.category2.id},\"id\":#{transaction.id},\"pipeline\":\"#{
+                    @set_category_callback
+                  }\"}",
                 switch_inline_query: nil,
                 text: context.category2.name,
                 url: nil

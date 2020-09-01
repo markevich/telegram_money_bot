@@ -2,6 +2,7 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
+  use MarkevichMoney.Constants
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
 
@@ -21,7 +22,11 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "c_week", "c_id" => category1.id},
+        callback_data: %{
+          "pipeline" => @stats_callback,
+          "type" => @stats_callback_current_week,
+          "c_id" => category1.id
+        },
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -102,7 +107,11 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "c_week", "c_id" => category2.id},
+        callback_data: %{
+          "pipeline" => @stats_callback,
+          "type" => @stats_callback_current_week,
+          "c_id" => category2.id
+        },
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -201,7 +210,11 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "c_month", "c_id" => category2.id},
+        callback_data: %{
+          "pipeline" => @stats_callback,
+          "type" => @stats_callback_current_month,
+          "c_id" => category2.id
+        },
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -302,7 +315,11 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "p_month", "c_id" => category2.id},
+        callback_data: %{
+          "pipeline" => @stats_callback,
+          "type" => @stats_callback_previous_month,
+          "c_id" => category2.id
+        },
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -368,7 +385,7 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "c_week"},
+        callback_data: %{"pipeline" => @stats_callback, "type" => @stats_callback_current_week},
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,
@@ -433,7 +450,11 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       callback_id = 234
 
       callback_data = %CallbackData{
-        callback_data: %{"pipeline" => "stats", "type" => "p_month", "c_id" => nil},
+        callback_data: %{
+          "pipeline" => @stats_callback,
+          "type" => @stats_callback_previous_month,
+          "c_id" => nil
+        },
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
         current_user: user,

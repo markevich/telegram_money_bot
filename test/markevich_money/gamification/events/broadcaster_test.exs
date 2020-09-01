@@ -3,17 +3,18 @@ defmodule MarkevichMoney.Gamification.Events.BroadcasterTest do
   use MarkevichMoney.DataCase, async: true
   use MecksUnit.Case
   use Oban.Testing, repo: MarkevichMoney.Repo
+  use MarkevichMoney.Constants
   import ExUnit.CaptureLog
 
   alias MarkevichMoney.Gamification.Events.Broadcaster
   alias MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit, as: LimitTracker
 
-  describe "when event is transaction_created" do
+  describe "when event is #{@transaction_created_event}" do
     setup do
       %{
         payload: %{
           "transaction_id" => 1,
-          "event" => "transaction_created"
+          "event" => @transaction_created_event
         }
       }
     end
@@ -28,12 +29,12 @@ defmodule MarkevichMoney.Gamification.Events.BroadcasterTest do
     end
   end
 
-  describe "when event is transaction_updated" do
+  describe "when event is #{@transaction_updated_event}" do
     setup do
       %{
         payload: %{
           "transaction_id" => 1,
-          "event" => "transaction_updated"
+          "event" => @transaction_updated_event
         }
       }
     end
