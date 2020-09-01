@@ -1,5 +1,7 @@
 defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
   use Timex
+  use MarkevichMoney.Constants
+  use MarkevichMoney.Constants
   alias MarkevichMoney.Transactions.Transaction
 
   def call(%{transaction: transaction} = payload) do
@@ -45,12 +47,17 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
         [
           %Nadia.Model.InlineKeyboardButton{
             text: "Категория",
-            callback_data: Jason.encode!(%{pipeline: "choose_category", id: transaction.id})
+            callback_data:
+              Jason.encode!(%{pipeline: @choose_category_callback, id: transaction.id})
           },
           %Nadia.Model.InlineKeyboardButton{
             text: "Удалить",
             callback_data:
-              Jason.encode!(%{pipeline: "dlt_trn", action: "ask", id: transaction.id})
+              Jason.encode!(%{
+                pipeline: @delete_transaction_callback,
+                action: @delete_transaction_callback_prompt,
+                id: transaction.id
+              })
           }
         ]
       ]

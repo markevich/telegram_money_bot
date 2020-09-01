@@ -1,5 +1,6 @@
 defmodule MarkevichMoney.Steps.Limits.RenderTest do
   use MarkevichMoney.DataCase, async: true
+  use MarkevichMoney.Constants
 
   alias MarkevichMoney.Gamifications
   alias MarkevichMoney.Steps.Limits.Render
@@ -46,7 +47,7 @@ defmodule MarkevichMoney.Steps.Limits.RenderTest do
         ```
         Для установки лимита используйте:
 
-        */set_limit id value*
+        *#{@set_limit_message} id value*
         """
       )
     end

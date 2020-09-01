@@ -1,4 +1,5 @@
 defmodule MarkevichMoney.Pipelines.Stats.General do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, SendMessage}
   alias MarkevichMoney.Transactions
 
@@ -30,7 +31,7 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
     Map.put(payload, :stats_total, total)
   end
 
-  defp put_details(%{callback_data: %{"type" => "all"}} = payload) do
+  defp put_details(%{callback_data: %{"type" => @stats_callback_lifetime}} = payload) do
     payload
   end
 
@@ -46,7 +47,7 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
           text: category_name,
           callback_data:
             Jason.encode!(%{
-              pipeline: "stats",
+              pipeline: @stats_callback,
               type: type,
               c_id: category_id
             })

@@ -3,6 +3,7 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
   use MecksUnit.Case
+  use MarkevichMoney.Constants
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
   alias MarkevichMoney.Steps.Transaction.RenderTransaction
@@ -19,8 +20,8 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
       callback_data = %CallbackData{
         callback_data: %{
           "id" => transaction.id,
-          "pipeline" => "dlt_trn",
-          "action" => "dlt"
+          "pipeline" => @delete_transaction_callback,
+          "action" => @delete_transaction_callback_confirm
         },
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
@@ -71,8 +72,8 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
       callback_data = %CallbackData{
         callback_data: %{
           "id" => transaction.id,
-          "pipeline" => "dlt_trn",
-          "action" => "ask"
+          "pipeline" => @delete_transaction_callback,
+          "action" => @delete_transaction_callback_prompt
         },
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
@@ -112,14 +113,18 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"dlt\",\"id\":#{context.transaction.id},\"pipeline\":\"dlt_trn\"}",
+                  "{\"action\":\"#{@delete_transaction_callback_confirm}\",\"id\":#{
+                    context.transaction.id
+                  },\"pipeline\":\"#{@delete_transaction_callback}\"}",
                 switch_inline_query: nil,
                 text: "❌ Удалить ❌",
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"cnl\",\"id\":#{context.transaction.id},\"pipeline\":\"dlt_trn\"}",
+                  "{\"action\":\"#{@delete_transaction_callback_cancel}\",\"id\":#{
+                    context.transaction.id
+                  },\"pipeline\":\"#{@delete_transaction_callback}\"}",
                 switch_inline_query: nil,
                 text: "Отмена",
                 url: nil
@@ -155,8 +160,8 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
       callback_data = %CallbackData{
         callback_data: %{
           "id" => transaction.id,
-          "pipeline" => "dlt_trn",
-          "action" => "cnl"
+          "pipeline" => @delete_transaction_callback,
+          "action" => @delete_transaction_callback_cancel
         },
         callback_id: callback_id,
         chat_id: user.telegram_chat_id,
@@ -196,14 +201,16 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"id\":#{context.transaction.id},\"pipeline\":\"choose_category\"}",
+                  "{\"id\":#{context.transaction.id},\"pipeline\":\"#{@choose_category_callback}\"}",
                 switch_inline_query: nil,
                 text: "Категория",
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"ask\",\"id\":#{context.transaction.id},\"pipeline\":\"dlt_trn\"}",
+                  "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{
+                    context.transaction.id
+                  },\"pipeline\":\"#{@delete_transaction_callback}\"}",
                 switch_inline_query: nil,
                 text: "Удалить",
                 url: nil

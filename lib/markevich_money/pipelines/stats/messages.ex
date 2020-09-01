@@ -1,4 +1,5 @@
 defmodule MarkevichMoney.Pipelines.Stats.Messages do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Steps.Telegram.SendMessage
 
@@ -8,21 +9,25 @@ defmodule MarkevichMoney.Pipelines.Stats.Messages do
         [
           %Nadia.Model.InlineKeyboardButton{
             text: "Текущая неделя",
-            callback_data: Jason.encode!(%{pipeline: :stats, type: :c_week})
+            callback_data:
+              Jason.encode!(%{pipeline: @stats_callback, type: @stats_callback_current_week})
           },
           %Nadia.Model.InlineKeyboardButton{
             text: "Текущий месяц",
-            callback_data: Jason.encode!(%{pipeline: :stats, type: :c_month})
+            callback_data:
+              Jason.encode!(%{pipeline: @stats_callback, type: @stats_callback_current_month})
           }
         ],
         [
           %Nadia.Model.InlineKeyboardButton{
             text: "Прошлый месяц",
-            callback_data: Jason.encode!(%{pipeline: :stats, type: :p_month})
+            callback_data:
+              Jason.encode!(%{pipeline: @stats_callback, type: @stats_callback_previous_month})
           },
           %Nadia.Model.InlineKeyboardButton{
             text: "За все время",
-            callback_data: Jason.encode!(%{pipeline: :stats, type: :all})
+            callback_data:
+              Jason.encode!(%{pipeline: @stats_callback, type: @stats_callback_lifetime})
           }
         ]
       ]

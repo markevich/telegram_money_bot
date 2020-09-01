@@ -3,11 +3,12 @@ defmodule MarkevichMoney.Pipelines.AddTransactionTest do
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
   use Oban.Testing, repo: MarkevichMoney.Repo
+  use MarkevichMoney.Constants
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
   alias MarkevichMoney.Transactions.Transaction
 
-  describe "/add message" do
+  describe "#{@add_message} message" do
     setup do
       user = insert(:user)
       to = "Something great"
@@ -29,7 +30,7 @@ defmodule MarkevichMoney.Pipelines.AddTransactionTest do
       #  FYI: /add 50.23 Something great
       reply_payload =
         Pipelines.call(%MessageData{
-          message: "/add #{context.amount} #{context.to}",
+          message: "#{@add_message} #{context.amount} #{context.to}",
           chat_id: context.user.telegram_chat_id
         })
 
@@ -50,7 +51,7 @@ defmodule MarkevichMoney.Pipelines.AddTransactionTest do
       assert_enqueued(
         worker: MarkevichMoney.Gamification.Events.Broadcaster,
         args: %{
-          event: "transaction_created",
+          event: @transaction_created_event,
           transaction_id: transaction.id,
           user_id: context.user.id
         }

@@ -1,10 +1,11 @@
 defmodule MarkevichMoney.Pipelines.Limits.Set do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.Gamifications
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Steps.Telegram.SendMessage
 
-  @regex ~r/\/set_limit\s+(?<category_id>\d+)\s+(?<limit>\d+)/
-  def call(%MessageData{message: "/set_limit" <> _rest} = message_data) do
+  @regex ~r/#{@set_limit_message}\s+(?<category_id>\d+)\s+(?<limit>\d+)/
+  def call(%MessageData{message: @set_limit_message <> _rest} = message_data) do
     message_data
     |> Map.from_struct()
     |> parse_limits()
@@ -36,7 +37,7 @@ defmodule MarkevichMoney.Pipelines.Limits.Set do
     output_message = """
     Упешно!
 
-    Нажмите на /limits для просмотра обновленных лимитов
+    Нажмите на #{@limits_message} для просмотра обновленных лимитов
     """
 
     payload
@@ -48,8 +49,8 @@ defmodule MarkevichMoney.Pipelines.Limits.Set do
     Я не смог распознать эту команду
 
     Пример правильной команды:
-    */set_limit 1 150*
-      - *1* это *id* категории, которую можно подсмотреть с помощью команды /limits
+    *#{@set_limit_message} 1 150*
+      - *1* это *id* категории, которую можно подсмотреть с помощью команды #{@limits_message}
       - *150* это целочисленное значение лимита
     """
 

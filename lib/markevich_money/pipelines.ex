@@ -1,4 +1,5 @@
 defmodule MarkevichMoney.Pipelines do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.{CallbackData, MessageData}
   alias MarkevichMoney.Pipelines.AddTransaction, as: AddTransactionPipeline
   alias MarkevichMoney.Pipelines.Categories.Callbacks, as: CategoriesCallbacksPipeline
@@ -19,17 +20,20 @@ defmodule MarkevichMoney.Pipelines do
   end
 
   def call(%CallbackData{callback_data: %{"pipeline" => pipeline}} = callback_data)
-      when pipeline in ["choose_category", "set_category"] do
+      when pipeline in [@choose_category_callback, @set_category_callback] do
     callback_data
     |> CategoriesCallbacksPipeline.call()
   end
 
-  def call(%CallbackData{callback_data: %{"pipeline" => "stats"}} = callback_data) do
+  def call(%CallbackData{callback_data: %{"pipeline" => @stats_callback}} = callback_data) do
     callback_data
     |> StatsCallbacksPipeline.call()
   end
 
-  def call(%CallbackData{callback_data: %{"pipeline" => "dlt_trn"}} = callback_data) do
+  def call(
+        %CallbackData{callback_data: %{"pipeline" => @delete_transaction_callback}} =
+          callback_data
+      ) do
     callback_data
     |> DeleteTransactionPipeline.call()
   end
@@ -76,23 +80,23 @@ defmodule MarkevichMoney.Pipelines do
     |> ReceiveTransactionPipeline.call()
   end
 
-  def call(%MessageData{message: "/help", current_user: user}) do
+  def call(%MessageData{message: @help_message, current_user: user}) do
     HelpPipeline.call(%MessageData{current_user: user})
   end
 
-  def call(%MessageData{message: "/stats", current_user: user}) do
+  def call(%MessageData{message: @stats_message, current_user: user}) do
     StatsMessagesPipeline.call(%MessageData{current_user: user})
   end
 
-  def call(%MessageData{message: "/add" <> _rest = message, current_user: user}) do
+  def call(%MessageData{message: @add_message <> _rest = message, current_user: user}) do
     AddTransactionPipeline.call(%MessageData{message: message, current_user: user})
   end
 
-  def call(%MessageData{message: "/limits" <> _rest, current_user: _user} = data) do
+  def call(%MessageData{message: @limits_message <> _rest, current_user: _user} = data) do
     LimitsMessagesPipeline.call(data)
   end
 
-  def call(%MessageData{message: "/set_limit" <> _rest, current_user: _user} = data) do
+  def call(%MessageData{message: @set_limit_message <> _rest, current_user: _user} = data) do
     LimitsMessagesPipeline.call(data)
   end
 

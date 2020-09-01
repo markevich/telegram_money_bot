@@ -1,4 +1,6 @@
 defmodule MarkevichMoney.Steps.Limits.Render do
+  use MarkevichMoney.Constants
+
   def call(%{limits: limits} = payload) do
     table = render_table(limits)
 
@@ -8,7 +10,7 @@ defmodule MarkevichMoney.Steps.Limits.Render do
     ```
     Для установки лимита используйте:
 
-    */set_limit id value*
+    *#{@set_limit_message} id value*
     """
 
     payload

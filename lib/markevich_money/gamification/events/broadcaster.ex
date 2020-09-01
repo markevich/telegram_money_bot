@@ -1,4 +1,5 @@
 defmodule MarkevichMoney.Gamification.Events.Broadcaster do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit, as: LimitTracker
   alias MarkevichMoney.LoggerWithSentry
 
@@ -6,7 +7,7 @@ defmodule MarkevichMoney.Gamification.Events.Broadcaster do
 
   @impl Oban.Worker
   def perform(%Job{args: %{"event" => event, "transaction_id" => _t_id} = payload})
-      when event in ["transaction_created", "transaction_updated"] do
+      when event in [@transaction_created_event, @transaction_updated_event] do
     payload
     |> LimitTracker.new()
     |> Oban.insert()

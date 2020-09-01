@@ -1,4 +1,5 @@
 defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, UpdateMessage}
   alias MarkevichMoney.Steps.Transaction.{FetchTransaction, RenderTransaction}
 
@@ -27,7 +28,11 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
         %Nadia.Model.InlineKeyboardButton{
           text: category.name,
           callback_data:
-            Jason.encode!(%{pipeline: "set_category", id: transaction_id, c_id: category.id})
+            Jason.encode!(%{
+              pipeline: @set_category_callback,
+              id: transaction_id,
+              c_id: category.id
+            })
         }
       end)
       |> Enum.chunk_every(2)
