@@ -18,6 +18,8 @@ defmodule MarkevichMoney.Constants do
       @delete_transaction_callback_confirm "dlt"
       @delete_transaction_callback_cancel "cnl"
 
+      @limits_stats_callback "limits_stats"
+
       # messages
       @help_message "/help"
       @stats_message "/stats"

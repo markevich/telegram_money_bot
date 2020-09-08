@@ -2,7 +2,7 @@ defmodule MarkevichMoney.Pipelines.Limits.List do
   use MarkevichMoney.Constants
   alias MarkevichMoney.Gamifications
   alias MarkevichMoney.MessageData
-  alias MarkevichMoney.Steps.Limits.Render
+  alias MarkevichMoney.Steps.Limits.RenderLimitsValues, as: Render
   alias MarkevichMoney.Steps.Telegram.SendMessage
 
   def call(%MessageData{message: @limits_message <> _rest} = message_data) do

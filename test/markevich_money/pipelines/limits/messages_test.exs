@@ -6,7 +6,7 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
   alias MarkevichMoney.Gamification.TransactionCategoryLimit
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
-  alias MarkevichMoney.Steps.Limits.Render
+  alias MarkevichMoney.Steps.Limits.RenderLimitsValues, as: Render
 
   describe "#{@limits_message} message" do
     setup do
@@ -42,7 +42,7 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
       }
     end
 
-    defmock MarkevichMoney.Steps.Limits.Render do
+    defmock MarkevichMoney.Steps.Limits.RenderLimitsValues do
       def call(_) do
         :passthrough
       end

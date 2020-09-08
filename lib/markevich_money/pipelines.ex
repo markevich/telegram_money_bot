@@ -5,6 +5,8 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.Pipelines.Categories.Callbacks, as: CategoriesCallbacksPipeline
   alias MarkevichMoney.Pipelines.DeleteTransaction, as: DeleteTransactionPipeline
   alias MarkevichMoney.Pipelines.Help, as: HelpPipeline
+  alias MarkevichMoney.Pipelines.Limits.Callbacks, as: LimitsCallbacksPipeline
+  alias MarkevichMoney.Pipelines.Limits.Callbacks, as: LimitsCallbacksPipeline
   alias MarkevichMoney.Pipelines.Limits.Messages, as: LimitsMessagesPipeline
   alias MarkevichMoney.Pipelines.ReceiveTransaction, as: ReceiveTransactionPipeline
   alias MarkevichMoney.Pipelines.Stats.Callbacks, as: StatsCallbacksPipeline
@@ -36,6 +38,11 @@ defmodule MarkevichMoney.Pipelines do
       ) do
     callback_data
     |> DeleteTransactionPipeline.call()
+  end
+
+  def call(%CallbackData{callback_data: %{"pipeline" => @limits_stats_callback}} = callback_data) do
+    callback_data
+    |> LimitsCallbacksPipeline.call()
   end
 
   def call(%CallbackData{callback_data: %{"pipeline" => _}} = callback_data) do
