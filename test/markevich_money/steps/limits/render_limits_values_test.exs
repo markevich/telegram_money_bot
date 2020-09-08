@@ -1,9 +1,9 @@
-defmodule MarkevichMoney.Steps.Limits.RenderTest do
+defmodule MarkevichMoney.Steps.Limits.RenderLimitsValuesTest do
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.Constants
 
   alias MarkevichMoney.Gamifications
-  alias MarkevichMoney.Steps.Limits.Render
+  alias MarkevichMoney.Steps.Limits.RenderLimitsValues, as: Render
 
   describe ".call" do
     setup do
@@ -18,6 +18,12 @@ defmodule MarkevichMoney.Steps.Limits.RenderTest do
         limit: 125
       )
 
+      insert(:transaction,
+        transaction_category: category_with_limit,
+        user: user,
+        amount: 100
+      )
+
       limits = Gamifications.list_categories_limits(user)
 
       %{
@@ -30,12 +36,13 @@ defmodule MarkevichMoney.Steps.Limits.RenderTest do
     end
 
     test "Renders limits message", context do
-      reply_payload = Render.call(%{limits: context.limits})
+      reply_payload = Render.call(%{limits: context.limits, current_user: context.user})
       assert(Map.has_key?(reply_payload, :output_message))
 
       assert(
         reply_payload[:output_message] == """
         ```
+
           Лимиты по категориям
 
          id   Категория    Лимит
@@ -45,6 +52,15 @@ defmodule MarkevichMoney.Steps.Limits.RenderTest do
          #{context.category_with_0_limit.id}   #{context.category_with_0_limit.name}   ♾️
 
         ```
+        ```
+         Расходы за текущий месяц
+
+         Категория      Расходы
+
+         limit_cat2     0 из 125
+
+        ```
+
         Для установки лимита используйте:
 
         *#{@set_limit_message} id value*

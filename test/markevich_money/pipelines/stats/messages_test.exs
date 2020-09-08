@@ -49,6 +49,14 @@ defmodule MarkevichMoney.Pipelines.Stats.MessagesTest do
               text: "За все время",
               url: nil
             }
+          ],
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data: "{\"pipeline\":\"#{@limits_stats_callback}\"}",
+              switch_inline_query: nil,
+              text: "Расходы по лимитам",
+              url: nil
+            }
           ]
         ]
       }

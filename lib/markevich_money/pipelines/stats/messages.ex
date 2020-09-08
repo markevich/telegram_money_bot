@@ -29,6 +29,12 @@ defmodule MarkevichMoney.Pipelines.Stats.Messages do
             callback_data:
               Jason.encode!(%{pipeline: @stats_callback, type: @stats_callback_lifetime})
           }
+        ],
+        [
+          %Nadia.Model.InlineKeyboardButton{
+            text: "Расходы по лимитам",
+            callback_data: Jason.encode!(%{pipeline: @limits_stats_callback})
+          }
         ]
       ]
     }
