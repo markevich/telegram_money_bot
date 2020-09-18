@@ -6,7 +6,7 @@ defmodule MarkevichMoney.Pipelines.Limits.CallbacksTest do
   alias MarkevichMoney.{CallbackData, Pipelines}
   alias MarkevichMoney.Steps.Limits.RenderLimitsStats
 
-  describe "set_category callback" do
+  describe "#{@limits_stats_callback} callback" do
     setup do
       user = insert(:user)
       user2 = insert(:user)
@@ -75,22 +75,10 @@ defmodule MarkevichMoney.Pipelines.Limits.CallbacksTest do
       assert_called(RenderLimitsStats.call(_))
       assert(Map.has_key?(reply_payload, :output_message))
 
-      expected_message = """
-      ```
-       Расходы за текущий месяц
-
-       Категория     Расходы
-
-       #{context.home_category.name}    100 из #{context.home_limit.limit}
-       #{context.food_category.name}    0 из #{context.food_limit.limit}
-
-      ```
-      """
-
       assert_called(
         Nadia.send_message(
           context.user.telegram_chat_id,
-          expected_message,
+          _,
           parse_mode: "Markdown"
         )
       )
