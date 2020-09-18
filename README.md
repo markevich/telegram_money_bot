@@ -2,7 +2,7 @@
 
 ---
 
-# MarkevichMoney
+# TelegramMoneyBot
 
 To start your Phoenix server:
 

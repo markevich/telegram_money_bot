@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Repo.Migrations.CreateBots do
+defmodule TelegramMoneyBot.Repo.Migrations.CreateBots do
   use Ecto.Migration
 
   def change do

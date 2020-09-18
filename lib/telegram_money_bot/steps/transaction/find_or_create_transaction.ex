@@ -1,0 +1,19 @@
+defmodule TelegramMoneyBot.Steps.Transaction.FindOrCreateTransaction do
+  alias TelegramMoneyBot.Transactions
+
+  def call(payload) do
+    transaction = find_or_create_transaction(payload)
+
+    Map.put(payload, :transaction_id, transaction.id)
+  end
+
+  defp find_or_create_transaction(%{
+         parsed_attributes: %{account: account, amount: amount, issued_at: issued_at},
+         current_user: current_user
+       }) do
+    {:ok, transaction} =
+      Transactions.upsert_transaction(current_user.id, account, amount, issued_at)
+
+    Transactions.get_transaction!(transaction.id)
+  end
+end

@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Repo.Migrations.AddLookupHashToTransactions do
+defmodule TelegramMoneyBot.Repo.Migrations.AddLookupHashToTransactions do
   use Ecto.Migration
 
   def change do

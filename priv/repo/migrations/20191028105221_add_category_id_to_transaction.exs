@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Repo.Migrations.AddCategoryIdToTransaction do
+defmodule TelegramMoneyBot.Repo.Migrations.AddCategoryIdToTransaction do
   use Ecto.Migration
 
   def change do

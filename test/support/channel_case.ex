@@ -1,4 +1,4 @@
-defmodule MarkevichMoneyWeb.ChannelCase do
+defmodule TelegramMoneyBotWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -21,18 +21,18 @@ defmodule MarkevichMoneyWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import MarkevichMoneyWeb.ChannelCase
+      import TelegramMoneyBotWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint MarkevichMoneyWeb.Endpoint
+      @endpoint TelegramMoneyBotWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Sandbox.checkout(MarkevichMoney.Repo)
+    :ok = Sandbox.checkout(TelegramMoneyBot.Repo)
 
     unless tags[:async] do
-      Sandbox.mode(MarkevichMoney.Repo, {:shared, self()})
+      Sandbox.mode(TelegramMoneyBot.Repo, {:shared, self()})
     end
 
     :ok

@@ -1,4 +1,4 @@
-defmodule MarkevichMoneyWeb.ConnCase do
+defmodule TelegramMoneyBotWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -22,19 +22,19 @@ defmodule MarkevichMoneyWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import MarkevichMoneyWeb.ConnCase
-      alias MarkevichMoneyWeb.Router.Helpers, as: Routes
+      import TelegramMoneyBotWeb.ConnCase
+      alias TelegramMoneyBotWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint MarkevichMoneyWeb.Endpoint
+      @endpoint TelegramMoneyBotWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Sandbox.checkout(MarkevichMoney.Repo)
+    :ok = Sandbox.checkout(TelegramMoneyBot.Repo)
 
     unless tags[:async] do
-      Sandbox.mode(MarkevichMoney.Repo, {:shared, self()})
+      Sandbox.mode(TelegramMoneyBot.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

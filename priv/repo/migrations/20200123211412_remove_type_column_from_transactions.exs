@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Repo.Migrations.RemoveTypeColumnFromTransactions do
+defmodule TelegramMoneyBot.Repo.Migrations.RemoveTypeColumnFromTransactions do
   use Ecto.Migration
 
   def change do

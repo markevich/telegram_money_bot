@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Repo.Migrations.RenameTargetToToInTransactions do
+defmodule TelegramMoneyBot.Repo.Migrations.RenameTargetToToInTransactions do
   use Ecto.Migration
 
   def change do

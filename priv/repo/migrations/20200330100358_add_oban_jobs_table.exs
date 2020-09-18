@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Repo.Migrations.AddObanJobsTable do
+defmodule TelegramMoneyBot.Repo.Migrations.AddObanJobsTable do
   use Ecto.Migration
 
   def up do

@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.MockNadia do
+defmodule TelegramMoneyBot.MockNadia do
   use ExUnit.CaseTemplate
 
   using do

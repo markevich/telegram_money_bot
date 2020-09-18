@@ -1,15 +1,15 @@
-defmodule MarkevichMoney.Factory do
-  use ExMachina.Ecto, repo: MarkevichMoney.Repo
+defmodule TelegramMoneyBot.Factory do
+  use ExMachina.Ecto, repo: TelegramMoneyBot.Repo
 
   def user_factory do
-    %MarkevichMoney.Users.User{
+    %TelegramMoneyBot.Users.User{
       name: sequence(:name, &"username_#{&1}"),
       telegram_chat_id: sequence(:telegram_chat_id, & &1)
     }
   end
 
   def transaction_factory do
-    %MarkevichMoney.Transactions.Transaction{
+    %TelegramMoneyBot.Transactions.Transaction{
       account: "BY06ALFA30143400080030270000",
       issued_at: DateTime.utc_now(),
       amount: Decimal.new(-100),
@@ -22,13 +22,13 @@ defmodule MarkevichMoney.Factory do
   end
 
   def transaction_category_factory do
-    %MarkevichMoney.Transactions.TransactionCategory{
+    %TelegramMoneyBot.Transactions.TransactionCategory{
       name: sequence(:name, &"category#{&1}")
     }
   end
 
   def transaction_category_limit_factory do
-    %MarkevichMoney.Gamification.TransactionCategoryLimit{
+    %TelegramMoneyBot.Gamification.TransactionCategoryLimit{
       user: build(:user),
       transaction_category: build(:transaction_category),
       limit: 100

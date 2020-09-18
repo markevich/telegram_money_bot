@@ -24,7 +24,7 @@ database_url =
     For example: ecto://USER:PASS@HOST/DATABASE
     """
 
-config :markevich_money, MarkevichMoney.Repo,
+config :telegram_money_bot, TelegramMoneyBot.Repo,
   # ssl: true,
   url: database_url,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
@@ -36,7 +36,7 @@ secret_key_base =
     You can generate one by calling: mix phx.gen.secret
     """
 
-config :markevich_money, MarkevichMoneyWeb.Endpoint,
+config :telegram_money_bot, TelegramMoneyBotWeb.Endpoint,
   https: [
     port: 443,
     cipher_suite: :strong,
@@ -46,7 +46,7 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
     transport_options: [socket_opts: [:inet6]]
   ],
   secret_key_base: secret_key_base,
-  live_view: [signing_salt: Helpers.get_env("MARKEVICH_MONEY_LIVE_VIEW_SALT")]
+  live_view: [signing_salt: Helpers.get_env("telegram_money_bot_LIVE_VIEW_SALT")]
 
 config :sentry,
   dsn: Helpers.get_env("SENTRY_URL"),
@@ -63,9 +63,9 @@ config :sentry,
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start each relevant endpoint:
 #
-config :markevich_money, MarkevichMoneyWeb.Endpoint, server: true
+config :telegram_money_bot, TelegramMoneyBotWeb.Endpoint, server: true
 config :nadia, token: Helpers.get_env("TELEGRAM_TOKEN")
-config :markevich_money, mailgun_api_key: Helpers.get_env("MAILGUN_API_KEY")
+config :telegram_money_bot, mailgun_api_key: Helpers.get_env("MAILGUN_API_KEY")
 
 #
 # Then you can assemble a release by calling `mix release`.

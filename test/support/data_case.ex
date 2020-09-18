@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.DataCase do
+defmodule TelegramMoneyBot.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -18,21 +18,21 @@ defmodule MarkevichMoney.DataCase do
 
   using do
     quote do
-      alias MarkevichMoney.Repo
+      alias TelegramMoneyBot.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import MarkevichMoney.DataCase
-      import MarkevichMoney.Factory
+      import TelegramMoneyBot.DataCase
+      import TelegramMoneyBot.Factory
     end
   end
 
   setup tags do
-    :ok = Sandbox.checkout(MarkevichMoney.Repo)
+    :ok = Sandbox.checkout(TelegramMoneyBot.Repo)
 
     unless tags[:async] do
-      Sandbox.mode(MarkevichMoney.Repo, {:shared, self()})
+      Sandbox.mode(TelegramMoneyBot.Repo, {:shared, self()})
     end
 
     :ok

@@ -1,13 +1,13 @@
 use Mix.Config
 
 # Configure your database
-config :markevich_money, MarkevichMoney.Repo,
+config :telegram_money_bot, TelegramMoneyBot.Repo,
   username: "postgres",
   password: "",
-  database: "markevich_money_dev",
+  database: "telegram_money_bot_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
 config :nadia, token: "bot token"
-config :markevich_money, mailgun_api_key: "api key"
+config :telegram_money_bot, mailgun_api_key: "api key"

@@ -5,12 +5,12 @@ use Mix.Config
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :markevich_money, MarkevichMoney.Repo,
+config :telegram_money_bot, TelegramMoneyBot.Repo,
   username: "postgres",
   password: "",
-  database: "markevich_money_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "telegram_money_bot_test#{System.get_env("MIX_TEST_PARTITION")}",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :nadia, token: "bot token"
-config :markevich_money, mailgun_api_key: "api key"
+config :telegram_money_bot, mailgun_api_key: "api key"

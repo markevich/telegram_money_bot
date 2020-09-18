@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :markevich_money,
-  ecto_repos: [MarkevichMoney.Repo]
+config :telegram_money_bot,
+  ecto_repos: [TelegramMoneyBot.Repo]
 
 # Configures the endpoint
-config :markevich_money, MarkevichMoneyWeb.Endpoint,
+config :telegram_money_bot, TelegramMoneyBotWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "PlSrrESn3RAQLURO2d19ck+D+EnJcZ51nDad++Tg3Ulq8VaDcQep17Tb1bOSV18B",
-  render_errors: [view: MarkevichMoneyWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: MarkevichMoney.PubSub,
+  render_errors: [view: TelegramMoneyBotWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: TelegramMoneyBot.PubSub,
   live_view: [signing_salt: "aevz9FQT"]
 
 # Configures Elixir's Logger
@@ -37,8 +37,8 @@ config :logger, Sentry.LoggerBackend,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :markevich_money, Oban,
-  repo: MarkevichMoney.Repo,
+config :telegram_money_bot, Oban,
+  repo: TelegramMoneyBot.Repo,
   # plugins: [{Oban.Plugins.Pruner, max_age: 60}, Oban.Pro.Plugins.Lifeline, Oban.Web.Plugins.Stats],
   plugins: [{Oban.Plugins.Pruner, max_age: 60}],
   queues: [events: 5, trackers: 5]

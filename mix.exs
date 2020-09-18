@@ -1,9 +1,9 @@
-defmodule MarkevichMoney.MixProject do
+defmodule TelegramMoneyBot.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :markevich_money,
+      app: :telegram_money_bot,
       version: "0.4.1",
       elixir: "~> 1.10.3",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -26,7 +26,7 @@ defmodule MarkevichMoney.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {MarkevichMoney.Application, []},
+      mod: {TelegramMoneyBot.Application, []},
       extra_applications: [
         :logger,
         :runtime_tools,

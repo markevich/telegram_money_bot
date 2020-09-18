@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Repo.Migrations.AddNotNullAndUniqueToColumns do
+defmodule TelegramMoneyBot.Repo.Migrations.AddNotNullAndUniqueToColumns do
   use Ecto.Migration
 
   def change do

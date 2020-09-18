@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Repo.Migrations.RenameDatetimeToIssuedAtInTransactions do
+defmodule TelegramMoneyBot.Repo.Migrations.RenameDatetimeToIssuedAtInTransactions do
   use Ecto.Migration
 
   def change do

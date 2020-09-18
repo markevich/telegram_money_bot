@@ -5,7 +5,7 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     MarkevichMoney.Repo.insert!(%MarkevichMoney.SomeSchema{})
+#     TelegramMoneyBot.Repo.insert!(%TelegramMoneyBot.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
@@ -30,7 +30,7 @@ categories = [
 ]
 
 Enum.each(categories, fn category_name ->
-  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
+  TelegramMoneyBot.Repo.insert!(%TelegramMoneyBot.Transactions.TransactionCategory{
     name: category_name
   })
 end)
