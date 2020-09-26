@@ -20,14 +20,26 @@ defmodule MarkevichMoneyWeb.BotController do
       }) do
     callback_data = Jason.decode!(callback_data)
 
-    %CallbackData{
-      chat_id: chat_id,
-      callback_data: callback_data,
-      callback_id: callback_id,
-      message_id: message_id,
-      message_text: message_text
-    }
-    |> Pipelines.call()
+    try do
+      %CallbackData{
+        chat_id: chat_id,
+        callback_data: callback_data,
+        callback_id: callback_id,
+        message_id: message_id,
+        message_text: message_text
+      }
+      |> Pipelines.call()
+    rescue
+      e ->
+        LoggerWithSentry.log_exception(e, __STACKTRACE__, callback_data: callback_data)
+
+        message = "Случилось что то страшное и я не смог обработать запрос."
+
+        SendMessage.call(%{
+          output_message: message,
+          chat_id: chat_id
+        })
+    end
 
     json(conn, %{})
   end
@@ -41,7 +53,7 @@ defmodule MarkevichMoneyWeb.BotController do
       |> Pipelines.call()
     rescue
       e ->
-        LoggerWithSentry.log_exception(e, __STACKTRACE__)
+        LoggerWithSentry.log_exception(e, __STACKTRACE__, input_message: input_message)
 
         message = "Случилось что то страшное и я не смог обработать запрос."
 
