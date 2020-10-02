@@ -3,6 +3,11 @@
 ---
 
 # MarkevichMoney
+ Have you ever asked yourself a question: what is all my money spent on? 
+
+ Forget about that problem - Сash "At Markevich" is the easiest and most powerful way for personal finance management. You no longer need to manually record and categorize your spendings - let the robots do the boring part for you. 
+
+ Statistics, budgeting, money management, spending optimizations - this is done by your personal Telegram Chat Bot, which is available 24/7 from anywhere in the world.
 
 To start your Phoenix server:
 
