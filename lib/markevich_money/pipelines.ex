@@ -16,7 +16,7 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Users
 
-  def call(%CallbackData{callback_data: %{"pipeline" => "start"}} = callback_data) do
+  def call(%CallbackData{callback_data: %{"pipeline" => @start_callback}} = callback_data) do
     StartCallbacksPipeline.call(callback_data)
   end
 
@@ -66,7 +66,7 @@ defmodule MarkevichMoney.Pipelines do
     end
   end
 
-  def call(%MessageData{message: "/start", chat_id: _chat_id} = message_data) do
+  def call(%MessageData{message: @start_message, chat_id: _chat_id} = message_data) do
     StartMessagesPipeline.call(message_data)
   end
 

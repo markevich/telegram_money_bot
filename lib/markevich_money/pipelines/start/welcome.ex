@@ -1,4 +1,5 @@
 defmodule MarkevichMoney.Pipelines.Start.Welcome do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.Steps.Telegram.{SendMessage}
 
   @output_message """
@@ -12,7 +13,7 @@ defmodule MarkevichMoney.Pipelines.Start.Welcome do
   - Вы в любой момент, без объяснения причин, сможете отключить бота;
   - Бот использует все современные технологии для защиты ваших данных;
   - Ваши данные *никогда* не будут переданы сторонним лицам и организациям;
-  - Исходный код бота публично доступен - https://github.com/markevich/telegram_money_bot
+  - Исходный код бота публично доступен - https://github.com/markevich/telegram\\_money\\_bot
 
   Прежде чем начать, давайте убедимся что *все* условия для использования бота соблюдены:
   - Вы являетесь жителем Республики Беларусь;
@@ -35,7 +36,7 @@ defmodule MarkevichMoney.Pipelines.Start.Welcome do
         [
           %Nadia.Model.InlineKeyboardButton{
             text: "Приступить к настройке.",
-            callback_data: Jason.encode!(%{pipeline: "start", action: "create_user"})
+            callback_data: Jason.encode!(%{pipeline: @start_callback})
           }
         ]
       ]

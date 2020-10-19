@@ -1,12 +1,10 @@
 defmodule MarkevichMoney.Pipelines.Start.Callbacks do
+  use MarkevichMoney.Constants
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Users
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, SendMessage}
 
-  def call(
-        %CallbackData{callback_data: %{"action" => "create_user", "pipeline" => "start"}} =
-          callback_data
-      ) do
+  def call(%CallbackData{callback_data: %{"pipeline" => @start_callback}} = callback_data) do
     user =
       %{
         name: username(callback_data.from),
@@ -20,6 +18,7 @@ defmodule MarkevichMoney.Pipelines.Start.Callbacks do
     |> AnswerCallback.call()
   end
 
+  # TODO: Move that to telegram context
   defp username(from) do
     if Map.has_key?(from, "username") do
       from["username"]
@@ -30,8 +29,7 @@ defmodule MarkevichMoney.Pipelines.Start.Callbacks do
 
   defp output_message(notification_email) do
     """
-    *#{notification_email}@gmail.com*
-    https://survey-ru.com/sayty_oprosov/askgfk.ru_glavnaja.png
+    Ваш персональный e-mail бота: `*#{notification_email}@gmail.com*`
     """
   end
 end
