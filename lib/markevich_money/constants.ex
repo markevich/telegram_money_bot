@@ -20,12 +20,15 @@ defmodule MarkevichMoney.Constants do
 
       @limits_stats_callback "limits_stats"
 
+      @start_callback "start"
+
       # messages
       @help_message "/help"
       @stats_message "/stats"
       @add_message "/add"
       @limits_message "/limits"
       @set_limit_message "/set_limit"
+      @start_message "/start"
 
       # events
       @transaction_created_event "transaction_created"

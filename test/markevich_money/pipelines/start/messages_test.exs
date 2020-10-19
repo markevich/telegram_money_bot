@@ -2,25 +2,35 @@ defmodule MarkevichMoney.Pipelines.Start.MessagesTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
+  use MarkevichMoney.Constants
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
 
-  describe "/start message" do
+  describe "#{@start_message} message" do
     mocked_test "Renders welcome message" do
-      expected_message = """
-      Я создан помогать следить за расходами.
-
-      */add 10 Еда* - Добавить собственный расход
-      */limits* - Просмотр списка всех лимитов по категориям
-      */set_limit 1 100* - Установить на категорию с ID 1 лимит в 100
-      */stats* - Статистика
-      */help* - Диалог помощи
-      """
-
-      reply_payload = Pipelines.call(%MessageData{message: "/start", chat_id: 123})
+      reply_payload = Pipelines.call(%MessageData{message: @start_message, chat_id: 123})
 
       assert(Map.has_key?(reply_payload, :output_message))
-      assert_called(Nadia.send_message(123, expected_message, parse_mode: "Markdown"))
+
+      assert_called(
+        Nadia.send_message(
+          123,
+          _,
+          reply_markup: %Nadia.Model.InlineKeyboardMarkup{
+            inline_keyboard: [
+              [
+                %Nadia.Model.InlineKeyboardButton{
+                  callback_data: "{\"pipeline\":\"#{@start_callback}\"}",
+                  switch_inline_query: nil,
+                  text: "Приступить к настройке.",
+                  url: nil
+                }
+              ]
+            ]
+          },
+          parse_mode: "Markdown"
+        )
+      )
     end
   end
 end
