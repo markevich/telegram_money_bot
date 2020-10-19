@@ -56,7 +56,10 @@ defmodule MarkevichMoneyWeb.Router do
       pipe_through [:browser, :admins_only]
     end
 
-    live_dashboard "/dashboard", metrics: MarkevichMoneyWeb.Telemetry
+    live_dashboard "/dashboard",
+      metrics: MarkevichMoneyWeb.Telemetry,
+      ecto_repos: [MarkevichMoney.Repo]
+
     # oban_dashboard("/oban_dashboard")
   end
 end
