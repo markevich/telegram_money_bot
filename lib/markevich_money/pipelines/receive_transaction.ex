@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
-  alias MarkevichMoney.Steps.Telegram.{SendMessage}
+  alias MarkevichMoney.Steps.Telegram.SendMessage
 
   alias MarkevichMoney.Steps.Transaction.{
     CalculateAmountSign,
