@@ -1,5 +1,7 @@
 defmodule MarkevichMoney.Pipelines do
   use MarkevichMoney.Constants
+  use MarkevichMoney.LoggerWithSentry
+
   alias MarkevichMoney.{CallbackData, MessageData}
   alias MarkevichMoney.Pipelines.AddTransaction, as: AddTransactionPipeline
   alias MarkevichMoney.Pipelines.Categories.Callbacks, as: CategoriesCallbacksPipeline
@@ -62,6 +64,13 @@ defmodule MarkevichMoney.Pipelines do
     if user do
       call(%MessageData{message_data | current_user: user})
     else
+      log_error_message(
+        """
+          Received email from unknown user.
+        """,
+        message_data: message_data
+      )
+
       message_data
     end
   end

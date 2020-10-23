@@ -1,8 +1,7 @@
 defmodule MarkevichMoneyWeb.BotController do
   use MarkevichMoneyWeb, :controller
-  require Logger
+  use MarkevichMoney.LoggerWithSentry
   alias MarkevichMoney.{CallbackData, MessageData, Pipelines}
-  alias MarkevichMoney.LoggerWithSentry
   alias MarkevichMoney.Steps.Telegram.SendMessage
 
   action_fallback MarkevichMoneyWeb.FallbackController
@@ -33,7 +32,7 @@ defmodule MarkevichMoneyWeb.BotController do
       |> Pipelines.call()
     rescue
       e ->
-        LoggerWithSentry.log_exception(e, __STACKTRACE__, callback_data: callback_data)
+        log_exception(e, __STACKTRACE__, callback_data: callback_data)
 
         message = "Случилось что то страшное и я не смог обработать запрос."
 
@@ -55,7 +54,7 @@ defmodule MarkevichMoneyWeb.BotController do
       |> Pipelines.call()
     rescue
       e ->
-        LoggerWithSentry.log_exception(e, __STACKTRACE__, input_message: input_message)
+        log_exception(e, __STACKTRACE__, %{input_message: input_message})
 
         message = "Случилось что то страшное и я не смог обработать запрос."
 

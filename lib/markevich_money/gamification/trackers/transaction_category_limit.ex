@@ -1,9 +1,8 @@
 defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
-  require Logger
   use Oban.Worker, queue: :trackers, max_attempts: 1
+  use MarkevichMoney.LoggerWithSentry
 
   alias MarkevichMoney.Gamifications
-  alias MarkevichMoney.LoggerWithSentry
   alias MarkevichMoney.ProgressBar
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Transactions
@@ -17,7 +16,7 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
   end
 
   def perform(%Job{args: args}) do
-    LoggerWithSentry.log_message(
+    log_error_message(
       "'#{__MODULE__}' worker received unknown arguments.",
       %{args: args}
     )

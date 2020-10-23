@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Gamification.Events.Broadcaster do
   use MarkevichMoney.Constants
+  use MarkevichMoney.LoggerWithSentry
   alias MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit, as: LimitTracker
-  alias MarkevichMoney.LoggerWithSentry
 
   use Oban.Worker, queue: :events, max_attempts: 2
 
@@ -16,7 +16,7 @@ defmodule MarkevichMoney.Gamification.Events.Broadcaster do
   end
 
   def perform(%Job{args: args}) do
-    LoggerWithSentry.log_message(
+    log_error_message(
       "'#{__MODULE__}' worker received unknown arguments.",
       %{args: args}
     )
