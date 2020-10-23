@@ -1,14 +1,12 @@
 .open-startup{
   &.title{
-    font-size: 30px;
+    font-size: 2vw;
     text-align: center;
     margin-bottom: 20px;
   }
 
   &.chart-container{
     position: relative;
-    height:80vh;
-    width:50vw
   }
 
   &.chart{
