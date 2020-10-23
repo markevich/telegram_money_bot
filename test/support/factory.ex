@@ -34,4 +34,12 @@ defmodule MarkevichMoney.Factory do
       limit: 100
     }
   end
+
+  def profit_factory do
+    %MarkevichMoney.OpenStartup.Profit{
+      date: ~D[2020-04-11],
+      amount: 100,
+      description: "description"
+    }
+  end
 end

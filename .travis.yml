@@ -31,5 +31,4 @@ script:
   - mix coveralls.travis
   - mix credo --strict
   - mix hex.audit
-  # - mix hex.audit
-  # - cd assets && npm test
+  - cd assets && npm run test
