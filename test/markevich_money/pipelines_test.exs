@@ -31,7 +31,7 @@ defmodule MarkevichMoney.PipelinesTest do
     end
   end
 
-  describe "message data with username" do
+  describe "message data with notification_email" do
     setup do
       user = insert(:user)
 
@@ -40,7 +40,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
     test "puts current user into payload when user exists", %{user: user} do
       message_data = %MessageData{
-        username: user.name,
+        notification_email: user.notification_email,
         message: ""
       }
 
@@ -52,7 +52,7 @@ defmodule MarkevichMoney.PipelinesTest do
 
     test "does nothing when user is not exists" do
       message_data = %MessageData{
-        username: "_PWNED",
+        notification_email: "_PWNED",
         message: ""
       }
 

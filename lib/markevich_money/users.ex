@@ -17,8 +17,8 @@ defmodule MarkevichMoney.Users do
     Repo.one!(from u in User, where: u.telegram_chat_id == ^chat_id)
   end
 
-  def get_user_by_username(username) do
-    Repo.one(from u in User, where: u.name == ^String.downcase(username))
+  def get_user_by_notification_email(notification_email) do
+    Repo.one(from u in User, where: u.notification_email == ^String.downcase(notification_email))
   end
 
   def all_users do

@@ -55,9 +55,9 @@ defmodule MarkevichMoney.Pipelines do
     callback_data
   end
 
-  def call(%MessageData{current_user: nil, username: username} = message_data)
-      when is_binary(username) do
-    user = Users.get_user_by_username(username)
+  def call(%MessageData{current_user: nil, notification_email: notification_email} = message_data)
+      when is_binary(notification_email) do
+    user = Users.get_user_by_notification_email(notification_email)
 
     if user do
       call(%MessageData{message_data | current_user: user})

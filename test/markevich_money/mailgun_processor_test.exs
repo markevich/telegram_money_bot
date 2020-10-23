@@ -17,7 +17,7 @@ defmodule MarkevichMoney.MailgunProcessorTest do
         subject: "adsd",
         text:
           "Карта 5.9737\r\nСо счёта: BY06ALFA30143400080030270000\r\nОплата товаров/услуг\r\nУспешно\r\nСумма:18.26 BYN\r\nОстаток:450.56 BYN\r\nНа время:15:08:56\r\nBLR/MINSK/PIZZERIA\r\n20.01.2020 15:08:55\r\n",
-        to: [nil: "#{user.name}@co2offset.dev"]
+        to: [nil: "#{user.notification_email}@gmail.com2"]
       }
 
       {:ok, %{mail: mail, user: user}}
