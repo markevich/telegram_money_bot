@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.CalculateAmountSign do
-  @regex ~r/(?<income>На счёт:)|(?<outcome>Со счёта)/
+  @income_regex ~r/возврат|На счёт:/i
 
   def call(%{input_message: input_message, parsed_attributes: %{amount: amount}} = payload) do
     payload
@@ -9,9 +9,9 @@ defmodule MarkevichMoney.Steps.Transaction.CalculateAmountSign do
   end
 
   defp sign(input_message) do
-    result = Regex.named_captures(@regex, input_message)
+    income = Regex.match?(@income_regex, input_message)
 
-    if String.trim(result["income"]) != "" do
+    if income do
       1
     else
       -1
