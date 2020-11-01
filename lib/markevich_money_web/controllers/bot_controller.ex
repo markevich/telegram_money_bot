@@ -34,7 +34,7 @@ defmodule MarkevichMoneyWeb.BotController do
       e ->
         log_exception(e, __STACKTRACE__, callback_data: callback_data)
 
-        message = "Случилось что то страшное и я не смог обработать запрос."
+        message = "Случилось что-то страшное, и я не смог обработать запрос."
 
         SendMessage.call(%{
           output_message: message,
@@ -56,7 +56,7 @@ defmodule MarkevichMoneyWeb.BotController do
       e ->
         log_exception(e, __STACKTRACE__, %{input_message: input_message})
 
-        message = "Случилось что то страшное и я не смог обработать запрос."
+        message = "Случилось что-то страшное, и я не смог обработать запрос."
 
         SendMessage.call(%{
           output_message: message,
