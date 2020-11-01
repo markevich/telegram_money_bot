@@ -23,7 +23,8 @@ defmodule MarkevichMoneyWeb.Router do
   scope "/", MarkevichMoneyWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    live "/page", PageLive, :index
+    live "/", OpenStartupLive, :index
     live "/open", OpenStartupLive, :index
   end
 

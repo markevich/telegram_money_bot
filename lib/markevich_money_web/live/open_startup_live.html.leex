@@ -1,14 +1,18 @@
+
+<div class="open-startup title">
+  Денежный бот - <a href="https://vc.ru/flood/54793-otkrytyy-startap-chto-eto-takoe">открытый стартап</a>, работающий совершенно прозрачно и не скрывающий свои метрики.
+</div>
 <div
-  class="open-startup chart-container"
   id="data-charts-cotainer"
   phx-hook="openProfits"
   data-incomes="<%= @incomes %>"
   data-expenses="<%= @expenses %>"
   data-profits="<%= @profits %>"
   >
-  <div class="open-startup title">
-    Денежный бот - <a href="https://vc.ru/flood/54793-otkrytyy-startap-chto-eto-takoe">открытый стартап</a>, работающий совершенно прозрачно и не скрывающий свои метрики.
+  <div class="open-startup chart-container">
+    <canvas class="open-startup chart" id="data-profits-trend"></canvas>
   </div>
-  <canvas class="open-startup chart" id="data-profits-trend"></canvas>
-  <canvas class="open-startup chart" id="data-incomes-expenses"></canvas>
+  <div class="open-startup chart-container">
+    <canvas class="open-startup chart" id="data-incomes-expenses"></canvas>
+  </div>
 </div>
