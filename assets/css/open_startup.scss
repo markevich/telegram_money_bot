@@ -7,9 +7,15 @@
 
   &.chart-container{
     position: relative;
+    height:40vh;
   }
 
   &.chart{
     margin-bottom: 30px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .open-startup.title{
+    font-size: 5vw;
   }
 }

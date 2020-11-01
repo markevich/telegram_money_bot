@@ -9,8 +9,8 @@ export default {
   incomes() { return JSON.parse(this.el.dataset.incomes) },
   expenses() { return JSON.parse(this.el.dataset.expenses) },
   profits() { return JSON.parse(this.el.dataset.profits) },
-  createIncomeExpensesChart() {
 
+  createIncomeExpensesChart() {
     const ctx = document.getElementById('data-incomes-expenses');
     const formattedIncomes = this.incomes().map((i) => {
       return {
@@ -81,7 +81,8 @@ export default {
             offset: true,
           },
         },
-        responsive: true
+        responsive: true,
+        maintainAspectRatio: false
       }
     })
 
@@ -116,6 +117,7 @@ export default {
           display: false
         },
         responsive: true,
+        maintainAspectRatio: false,
         tooltips: {
           callbacks: {
             title: function () {
