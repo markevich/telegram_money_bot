@@ -37,7 +37,7 @@
     "size-limit": "^4.7.0",
     "terser-webpack-plugin": "^4.2.1",
     "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^4.1.0"
   },
   "size-limit": [
     {
