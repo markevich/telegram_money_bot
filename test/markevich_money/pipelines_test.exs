@@ -5,6 +5,7 @@ defmodule MarkevichMoney.PipelinesTest do
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines
+  import ExUnit.CaptureLog
 
   describe "unknown callback pipelines" do
     setup do
@@ -50,15 +51,17 @@ defmodule MarkevichMoney.PipelinesTest do
       assert(current_user == user)
     end
 
-    test "does nothing when user is not exists" do
+    test "does nothing but log when user is not exists" do
       message_data = %MessageData{
         notification_email: "_PWNED",
         message: ""
       }
 
-      result = Pipelines.call(message_data)
+      capture_log(fn ->
+        result = Pipelines.call(message_data)
 
-      assert(%{current_user: nil} = result)
+        assert(%{current_user: nil} = result)
+      end) =~ "Received email from unknown user"
     end
   end
 

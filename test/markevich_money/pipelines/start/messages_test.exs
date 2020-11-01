@@ -28,7 +28,8 @@ defmodule MarkevichMoney.Pipelines.Start.MessagesTest do
               ]
             ]
           },
-          parse_mode: "Markdown"
+          parse_mode: "Markdown",
+          disable_web_page_preview: true
         )
       )
     end
