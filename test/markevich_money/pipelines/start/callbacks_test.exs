@@ -80,10 +80,19 @@ defmodule MarkevichMoney.Pipelines.Start.CallbacksTest do
       assert_called(
         Nadia.send_message(
           context.chat_id,
-          _,
+          "```#{last_user.notification_email}@gmail.com```",
           parse_mode: "Markdown"
         )
       )
+
+      for n <- [1, 2, 3, 4, 5, 6] do
+        file_name = String.to_atom("alfa_click_email#{n}")
+
+        instruction_file =
+          Application.get_env(:markevich_money, :tg_file_ids)[:user_registration][file_name]
+
+        assert_called(Nadia.send_photo(context.chat_id, instruction_file, _))
+      end
 
       assert_called(
         Nadia.answer_callback_query(context.callback_data.callback_id, text: "Success")

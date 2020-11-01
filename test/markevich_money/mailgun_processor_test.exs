@@ -3,6 +3,7 @@ defmodule MarkevichMoney.MailgunProcessorTest do
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
   use MarkevichMoney.Constants
+  import ExUnit.CaptureLog
   alias MarkevichMoney.MailgunProcessor
   alias MarkevichMoney.Transactions
 
@@ -97,10 +98,14 @@ defmodule MarkevichMoney.MailgunProcessorTest do
     end
 
     test "do nothing", %{mail: mail} do
-      MailgunProcessor.process(mail)
+      assert(
+        capture_log(fn ->
+          MailgunProcessor.process(mail)
 
-      transactions = Transactions.list_transactions()
-      assert [] = transactions
+          transactions = Transactions.list_transactions()
+          assert [] = transactions
+        end) =~ "Received email from unknown user"
+      )
     end
   end
 end
