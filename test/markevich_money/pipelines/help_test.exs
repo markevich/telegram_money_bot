@@ -18,9 +18,9 @@ defmodule MarkevichMoney.Pipelines.HelpTest do
       Я создан помогать следить за расходами.
 
       *#{@add_message} 10 Еда* - Добавить собственный расход
+      *#{@stats_message}* - Статистика
       *#{@limits_message}* - Просмотр списка всех лимитов по категориям
       *#{@set_limit_message} 1 100* - Установить на категорию с ID 1 лимит в 100
-      *#{@stats_message}* - Статистика
       *#{@help_message}* - Диалог помощи
       """
 
