@@ -22,6 +22,6 @@ defmodule MarkevichMoney.Users.User do
   end
 
   defp notification_email do
-    "tg.money.bot+#{String.slice(Ecto.UUID.generate(), 0, 8)}"
+    "tg.money.bot+#{String.slice(Ecto.UUID.generate(), 0, 10)}"
   end
 end

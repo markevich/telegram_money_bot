@@ -16,8 +16,9 @@
     "lib/markevich_money_web/views/error_helpers.ex",
     "lib/markevich_money_web/live/page_live.ex",
     "lib/markevich_money/oban_error_reporter.ex",
-    "lib/markevich_money/logger_with_sentry",
+    "lib/markevich_money/logger_with_sentry.ex",
     "lib/mix/tasks",
+    "lib/email_processor.ex",
     "test"
   ],
   "terminal_options": {

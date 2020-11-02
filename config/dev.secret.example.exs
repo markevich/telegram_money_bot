@@ -10,4 +10,7 @@ config :markevich_money, MarkevichMoney.Repo,
   pool_size: 10
 
 config :nadia, token: "bot token"
-config :markevich_money, mailgun_api_key: "api key"
+
+config :markevich_money, :pop3_receiver,
+  username: "username@gmail.com",
+  password: "password"
