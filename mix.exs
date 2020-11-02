@@ -4,7 +4,7 @@ defmodule MarkevichMoney.MixProject do
   def project do
     [
       app: :markevich_money,
-      version: "0.4.4",
+      version: "0.4.5",
       elixir: "~> 1.10.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
@@ -65,9 +65,9 @@ defmodule MarkevichMoney.MixProject do
       {:nadia, git: "https://github.com/zhyu/nadia.git"},
       {:table_rex, "~> 3.0"},
       {:timex, "~> 3.5"},
-      {:receivex, "~> 0.8", github: "markevich/receivex"},
       {:ex_machina, "~> 2.3", only: :test},
       {:mecks_unit, "~> 0.1", only: :test},
+      {:pop3mail, "~> 1.3"},
       {:sentry, "~> 8.0"},
       {:hackney, "~> 1.8"},
       {:jason, "~> 1.1"},

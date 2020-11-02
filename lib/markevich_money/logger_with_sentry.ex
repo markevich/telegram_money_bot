@@ -10,7 +10,7 @@ defmodule MarkevichMoney.LoggerWithSentry do
         )
       end
 
-      def log_error_message(message, metadata) do
+      def log_error_message(message, metadata \\ %{}) do
         message_with_meta =
           metadata
           |> Enum.reduce(

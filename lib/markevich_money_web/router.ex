@@ -37,14 +37,6 @@ defmodule MarkevichMoneyWeb.Router do
     end
   end
 
-  forward("/api/mailgun_webhook", Receivex,
-    adapter: Receivex.Adapter.Mailgun,
-    adapter_opts: [
-      api_key: Application.fetch_env!(:markevich_money, :mailgun_api_key)
-    ],
-    handler: MarkevichMoney.MailgunProcessor
-  )
-
   pipeline :admins_only do
     plug :basic_auth,
       username: System.get_env("DASHBOARD_USER"),

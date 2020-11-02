@@ -65,7 +65,10 @@ config :sentry,
 #
 config :markevich_money, MarkevichMoneyWeb.Endpoint, server: true
 config :nadia, token: Helpers.get_env("TELEGRAM_TOKEN")
-config :markevich_money, mailgun_api_key: Helpers.get_env("MAILGUN_API_KEY")
+
+config :markevich_money, :pop3_receiver,
+  username: Helpers.get_env("POP3_USERNAME"),
+  password: Helpers.get_env("POP3_PASSWORD")
 
 #
 # Then you can assemble a release by calling `mix release`.
