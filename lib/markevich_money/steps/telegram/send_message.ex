@@ -16,9 +16,8 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
       ]
       |> Keyword.merge(additional_options)
 
-    {:ok, _} = Nadia.send_message(current_user.telegram_chat_id, output_message, options)
-
-    payload
+    Nadia.send_message(current_user.telegram_chat_id, output_message, options)
+    |> process_result(payload)
   end
 
   def call(
@@ -32,9 +31,8 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
       ]
       |> Keyword.merge(additional_options)
 
-    {:ok, _} = Nadia.send_message(current_user.telegram_chat_id, output_message, options)
-
-    payload
+    Nadia.send_message(current_user.telegram_chat_id, output_message, options)
+    |> process_result(payload)
   end
 
   def call(
@@ -48,9 +46,8 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
       ]
       |> Keyword.merge(additional_options)
 
-    {:ok, _} = Nadia.send_message(chat_id, output_message, options)
-
-    payload
+    Nadia.send_message(chat_id, output_message, options)
+    |> process_result(payload)
   end
 
   def call(%{output_message: output_message, chat_id: chat_id} = payload, additional_options) do
@@ -60,8 +57,20 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
       ]
       |> Keyword.merge(additional_options)
 
-    {:ok, _} = Nadia.send_message(chat_id, output_message, options)
+    Nadia.send_message(chat_id, output_message, options)
+    |> process_result(payload)
+  end
 
-    payload
+  def process_result(result, payload) do
+    case result do
+      {:ok, _result} ->
+        payload
+
+      {:error, %Nadia.Model.Error{reason: "Forbidden: bot was blocked by the user"}} ->
+        payload
+
+      {:error, other_reason} ->
+        raise RuntimeError, message: other_reason
+    end
   end
 end

@@ -62,6 +62,38 @@ defmodule MarkevichMoney.Steps.Telegram.UpdateMessageTest do
     end
   end
 
+  describe "with 'Forbidden: bot was blocked by the user' nadia response" do
+    defmock Nadia do
+      def edit_message_text(_chat_id, _message_id, _inline_message_id, _message, _opts) do
+        {:error,
+         %Nadia.Model.Error{
+           reason: "Forbidden: bot was blocked by the user"
+         }}
+      end
+    end
+
+    mocked_test "without reply markup: returns success payload" do
+      payload = %{message_id: 1234, output_message: "Hello", chat_id: "123"}
+
+      assert UpdateMessage.call(payload) == payload
+    end
+
+    defmock Nadia do
+      def edit_message_text(_chat_id, _message_id, _inline_message_id, _message, _opts) do
+        {:error,
+         %Nadia.Model.Error{
+           reason: "Forbidden: bot was blocked by the user"
+         }}
+      end
+    end
+
+    mocked_test "with reply markup: returns success payload" do
+      payload = %{message_id: 1234, output_message: "Hello", chat_id: "123", reply_markup: %{}}
+
+      assert UpdateMessage.call(payload) == payload
+    end
+  end
+
   describe "with error nadia response" do
     defmock Nadia do
       def edit_message_text(_chat_id, _message_id, _inline_message_id, _message, _opts) do
@@ -69,7 +101,7 @@ defmodule MarkevichMoney.Steps.Telegram.UpdateMessageTest do
       end
     end
 
-    mocked_test "without reply markup: returns success payload" do
+    mocked_test "without reply markup: raises error" do
       payload = %{message_id: 1234, output_message: "Hello", chat_id: "123"}
 
       assert_raise RuntimeError, "Error reason", fn ->
@@ -83,7 +115,7 @@ defmodule MarkevichMoney.Steps.Telegram.UpdateMessageTest do
       end
     end
 
-    mocked_test "with reply markup: returns success payload" do
+    mocked_test "with reply markup: raises error" do
       payload = %{message_id: 1234, output_message: "Hello", chat_id: "123", reply_markup: %{}}
 
       assert_raise RuntimeError, "Error reason", fn ->
