@@ -42,7 +42,7 @@ defmodule EmailProcessor do
       |> Pipelines.call()
     rescue
       e ->
-        log_exception(e, __STACKTRACE__, message: body, notification_email: notification_email)
+        log_exception(e, __STACKTRACE__, %{message: body, notification_email: notification_email})
     end
   end
 

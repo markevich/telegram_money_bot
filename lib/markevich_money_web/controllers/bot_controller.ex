@@ -32,7 +32,7 @@ defmodule MarkevichMoneyWeb.BotController do
       |> Pipelines.call()
     rescue
       e ->
-        log_exception(e, __STACKTRACE__, callback_data: callback_data)
+        log_exception(e, __STACKTRACE__, %{callback_data: callback_data})
 
         message = "Случилось что-то страшное, и я не смог обработать запрос."
 
