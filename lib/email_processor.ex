@@ -37,8 +37,13 @@ defmodule EmailProcessor do
   defp send_message_to_pipeline(email, body) do
     [notification_email, _rest] = String.split(email, "@")
 
-    %MessageData{message: body, notification_email: notification_email}
-    |> Pipelines.call()
+    try do
+      %MessageData{message: body, notification_email: notification_email}
+      |> Pipelines.call()
+    rescue
+      e ->
+        log_exception(e, __STACKTRACE__, message: body, notification_email: notification_email)
+    end
   end
 
   defp get_to_and_body(mail) do
