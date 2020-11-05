@@ -96,7 +96,7 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
       assert(Repo.exists?(query))
 
       expected_message = """
-      Упешно!
+      Успешно!
 
       Нажмите на #{@limits_message} для просмотра обновленных лимитов
       """

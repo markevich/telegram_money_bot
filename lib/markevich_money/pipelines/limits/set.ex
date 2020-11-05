@@ -35,7 +35,7 @@ defmodule MarkevichMoney.Pipelines.Limits.Set do
     Gamifications.set_transaction_category_limit!(category_id, user.id, limit)
 
     output_message = """
-    Упешно!
+    Успешно!
 
     Нажмите на #{@limits_message} для просмотра обновленных лимитов
     """
