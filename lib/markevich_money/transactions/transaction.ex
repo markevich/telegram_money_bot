@@ -10,7 +10,9 @@ defmodule MarkevichMoney.Transactions.Transaction do
     field :account, :string
     field :issued_at, :naive_datetime
     field :amount, :decimal
+    field :external_amount, :decimal
     field :currency_code, :string
+    field :external_currency, :string
     field :balance, :decimal
     field :to, :string
     field :lookup_hash, :string
@@ -27,9 +29,11 @@ defmodule MarkevichMoney.Transactions.Transaction do
     |> cast(attrs, [
       :account,
       :amount,
+      :external_amount,
       :to,
       :account,
       :currency_code,
+      :external_currency,
       :balance,
       :issued_at,
       :transaction_category_id,
