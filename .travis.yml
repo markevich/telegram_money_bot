@@ -1,5 +1,5 @@
 language: elixir
-elixir: '1.10.3'
+elixir: '1.11.2'
 otp_release: '23.0'
 
 cache:
@@ -9,7 +9,7 @@ cache:
     - deps
 
 env:
-  - MIX_ENV=test TRAVIS_NODE_VERSION="12.6.0"
+  - MIX_ENV=test TRAVIS_NODE_VERSION="15.1.0"
 
 services:
   - postgresql
