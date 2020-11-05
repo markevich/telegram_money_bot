@@ -45,15 +45,6 @@ defmodule MarkevichMoney.Application do
   end
 
   defp oban_config do
-    opts = Application.get_env(:markevich_money, Oban)
-
-    # Prevent running queues or scheduling jobs from an iex console.
-    if Code.ensure_loaded?(IEx) and IEx.started?() do
-      opts
-      |> Keyword.put(:crontab, false)
-      |> Keyword.put(:queues, false)
-    else
-      opts
-    end
+    Application.get_env(:markevich_money, Oban)
   end
 end
