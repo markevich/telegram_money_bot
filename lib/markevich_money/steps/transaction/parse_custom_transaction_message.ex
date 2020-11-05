@@ -11,11 +11,12 @@ defmodule MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessage do
     result = Regex.named_captures(@regex, input_message)
     {float_amount, _} = Float.parse(result["amount"])
 
+    # TODO: add correct currency code for show
     %{
       amount: -float_amount,
       to: to_string(result["to"]),
       account: "manual",
-      currency_code: "byn",
+      currency_code: "BYN",
       user_id: current_user.id,
       balance: 0,
       issued_at: DateTime.utc_now(),

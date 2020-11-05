@@ -14,8 +14,8 @@ defmodule MarkevichMoney.Steps.Transaction.ParseAmountTest do
     Со счёта: BY06ALFA30143400080030270000
     Оплата товаров/услуг
     Успешно
-    Сумма:25.32 byn
-    Остаток:35 byn
+    Сумма:25.32 BYN
+    Остаток:35 BYN
     На время:15:14:35
     ToFooBar
     28.01.2020 15:14:35
@@ -33,8 +33,8 @@ defmodule MarkevichMoney.Steps.Transaction.ParseAmountTest do
     Со счёта: BY06ALFA30143400080030270000
     Оплата товаров/услуг
     Успешно
-    Сумма:3.53 USD (7.04 byn)
-    Остаток:35 byn
+    Сумма:3.53 USD (7.04 BYN)
+    Остаток:35 BYN
     На время:15:14:35
     ToFooBar
     28.01.2020 15:14:35
