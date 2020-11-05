@@ -8,7 +8,6 @@ erl_crash.dump
 co2_offset-*.tar
 npm-debug.log
 /assets/node_modules/
-/priv/static/
 /config/*.secret.exs
 *.beam
 .elixir_ls/
