@@ -1,7 +1,7 @@
-defmodule MarkevichMoney.Steps.Transaction.ParseAmountTest do
+defmodule MarkevichMoney.Steps.Transaction.ParseAmountAndCurrencyTest do
   use MarkevichMoney.DataCase, async: true
 
-  alias MarkevichMoney.Steps.Transaction.ParseAmount
+  alias MarkevichMoney.Steps.Transaction.ParseAmountAndCurrency
 
   describe ".call" do
     setup do
@@ -23,9 +23,12 @@ defmodule MarkevichMoney.Steps.Transaction.ParseAmountTest do
 
     test "parses amount", default_payload do
       payload = Map.put(default_payload, :input_message, @valid_transaction)
-      reply_payload = ParseAmount.call(payload)
+      reply_payload = ParseAmountAndCurrency.call(payload)
 
       assert(reply_payload[:parsed_attributes][:amount] == 25.32)
+      assert(reply_payload[:parsed_attributes][:currency_code] == "BYN")
+      assert(reply_payload[:parsed_attributes][:external_amount] == nil)
+      assert(reply_payload[:parsed_attributes][:external_currency] == nil)
     end
 
     @transaction_with_conversion """
@@ -42,9 +45,12 @@ defmodule MarkevichMoney.Steps.Transaction.ParseAmountTest do
 
     test "parses amount for converted transaction", default_payload do
       payload = Map.put(default_payload, :input_message, @transaction_with_conversion)
-      reply_payload = ParseAmount.call(payload)
+      reply_payload = ParseAmountAndCurrency.call(payload)
 
       assert(reply_payload[:parsed_attributes][:amount] == 7.04)
+      assert(reply_payload[:parsed_attributes][:currency_code] == "BYN")
+      assert(reply_payload[:parsed_attributes][:external_amount] == 3.53)
+      assert(reply_payload[:parsed_attributes][:external_currency] == "USD")
     end
   end
 end

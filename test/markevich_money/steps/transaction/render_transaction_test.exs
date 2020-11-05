@@ -144,4 +144,29 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              """
     end
   end
+
+  describe "transaction with external amount" do
+    setup do
+      {:ok, %{transaction: insert(:transaction, external_amount: 10, external_currency: "USD")}}
+    end
+
+    test "renders transaction", %{transaction: transaction} do
+      reply_payload = RenderTransaction.call(%{transaction: transaction})
+
+      assert reply_payload[:output_message] == """
+             Транзакция №#{transaction.id}(Списание)
+             ```
+
+              Сумма       #{transaction.amount} #{transaction.currency_code} (#{
+               transaction.external_amount
+             } #{transaction.external_currency})
+              Категория
+              Кому        #{transaction.to}
+              Остаток     #{transaction.balance}
+              Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+
+             ```
+             """
+    end
+  end
 end

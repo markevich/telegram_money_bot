@@ -13,9 +13,14 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
   defp render_message(%Transaction{} = transaction) do
     category = if transaction.transaction_category_id, do: transaction.transaction_category.name
 
+    external_transcation =
+      if transaction.external_amount do
+        "(#{transaction.external_amount} #{transaction.external_currency})"
+      end
+
     table =
       [
-        ["Сумма", "#{transaction.amount} #{transaction.currency_code}"],
+        ["Сумма", "#{transaction.amount} #{transaction.currency_code} #{external_transcation}"],
         ["Категория", category],
         ["Кому", transaction.to],
         ["Остаток", transaction.balance],

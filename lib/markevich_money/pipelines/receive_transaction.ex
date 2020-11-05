@@ -6,9 +6,8 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
     FindOrCreateTransaction,
     FireTransactionCreatedEvent,
     ParseAccount,
-    ParseAmount,
+    ParseAmountAndCurrency,
     ParseBalance,
-    ParseCurrencyCode,
     ParseIssuedAt,
     ParseTo,
     PredictCategory,
@@ -21,9 +20,8 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
       payload
       |> Map.put(:parsed_attributes, %{})
       |> ParseAccount.call()
-      |> ParseAmount.call()
+      |> ParseAmountAndCurrency.call()
       |> CalculateAmountSign.call()
-      |> ParseCurrencyCode.call()
       |> ParseBalance.call()
       |> ParseTo.call()
       |> ParseIssuedAt.call()
