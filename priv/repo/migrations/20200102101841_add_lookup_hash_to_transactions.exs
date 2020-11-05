@@ -2,7 +2,7 @@ defmodule MarkevichMoney.Repo.Migrations.AddLookupHashToTransactions do
   use Ecto.Migration
 
   def change do
-     alter table(:transactions) do
+    alter table(:transactions) do
       add :lookup_hash, :string, null: false
     end
 

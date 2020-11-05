@@ -14,8 +14,8 @@ defmodule MarkevichMoney.Steps.Transaction.CalculateAmountSignTest do
     Со счёта: BY06TEST
     Оплата товаров/услуг
     Успешно
-    Сумма:25.32 byn
-    Остаток:35 byn
+    Сумма:25.32 BYN
+    Остаток:35 BYN
     На время:15:14:35
     ToFooBar
     28.01.2020 15:14:35
@@ -33,8 +33,8 @@ defmodule MarkevichMoney.Steps.Transaction.CalculateAmountSignTest do
     На счёт: BY06TEST
     Перевод (Поступление)
     Успешно
-    Сумма:25.32 byn
-    Остаток:30 byn
+    Сумма:25.32 BYN
+    Остаток:30 BYN
     На время:15:14:35
     ToFooBar
     28.01.2020 15:14:355
@@ -52,8 +52,8 @@ defmodule MarkevichMoney.Steps.Transaction.CalculateAmountSignTest do
     Со счёта: BY03TEST
     Оплата товаров/услуг(возврат)
     Успешно
-    Сумма:25.32 byn
-    Остаток:30 byn
+    Сумма:25.32 BYN
+    Остаток:30 BYN
     На время:15:38:19
     RUS/MOSCOW/YANDEX.HEALTH
     29.10.2020 15:38:18

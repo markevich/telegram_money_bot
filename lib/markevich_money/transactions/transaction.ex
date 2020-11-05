@@ -36,6 +36,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :lookup_hash,
       :user_id
     ])
+    |> upcase_currency_code
   end
 
   def update_changeset(transaction, attrs) do
@@ -50,5 +51,16 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :transaction_category_id
     ])
     |> validate_required([:account, :issued_at, :amount, :currency_code, :balance, :to])
+    |> upcase_currency_code
+  end
+
+  defp upcase_currency_code(%Ecto.Changeset{valid?: true, changes: %{}} = changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{currency_code: currency_code}} ->
+        put_change(changeset, :currency_code, String.upcase(currency_code))
+
+      _ ->
+        changeset
+    end
   end
 end
