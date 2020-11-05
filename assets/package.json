@@ -41,7 +41,7 @@
       "limit": "100 kb",
       "running": false,
       "path": [
-        "../priv/static/js/*.js"
+        "../priv/static/js/app.js"
       ]
     }
   ]
