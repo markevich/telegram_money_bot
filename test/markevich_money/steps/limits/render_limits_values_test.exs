@@ -63,7 +63,7 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValuesTest do
 
         Для установки лимита используйте:
 
-        *#{@set_limit_message} id value*
+        *#{@limit_message} id value*
         """
       )
     end

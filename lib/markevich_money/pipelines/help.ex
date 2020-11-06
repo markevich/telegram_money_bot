@@ -8,7 +8,7 @@ defmodule MarkevichMoney.Pipelines.Help do
   *#{@add_message} 10 Еда* - Добавить собственный расход
   *#{@stats_message}* - Статистика
   *#{@limits_message}* - Просмотр списка всех лимитов по категориям
-  *#{@set_limit_message} 1 100* - Установить на категорию с ID 1 лимит в 100
+  *#{@limit_message} Еда 100* - Установить на категорию Еда лимит в 100
   *#{@help_message}* - Диалог помощи
   """
 

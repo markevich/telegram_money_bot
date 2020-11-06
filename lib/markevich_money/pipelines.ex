@@ -122,7 +122,7 @@ defmodule MarkevichMoney.Pipelines do
     LimitsMessagesPipeline.call(data)
   end
 
-  def call(%MessageData{message: @set_limit_message <> _rest, current_user: _user} = data) do
+  def call(%MessageData{message: @limit_message <> _rest, current_user: _user} = data) do
     LimitsMessagesPipeline.call(data)
   end
 

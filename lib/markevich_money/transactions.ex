@@ -12,6 +12,17 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload([:transaction_category, :user])
   end
 
+  def category_id_by_name(category_name) do
+    searching = "%#{category_name}%"
+
+    from(category in TransactionCategory,
+      where: ilike(category.name, ^searching),
+      select: map(category, [:id, :name]),
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
   def delete_transaction(id) do
     from(t in Transaction, where: t.id == ^id) |> Repo.delete_all()
   end

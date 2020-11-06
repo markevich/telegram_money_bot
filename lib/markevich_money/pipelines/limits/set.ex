@@ -1,11 +1,11 @@
 defmodule MarkevichMoney.Pipelines.Limits.Set do
   use MarkevichMoney.Constants
-  alias MarkevichMoney.Gamifications
-  alias MarkevichMoney.MessageData
+  alias MarkevichMoney.{Gamifications, MessageData, Transactions}
   alias MarkevichMoney.Steps.Telegram.SendMessage
 
-  @regex ~r/#{@set_limit_message}\s+(?<category_id>\d+)\s+(?<limit>\d+)/
-  def call(%MessageData{message: @set_limit_message <> _rest} = message_data) do
+  @regex ~r/#{@limit_message}\s+(?<category_name>\D+)\s+(?<limit>\d+)/
+
+  def call(%MessageData{message: @limit_message <> _rest} = message_data) do
     message_data
     |> Map.from_struct()
     |> parse_limits()
@@ -16,32 +16,32 @@ defmodule MarkevichMoney.Pipelines.Limits.Set do
   defp parse_limits(%{message: message} = payload) do
     result = Regex.named_captures(@regex, message)
 
-    parsed_data =
-      case result do
-        nil ->
-          %{}
+    parsed_data = if result, do: result, else: %{}
 
-        %{"category_id" => category_id, "limit" => limit} ->
-          %{category_id: category_id, limit: limit}
-      end
-
-    payload
-    |> Map.put(:parsed_data, parsed_data)
+    Map.put(payload, :parsed_data, parsed_data)
   end
 
   defp render_message(
-         %{parsed_data: %{category_id: category_id, limit: limit}, current_user: user} = payload
+         %{parsed_data: %{"category_name" => category_name, "limit" => limit}, current_user: user} =
+           payload
        ) do
-    Gamifications.set_transaction_category_limit!(category_id, user.id, limit)
+    category = Transactions.category_id_by_name(category_name)
 
-    output_message = """
-    Успешно!
+    output_message =
+      if category do
+        Gamifications.set_transaction_category_limit!(category.id, user.id, limit)
 
-    Нажмите на #{@limits_message} для просмотра обновленных лимитов
-    """
+        """
+        На категорию #{category.name} установлен лимит #{limit}
+        """
+      else
+        """
+          Я не смог найти категорию #{category_name}.
+          Список категорий для лимитов можно посмотреть с помощью команды #{@limits_message}
+        """
+      end
 
-    payload
-    |> Map.put(:output_message, output_message)
+    Map.put(payload, :output_message, output_message)
   end
 
   defp render_message(%{parsed_data: %{}} = payload) do
@@ -49,9 +49,11 @@ defmodule MarkevichMoney.Pipelines.Limits.Set do
     Я не смог распознать эту команду
 
     Пример правильной команды:
-    *#{@set_limit_message} 1 150*
-      - *1* это *id* категории, которую можно подсмотреть с помощью команды #{@limits_message}
-      - *150* это целочисленное значение лимита
+    *#{@limit_message} Еда 150*
+      - Еда - это *название* категории, которую можно подсмотреть с помощью команды #{
+      @limits_message
+    }
+      - *150* - это целочисленное значение лимита
     """
 
     payload
