@@ -14,7 +14,7 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValues do
     #{limits_stats}
     Для установки лимита используйте:
 
-    *#{@set_limit_message} id value*
+    *#{@limit_message} id value*
     """
 
     payload

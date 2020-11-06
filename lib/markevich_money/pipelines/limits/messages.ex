@@ -8,7 +8,7 @@ defmodule MarkevichMoney.Pipelines.Limits.Messages do
     List.call(message_data)
   end
 
-  def call(%MessageData{message: @set_limit_message <> _rest} = message_data) do
+  def call(%MessageData{message: @limit_message <> _rest} = message_data) do
     Set.call(message_data)
   end
 end

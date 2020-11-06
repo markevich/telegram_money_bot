@@ -27,7 +27,7 @@ defmodule MarkevichMoney.Constants do
       @stats_message "/stats"
       @add_message "/add"
       @limits_message "/limits"
-      @set_limit_message "/set_limit"
+      @limit_message "/limit"
       @start_message "/start"
 
       # events
