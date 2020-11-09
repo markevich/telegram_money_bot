@@ -25,19 +25,19 @@ defmodule MarkevichMoney.Pipelines.Limits.Set do
          %{parsed_data: %{"category_name" => category_name, "limit" => limit}, current_user: user} =
            payload
        ) do
-    category = Transactions.category_id_by_name(category_name)
+    category = Transactions.category_id_by_name_similarity(category_name)
 
     output_message =
       if category do
         Gamifications.set_transaction_category_limit!(category.id, user.id, limit)
 
         """
-        На категорию #{category.name} установлен лимит #{limit}
+        На категорию `#{category.name}` установлен лимит `#{limit}`
         """
       else
         """
-          Я не смог найти категорию #{category_name}.
-          Список категорий для лимитов можно посмотреть с помощью команды #{@limits_message}
+        Я не смог найти категорию `#{category_name}`.
+        Список категорий для лимитов можно посмотреть с помощью команды #{@limits_message}
         """
       end
 

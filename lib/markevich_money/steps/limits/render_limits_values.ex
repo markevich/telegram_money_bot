@@ -14,7 +14,7 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValues do
     #{limits_stats}
     Для установки лимита используйте:
 
-    *#{@limit_message} id value*
+    *#{@limit_message} категория число*
     """
 
     payload
@@ -24,9 +24,9 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValues do
   defp render_limits_table(limits) do
     limits
     |> Enum.map(fn category ->
-      [category.id, category.name, limit_value(category)]
+      [category.name, limit_value(category)]
     end)
-    |> TableRex.Table.new(["id", "Категория", "Лимит"], "Лимиты по категориям")
+    |> TableRex.Table.new(["Категория", "Лимит"], "Лимиты по категориям")
     |> TableRex.Table.put_column_meta(:all, align: :left, padding: 1)
     |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
   end

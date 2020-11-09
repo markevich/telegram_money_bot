@@ -43,13 +43,13 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValuesTest do
         reply_payload[:output_message] == """
         ```
 
-          Лимиты по категориям
+         Лимиты по категориям
 
-         id   Категория    Лимит
+         Категория     Лимит
 
-         #{context.category_without_limit.id}   #{context.category_without_limit.name}   ♾️
-         #{context.category_with_limit.id}   #{context.category_with_limit.name}   125
-         #{context.category_with_0_limit.id}   #{context.category_with_0_limit.name}   ♾️
+         #{context.category_without_limit.name}    ♾️
+         #{context.category_with_limit.name}    125
+         #{context.category_with_0_limit.name}    ♾️
 
         ```
         ```
@@ -63,7 +63,7 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValuesTest do
 
         Для установки лимита используйте:
 
-        *#{@limit_message} id value*
+        *#{@limit_message} категория число*
         """
       )
     end
