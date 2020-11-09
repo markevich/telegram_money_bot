@@ -29,7 +29,7 @@
     "mini-css-extract-plugin": "^1.2.1",
     "node-sass": "^5.0.0",
     "postcss": "^8.1.4",
-    "sass": "^1.28.0",
+    "sass": "^1.29.0",
     "sass-loader": "^10.0.4",
     "size-limit": "^4.7.0",
     "terser-webpack-plugin": "^5.0.3",
