@@ -23,7 +23,7 @@
     "@size-limit/webpack": "^4.7.0",
     "babel-loader": "^8.1.0",
     "copy-webpack-plugin": "^6.2.1",
-    "css-loader": "^5.0.0",
+    "css-loader": "^5.0.1",
     "css-minimizer-webpack-plugin": "^1.x",
     "fibers": "^5.0.0",
     "mini-css-extract-plugin": "^1.2.1",
