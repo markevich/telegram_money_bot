@@ -97,7 +97,7 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
       assert(Repo.exists?(query))
 
       expected_message = """
-        На категорию #{context.category.name} установлен лимит #{context.new_limit}
+      На категорию `#{context.category.name}` установлен лимит `#{context.new_limit}`
       """
 
       assert_called(
@@ -122,6 +122,24 @@ defmodule MarkevichMoney.Pipelines.Limits.MessagesTest do
         @limits_message
       }
         - *150* - это целочисленное значение лимита
+      """
+
+      assert_called(
+        Nadia.send_message(
+          context.user.telegram_chat_id,
+          expected_message,
+          parse_mode: "Markdown"
+        )
+      )
+    end
+
+    mocked_test "Returns not found message if can't find category", context do
+      message = "#{@limit_message} неизвестно 100"
+      Pipelines.call(%MessageData{message: message, current_user: context.user})
+
+      expected_message = """
+      Я не смог найти категорию `неизвестно`.
+      Список категорий для лимитов можно посмотреть с помощью команды #{@limits_message}
       """
 
       assert_called(

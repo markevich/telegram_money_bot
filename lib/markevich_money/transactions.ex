@@ -12,12 +12,15 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload([:transaction_category, :user])
   end
 
-  def category_id_by_name(category_name) do
-    searching = "%#{category_name}%"
-
+  def category_id_by_name_similarity(category_name) do
     from(category in TransactionCategory,
-      where: ilike(category.name, ^searching),
-      select: map(category, [:id, :name]),
+      where: fragment("similarity(?, ?) > 0.1", category.name, ^category_name),
+      select: %{
+        id: category.id,
+        name: category.name,
+        similarity: fragment("similarity(?, ?)", category.name, ^category_name)
+      },
+      order_by: [desc: 3],
       limit: 1
     )
     |> Repo.one()
