@@ -40,6 +40,7 @@ if config_env() == :prod do
   config :markevich_money, MarkevichMoneyWeb.Endpoint,
     https: [
       port: 443,
+      compress: true,
       cipher_suite: :strong,
       keyfile: Helpers.get_env("CO2_OFFSET_SSL_KEY_PATH"),
       cacertfile: Helpers.get_env("CO2_OFFSET_SSL_CACERT_PATH"),

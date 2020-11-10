@@ -25,7 +25,7 @@ defmodule MarkevichMoneyWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :markevich_money,
-    gzip: false,
+    gzip: Mix.env() == :prod,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
