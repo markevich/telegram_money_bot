@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.CalculateAmountSign do
-  @income_regex ~r/возврат|На счёт:/i
+  @income_regex ~r/возврат|На счёт:|Внесение/i
 
   def call(%{input_message: input_message, parsed_attributes: %{amount: _amount}} = payload) do
     payload
