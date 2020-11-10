@@ -49,7 +49,9 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :account,
       :issued_at,
       :amount,
+      :external_amount,
       :currency_code,
+      :external_currency,
       :balance,
       :to,
       :transaction_category_id

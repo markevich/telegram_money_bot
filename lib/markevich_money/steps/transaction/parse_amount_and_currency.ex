@@ -1,4 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.ParseAmountAndCurrency do
+  # credo:disable-for-next-line
   @regex ~r/Сумма:((?<amount>\d+\.?\d*)\s(?<currency>\w{3}))(\s\((?<external_amount>\d+\.?\d*)\s(?<external_currency>\w{3})\))?/
 
   def call(%{input_message: input_message} = payload) do
@@ -14,17 +15,19 @@ defmodule MarkevichMoney.Steps.Transaction.ParseAmountAndCurrency do
   end
 
   defp parse_attributes(%{
-        "amount" => amount,
-        "currency" => currency,
-        "external_amount" => external_amount,
-        "external_currency" => external_currency
-      }) do
+         "amount" => amount,
+         "currency" => currency,
+         "external_amount" => external_amount,
+         "external_currency" => external_currency
+       }) do
     if external_amount == "" do
       {origin_card_amount, _} = Float.parse(amount)
 
       %{amount: origin_card_amount, currency_code: currency}
     else
-      # If we have two currencies "11 USD (10 EUR)" so real card amount and currency is external
+      # If we have two currencies in transaction, ie "11 USD (25 BYN)",
+      # then first number is `external_amount`, second is `amount`
+
       {origin_card_amount, _} = Float.parse(external_amount)
       {external_card_amount, _} = Float.parse(amount)
 

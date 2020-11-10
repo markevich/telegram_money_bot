@@ -70,6 +70,75 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
     end
   end
 
+  describe "Карта message without double currency" do
+    setup do
+      user = insert(:user)
+      amount = 11.30
+      external_amount = 5.5
+      balance = 522.05
+      to = "BLR/MINSK/PIZZERIA PIZZA TEMPO"
+      currency = "BYN"
+      external_currency = "USD"
+
+      input_message = """
+      Карта 5.9737
+      Со счёта: BY06ALFA30143400080030270000
+      Оплата товаров/услуг
+      Успешно
+      Сумма:#{external_amount} #{external_currency} (#{amount} #{currency})
+      Остаток:#{balance} #{currency}
+      На время:15:14:35
+      #{to}
+      28.01.2020 15:14:35
+      """
+
+      %{
+        user: user,
+        input_message: input_message,
+        amount: amount,
+        currency: currency,
+        balance: balance,
+        external_amount: external_amount,
+        external_currency: external_currency,
+        to: to
+      }
+    end
+
+    mocked_test "insert transaction, fire event", context do
+      reply_payload =
+        Pipelines.call(%MessageData{
+          message: context.input_message,
+          chat_id: context.user.telegram_chat_id
+        })
+
+      transaction = reply_payload[:transaction]
+
+      assert(%Transaction{} = transaction)
+      assert(transaction.user_id == context.user.id)
+      assert(transaction.amount == Decimal.from_float(-context.amount))
+      assert(transaction.external_amount == Decimal.from_float(-context.external_amount))
+      assert(transaction.currency_code == context.currency)
+      assert(transaction.external_currency == context.external_currency)
+      assert(transaction.transaction_category_id == nil)
+      assert(transaction.to == context.to)
+      assert(transaction.balance == Decimal.from_float(context.balance))
+
+      assert(Map.has_key?(reply_payload, :output_message))
+      assert(Map.has_key?(reply_payload, :reply_markup))
+
+      assert_called(Nadia.send_message(context.user.telegram_chat_id, _, _))
+
+      assert_enqueued(
+        worker: MarkevichMoney.Gamification.Events.Broadcaster,
+        args: %{
+          event: @transaction_created_event,
+          transaction_id: transaction.id,
+          user_id: context.user.id
+        }
+      )
+    end
+  end
+
   describe "Карта message with category" do
     setup do
       user = insert(:user)
