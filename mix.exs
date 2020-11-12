@@ -4,7 +4,7 @@ defmodule MarkevichMoney.MixProject do
   def project do
     [
       app: :markevich_money,
-      version: "0.4.7",
+      version: "0.4.8",
       elixir: "~> 1.11.2",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
