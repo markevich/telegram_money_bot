@@ -22,6 +22,14 @@ defmodule MarkevichMoney.Constants do
 
       @start_callback "start"
 
+      @help_callback "help"
+      @help_callback_newby "newby"
+      @help_callback_add "add"
+      @help_callback_stats "stats"
+      @help_callback_limits "limits"
+      @help_callback_support "support"
+      @help_callback_bug "bug"
+
       # messages
       @help_message "/help"
       @stats_message "/stats"

@@ -14,6 +14,10 @@ defmodule MarkevichMoney.MockNadia do
           {:ok, nil}
         end
 
+        def send_photo(_chat_id, _photo) do
+          {:ok, nil}
+        end
+
         def edit_message_text(_chat_id, _message_id, _, _message_text, _options) do
           {:ok, nil}
         end

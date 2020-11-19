@@ -16,4 +16,10 @@ config :markevich_money, :tg_file_ids,
       "AgACAgIAAxkBAAIFSF-e-dBFY4kz2yx3WA4qbi3tTos4AAJHsTEbs7b4SG4pzVDprQT4FFdgmi4AAwEAAwIAA20AAyRHAAIeBA",
     alfa_click_email6:
       "AgACAgIAAxkBAAIFR1-e-XAI4MKr3tv_JZPNMRPgpCj4AALnsDEbs7b4SLpjkaezEZ8-T1BVmS4AAwEAAwIAA3gAAzBFAAIeBA"
+  },
+  help: %{
+    newby: %{
+      transaction_example:
+        "AgACAgIAAxkBAAIHGF-2RwyyWUWJTpHUkOvYHJxFwmbKAAJarzEb1eawSfOgmhlf1LZGVG1Ali4AAwEAAwIAA3gAA_iPBAABHgQ"
+    }
   }
