@@ -15,7 +15,7 @@ defmodule MarkevichMoney.Release do
   # Исправления
   # Безопасность и быстродействие:
 
-  def send_changelog("1.0") do
+  def send_changelog("1.0.0") do
     message = """
     *🤍❤️🤍 Обновление `0.4.8` => `1.0*
 
