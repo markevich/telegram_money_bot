@@ -1,6 +1,7 @@
 defmodule MarkevichMoney.Pipelines.Start.Callbacks do
   use MarkevichMoney.Constants
   alias MarkevichMoney.CallbackData
+  alias MarkevichMoney.Pipelines.Help.Messages, as: HelpPipeline
   alias MarkevichMoney.Users
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, SendMessage, SendPhoto}
 
@@ -122,11 +123,16 @@ defmodule MarkevichMoney.Pipelines.Start.Callbacks do
     Настройка завершена! Поздравляю!
 
     Ты получишь оповещение о своей первой трате, как только совершишь покупку, используя подключенную к аккаунту "Альфа-Клик" банковскую карту.
+
+    _Вызываю /help для дальнейших инструкций._
     """
 
     callback_data
     |> Map.put(:output_message, message)
     |> SendMessage.call()
+
+    callback_data
+    |> HelpPipeline.call()
   end
 
   defp upsert_user(callback_data) do

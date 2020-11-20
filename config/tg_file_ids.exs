@@ -22,4 +22,8 @@ config :markevich_money, :tg_file_ids,
       transaction_example:
         "AgACAgIAAxkBAAIHGF-2RwyyWUWJTpHUkOvYHJxFwmbKAAJarzEb1eawSfOgmhlf1LZGVG1Ali4AAwEAAwIAA3gAA_iPBAABHgQ"
     }
+  },
+  releases: %{
+    "1.0" =>
+      "AgACAgIAAxkBAAIHo1-2pJgcWxySZMbU_aoW3OBl_RHLAALKrzEb1eawSQQMymAAAZQUi4KpdJcuAAMBAAMCAAN4AAPYVAMAAR4E"
   }
