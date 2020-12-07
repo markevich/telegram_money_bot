@@ -5,22 +5,22 @@ use Mix.Config
 config :markevich_money, :tg_file_ids,
   user_registration: %{
     alfa_click_email1:
-      "AgACAgIAAxkBAAIFSV-e-szHQWvLxg5xq4u5cE3_A45BAAJLsTEbs7b4SGefcwgmxa4-_xjnly4AAwEAAwIAA20AAymIAgABHgQ",
+      "AgACAgIAAxkBAAInBl_N_7KkBHJlGty_P-nE3YnSXhWoAAIBrzEbFEpwSimrjG6UhWQzQRjnly4AAwEAAwIAA3kAA4sYBAABHgQ",
     alfa_click_email2:
-      "AgACAgIAAxkBAAIFQ1-e-ECC5HK_PMiuChPStuzOQE9JAAJDsTEbs7b4SO9Z89WLfyEBThxLli4AAwEAAwIAA3gAA-_KAwABHgQ",
+      "AgACAgIAAxkBAAInB1_N_8pH6jF3Of-AQGblP_qgMRSGAAIDrzEbFEpwSi4cBluQRR1IBxeili4AAwEAAwIAA3kAA93sBAABHgQ",
     alfa_click_email3:
-      "AgACAgIAAxkBAAIFRV-e-JEH7V7VoRcpk9zoU50rjvMvAAKqrzEbQ-f4SAFbDMyPFwo-_htLli4AAwEAAwIAA20AA0fOAwABHgQ",
+      "AgACAgIAAxkBAAInCF_OAAFDRD5NDnDh8Gwvughpy-r77QACBK8xGxRKcEqnrvoE84sbvn_rF5guAAMBAAMCAAN5AAPZEQQAAR4E",
     alfa_click_email4:
-      "AgACAgIAAxkBAAIFRl-e-S8_wwPZq12dFsM8SMPjTdu8AAJGsTEbs7b4SFsM2iT7S0-5R8zKmS4AAwEAAwIAA3gAA2YTAAIeBA",
+      "AgACAgIAAxkBAAInCV_OAAFaiAjrElnWBRw62SOZFHRxtwACBa8xGxRKcEprIzbxCcdr_MltU5guAAMBAAMCAAN5AANE_AMAAR4E",
     alfa_click_email5:
-      "AgACAgIAAxkBAAIFSF-e-dBFY4kz2yx3WA4qbi3tTos4AAJHsTEbs7b4SG4pzVDprQT4FFdgmi4AAwEAAwIAA20AAyRHAAIeBA",
+      "AgACAgIAAxkBAAInCl_OAAFyHYqnzbOpBMa9A4JJKPc1fAACBq8xGxRKcEqb98017g5hq8RP85cuAAMBAAMCAAN5AAO5-QMAAR4E",
     alfa_click_email6:
-      "AgACAgIAAxkBAAIFR1-e-XAI4MKr3tv_JZPNMRPgpCj4AALnsDEbs7b4SLpjkaezEZ8-T1BVmS4AAwEAAwIAA3gAAzBFAAIeBA"
+      "AgACAgIAAxkBAAInC1_OAAGH0_wewjzrgM4pv6hw60I3AwACB68xGxRKcEqQ-SSbjldHIyWf6JcuAAMBAAMCAAN5AAO4DAQAAR4E"
   },
   help: %{
     newby: %{
       transaction_example:
-        "AgACAgIAAxkBAAIHGF-2RwyyWUWJTpHUkOvYHJxFwmbKAAJarzEb1eawSfOgmhlf1LZGVG1Ali4AAwEAAwIAA3gAA_iPBAABHgQ"
+        "AgACAgIAAxkBAAInDV_OAAHeA4LMB6iOZ3e4GxMufv5jOgACCK8xGxRKcEo0Vy-knxjFc76odJcuAAMBAAMCAAN4AAOvHQQAAR4E"
     }
   },
   releases: %{
