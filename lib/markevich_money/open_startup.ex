@@ -45,7 +45,11 @@ defmodule MarkevichMoney.OpenStartup do
   def list_expenses do
     Repo.all(from(p in Profit, where: p.amount < 0))
   end
-  SELECT generated::date as month, category_name, records_count from
+
+  def list_popular_categories_by_month do
+    {:ok, %{rows: rows}} = Repo.query(
+    """
+    SELECT generated::date as month, category_name, records_count from
     generate_series(date_trunc('month', current_date - interval '1 year'), date_trunc('month', current_date), '1 month') AS generated
     INNER JOIN LATERAL (
       SELECT count(st0."amount") AS "records_count",
@@ -58,38 +62,28 @@ defmodule MarkevichMoney.OpenStartup do
       AND (NOT (st0."transaction_category_id" IS NULL))
       GROUP BY month, st1."name"
       ORDER BY month, st0."count" DESC
-      LIMIT 5) AS s1
+      LIMIT 3) AS s1
     ON TRUE
-
-  def list_popular_profits_by_month do
-    child_query =
-      from(t in Transaction,
-        join: c in assoc(t, :transaction_category),
-        select: %{
-          count: count(t.amount),
-          month: fragment("date_trunc('month', ?)::date", t.issued_at),
-          category_name: c.name
-        },
-        where: t.amount < 0,
-        where: parent_as(:generated).m == fragment("month"),
-        where: not is_nil(t.transaction_category_id),
-        group_by: [fragment("month"), c.name],
-        order_by: [fragment("month"), desc: t.count],
-        limit: 5
-      )
-
-    lateral = "select generate_series(date_trunc('month', current_date - interval '1 year'), date_trunc('month', current_date), '1 month')::date as m"
-    query = from(
-      date in lateral, as: :generated,
-      inner_lateral_join: c in subquery(child_query),
-      select: %{
-        month: date.m
-      }
+    """
     )
-    Repo.all(query)
+
+    rows
+    |> Enum.map(fn (row) ->
+      [month, category_name, records_count] = row
+
+      %{
+        month: month,
+        category_name: category_name,
+        records_count: records_count
+      }
+    end)
+    |> Enum.group_by(fn (row) ->
+      row.category_name
+    end)
   end
 
   def list_expenses_by_month do
+    #later
     query =
       from(t in Transaction,
         select: %{

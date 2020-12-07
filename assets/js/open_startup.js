@@ -9,6 +9,8 @@ export default {
   incomes() { return JSON.parse(this.el.dataset.incomes) },
   expenses() { return JSON.parse(this.el.dataset.expenses) },
   profits() { return JSON.parse(this.el.dataset.profits) },
+  popularCategories() { return JSON.parse(this.el.dataset.popularCategories) },
+  randomHsl() { return `hsla(${Math.random() * 360}, 80%, 50%, 1)` },
 
   createIncomeExpensesChart() {
     const ctx = document.getElementById('data-incomes-expenses');
@@ -85,8 +87,8 @@ export default {
         maintainAspectRatio: false
       }
     })
-
   },
+
   createProfitsTrendChart(){
     const ctx = document.getElementById('data-profits-trend');
 
@@ -163,8 +165,89 @@ export default {
     new Chart(ctx, config)
   },
 
+  createPopularCategoriesChart() {
+    const ctx = document.getElementById('data-popular-categories');
+
+    const data = this.popularCategories()
+    const datasets = Object.entries(data).map(([k, v]) => {
+      const color = this.randomHsl();
+      return {
+        fill: false,
+        label: k,
+        backgroundColor: color,
+        borderColor: color,
+        data: v.map((p) => {
+          return {
+            x: p.month,
+            y: p.records_count,
+            description: p.category_namen
+          }
+        }),
+      }
+    })
+
+    var config = {
+      type: 'line',
+      data: {
+        datasets: datasets
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Категории с наибольшим количеством транзакций"
+        },
+        legend: {
+          display: true
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            title: function (item) {
+              return "";
+            },
+            label: function (item) {
+              return `${item.dataset.label}: ${item.formattedValue}`;
+            }
+          },
+          displayColors: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          x: {
+            display: true,
+            adapters: {
+              date: {
+                locale: ru
+              }
+            },
+            type: 'time',
+            time: {
+              unit: 'month'
+            },
+            offset: true
+          },
+          y: {
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Сумма'
+            },
+            suggestedMin: 0,
+            beginAtZero: true,
+          }
+        }
+      }
+    };
+    new Chart(ctx, config)
+  },
+
   mounted(){
     this.createIncomeExpensesChart()
     this.createProfitsTrendChart()
+    this.createPopularCategoriesChart()
   }
 }
