@@ -38,7 +38,7 @@ defmodule MarkevichMoney.Factory do
 
   def profit_factory do
     %MarkevichMoney.OpenStartup.Profit{
-      date: ~D[2020-04-11],
+      date: DateTime.utc_now(),
       amount: 100,
       description: "description"
     }

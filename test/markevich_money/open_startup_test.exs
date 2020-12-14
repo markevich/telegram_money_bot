@@ -54,4 +54,409 @@ defmodule MarkevichMoney.OpenStartupTest do
       assert OpenStartup.list_expenses() == [expense]
     end
   end
+
+  describe ".list_popular_categories_by_month" do
+    test "list_popular_categories_by_month/0 returns list of popular categories with counts" do
+      food_category = insert(:transaction_category, %{name: "food_popular_category"})
+      transport_category = insert(:transaction_category, %{name: "transport_popular_category"})
+      home_category = insert(:transaction_category, %{name: "home_popular_category"})
+      pet_category = insert(:transaction_category, %{name: "pet_popular_category"})
+      other_category = insert(:transaction_category, %{name: "other_popular_category"})
+
+      # speed up tests by reducing number of transaction user inserts.
+      user = insert(:user)
+
+      insert_list(5, :transaction,
+        user: user,
+        transaction_category: food_category,
+        issued_at: ~N[2020-12-03 12:00:00]
+      )
+
+      insert_list(4, :transaction,
+        user: user,
+        transaction_category: transport_category,
+        issued_at: ~N[2020-12-03 12:00:00]
+      )
+
+      insert_list(3, :transaction,
+        user: user,
+        transaction_category: home_category,
+        issued_at: ~N[2020-12-03 12:00:00]
+      )
+
+      insert_list(2, :transaction,
+        user: user,
+        transaction_category: pet_category,
+        issued_at: ~N[2020-12-03 12:00:00]
+      )
+
+      insert_list(1, :transaction,
+        user: user,
+        transaction_category: other_category,
+        issued_at: ~N[2020-12-03 12:00:00]
+      )
+
+      insert_list(5, :transaction,
+        user: user,
+        transaction_category: pet_category,
+        issued_at: ~N[2020-11-03 12:00:00]
+      )
+
+      insert_list(4, :transaction,
+        user: user,
+        transaction_category: home_category,
+        issued_at: ~N[2020-11-03 12:00:00]
+      )
+
+      insert_list(3, :transaction,
+        user: user,
+        transaction_category: transport_category,
+        issued_at: ~N[2020-11-03 12:00:00]
+      )
+
+      insert_list(2, :transaction,
+        user: user,
+        transaction_category: food_category,
+        issued_at: ~N[2020-11-03 12:00:00]
+      )
+
+      insert_list(1, :transaction,
+        user: user,
+        transaction_category: other_category,
+        issued_at: ~N[2020-11-03 12:00:00]
+      )
+
+      insert_list(5, :transaction,
+        user: user,
+        transaction_category: pet_category,
+        issued_at: ~N[2020-09-03 12:00:00]
+      )
+
+      insert_list(4, :transaction,
+        user: user,
+        transaction_category: home_category,
+        issued_at: ~N[2020-09-03 12:00:00]
+      )
+
+      insert_list(3, :transaction,
+        user: user,
+        transaction_category: transport_category,
+        issued_at: ~N[2020-09-03 12:00:00]
+      )
+
+      insert_list(2, :transaction,
+        user: user,
+        transaction_category: food_category,
+        issued_at: ~N[2020-09-03 12:00:00]
+      )
+
+      insert_list(1, :transaction,
+        user: user,
+        transaction_category: other_category,
+        issued_at: ~N[2020-09-03 12:00:00]
+      )
+
+      records = OpenStartup.list_popular_categories_by_month()
+
+      assert(
+        records ==
+          %{
+            "food_popular_category" => [
+              [
+                %{
+                  category_name: "food_popular_category",
+                  date: ~D[2020-09-01],
+                  records_count: 2
+                }
+              ],
+              [
+                %{
+                  category_name: "food_popular_category",
+                  date: ~D[2020-12-01],
+                  records_count: 5
+                },
+                %{
+                  category_name: "food_popular_category",
+                  date: ~D[2020-11-01],
+                  records_count: 2
+                }
+              ]
+            ],
+            "home_popular_category" => [
+              [
+                %{
+                  category_name: "home_popular_category",
+                  date: ~D[2020-09-01],
+                  records_count: 4
+                }
+              ],
+              [
+                %{
+                  category_name: "home_popular_category",
+                  date: ~D[2020-12-01],
+                  records_count: 3
+                },
+                %{
+                  category_name: "home_popular_category",
+                  date: ~D[2020-11-01],
+                  records_count: 4
+                }
+              ]
+            ],
+            "pet_popular_category" => [
+              [
+                %{
+                  category_name: "pet_popular_category",
+                  date: ~D[2020-09-01],
+                  records_count: 5
+                }
+              ],
+              [
+                %{
+                  category_name: "pet_popular_category",
+                  date: ~D[2020-12-01],
+                  records_count: 2
+                },
+                %{
+                  category_name: "pet_popular_category",
+                  date: ~D[2020-11-01],
+                  records_count: 5
+                }
+              ]
+            ],
+            "transport_popular_category" => [
+              [
+                %{
+                  category_name: "transport_popular_category",
+                  date: ~D[2020-09-01],
+                  records_count: 3
+                }
+              ],
+              [
+                %{
+                  category_name: "transport_popular_category",
+                  date: ~D[2020-12-01],
+                  records_count: 4
+                },
+                %{
+                  category_name: "transport_popular_category",
+                  date: ~D[2020-11-01],
+                  records_count: 3
+                }
+              ]
+            ]
+          }
+      )
+    end
+  end
+
+  describe ".list_most_expensive_categories_by_month" do
+    test "list_most_expensive_categories_by_month/0 returns list of most expensive categories with amounts" do
+      food_category = insert(:transaction_category, %{name: "food_expensive_category"})
+      transport_category = insert(:transaction_category, %{name: "transport_expensive_category"})
+      home_category = insert(:transaction_category, %{name: "home_expensive_category"})
+      pet_category = insert(:transaction_category, %{name: "pet_expensive_category"})
+      other_category = insert(:transaction_category, %{name: "other_expensive_category"})
+
+      # speed up tests by reducing number of transaction user inserts.
+      user = insert(:user)
+
+      insert(:transaction,
+        user: user,
+        transaction_category: food_category,
+        issued_at: ~N[2020-12-14 12:00:00],
+        amount: -10
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: transport_category,
+        issued_at: ~N[2020-12-14 12:00:00],
+        amount: -20
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: home_category,
+        issued_at: ~N[2020-12-14 12:00:00],
+        amount: -30
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: pet_category,
+        issued_at: ~N[2020-12-14 12:00:00],
+        amount: -40
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: other_category,
+        issued_at: ~N[2020-12-14 12:00:00],
+        amount: -5
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: food_category,
+        issued_at: ~N[2020-11-14 12:00:00],
+        amount: -40
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: transport_category,
+        issued_at: ~N[2020-11-14 12:00:00],
+        amount: -30
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: home_category,
+        issued_at: ~N[2020-11-14 12:00:00],
+        amount: -20
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: pet_category,
+        issued_at: ~N[2020-11-14 12:00:00],
+        amount: -10
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: other_category,
+        issued_at: ~N[2020-11-14 12:00:00],
+        amount: -5
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: food_category,
+        issued_at: ~N[2020-09-14 12:00:00],
+        amount: -40
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: transport_category,
+        issued_at: ~N[2020-09-14 12:00:00],
+        amount: -30
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: home_category,
+        issued_at: ~N[2020-09-14 12:00:00],
+        amount: -20
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: pet_category,
+        issued_at: ~N[2020-09-14 12:00:00],
+        amount: -10
+      )
+
+      insert(:transaction,
+        user: user,
+        transaction_category: other_category,
+        issued_at: ~N[2020-09-14 12:00:00],
+        amount: -5
+      )
+
+      records = OpenStartup.list_most_expensive_categories_by_month()
+
+      assert(
+        records ==
+          %{
+            "food_expensive_category" => [
+              [
+                %{
+                  category_name: "food_expensive_category",
+                  date: ~D[2020-09-01],
+                  sum_amount: Decimal.new(40)
+                }
+              ],
+              [
+                %{
+                  category_name: "food_expensive_category",
+                  date: ~D[2020-12-01],
+                  sum_amount: Decimal.new(10)
+                },
+                %{
+                  category_name: "food_expensive_category",
+                  date: ~D[2020-11-01],
+                  sum_amount: Decimal.new(40)
+                }
+              ]
+            ],
+            "home_expensive_category" => [
+              [
+                %{
+                  category_name: "home_expensive_category",
+                  date: ~D[2020-09-01],
+                  sum_amount: Decimal.new(20)
+                }
+              ],
+              [
+                %{
+                  category_name: "home_expensive_category",
+                  date: ~D[2020-12-01],
+                  sum_amount: Decimal.new(30)
+                },
+                %{
+                  category_name: "home_expensive_category",
+                  date: ~D[2020-11-01],
+                  sum_amount: Decimal.new(20)
+                }
+              ]
+            ],
+            "other_expensive_category" => [
+              [
+                %{
+                  category_name: "other_expensive_category",
+                  date: ~D[2020-09-01],
+                  sum_amount: Decimal.new(5)
+                }
+              ],
+              [
+                %{
+                  category_name: "other_expensive_category",
+                  date: ~D[2020-12-01],
+                  sum_amount: Decimal.new(5)
+                },
+                %{
+                  category_name: "other_expensive_category",
+                  date: ~D[2020-11-01],
+                  sum_amount: Decimal.new(5)
+                }
+              ]
+            ],
+            "pet_expensive_category" => [
+              [
+                %{
+                  category_name: "pet_expensive_category",
+                  date: ~D[2020-09-01],
+                  sum_amount: Decimal.new(10)
+                }
+              ],
+              [
+                %{
+                  category_name: "pet_expensive_category",
+                  date: ~D[2020-12-01],
+                  sum_amount: Decimal.new(40)
+                },
+                %{
+                  category_name: "pet_expensive_category",
+                  date: ~D[2020-11-01],
+                  sum_amount: Decimal.new(10)
+                }
+              ]
+            ]
+          }
+      )
+    end
+  end
 end

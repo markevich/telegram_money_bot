@@ -10,7 +10,22 @@ export default {
   expenses() { return JSON.parse(this.el.dataset.expenses) },
   profits() { return JSON.parse(this.el.dataset.profits) },
   popularCategories() { return JSON.parse(this.el.dataset.popularCategories) },
-  randomHsl() { return `hsla(${Math.random() * 360}, 80%, 50%, 1)` },
+  mostExpensiveCategories() { return JSON.parse(this.el.dataset.mostExpensiveCategories) },
+  colors() {
+    const colors = {
+      blue: "rgb(54, 162, 235)",
+      yellow: "rgb(249, 231, 159)",
+      green: "rgb(75, 192, 192)",
+      red: "rgb(255, 99, 132)",
+      purple: "rgb(108, 52, 131)",
+      grey: "rgb(201, 203, 207)",
+      darkRed: "rgb(110, 44, 0)",
+      darkBlue: "rgb(28, 40, 51)",
+      darkGreen: "rgb(0, 131, 143)"
+    }
+
+    return Object.entries(colors).map(([k, v]) => v)
+  },
 
   createIncomeExpensesChart() {
     const ctx = document.getElementById('data-incomes-expenses');
@@ -34,14 +49,14 @@ export default {
         datasets: [
           {
             backgroundColor: "rgb(75, 192, 192)",
-            maxBarThickness: '20',
+            barThickness: 'flex',
             label: 'Поступление',
             data: formattedIncomes
           },
           {
             backgroundColor: "rgb(255, 99, 132)",
             label: 'Расход',
-            maxBarThickness: '20',
+            barThickness: 'flex',
             data: formattedExpenses
           }
         ]
@@ -49,9 +64,6 @@ export default {
       options: {
         tooltips: {
           callbacks: {
-            title: function () {
-              return "";
-            },
             label: function (item) {
               const description = item.dataset.data[item.dataIndex].description;
               return ` ${description}: ${item.formattedValue} $`;
@@ -61,7 +73,7 @@ export default {
         },
         title: {
           display: true,
-          text: "Движение средств"
+          text: "Движение средств."
         },
         scales: {
           y: {
@@ -89,7 +101,7 @@ export default {
     })
   },
 
-  createProfitsTrendChart(){
+  createProfitsTrendChart() {
     const ctx = document.getElementById('data-profits-trend');
 
     var config = {
@@ -98,7 +110,7 @@ export default {
         datasets: [
           {
             fill: false,
-            label: 'Ежемесячная прибыль',
+            label: 'Ежемесячная прибыль.',
             borderColor: "rgb(153, 102, 255)",
             data: this.profits().map((p) => {
               return {
@@ -113,7 +125,7 @@ export default {
       options: {
         title: {
           display: true,
-          text: "Ежемесячная прибыль"
+          text: "Ежемесячная прибыль."
         },
         legend: {
           display: false
@@ -169,21 +181,26 @@ export default {
     const ctx = document.getElementById('data-popular-categories');
 
     const data = this.popularCategories()
-    const datasets = Object.entries(data).map(([k, v]) => {
-      const color = this.randomHsl();
-      return {
-        fill: false,
-        label: k,
-        backgroundColor: color,
-        borderColor: color,
-        data: v.map((p) => {
-          return {
-            x: p.month,
-            y: p.records_count,
-            description: p.category_namen
-          }
-        }),
-      }
+    let colors = this.colors()
+    const datasets = Object.entries(data).flatMap(([category, groups], index) => {
+      let color = colors[index % colors.length]
+
+      return groups.flatMap((group) => {
+        return {
+          fill: false,
+          pointRadius: 4,
+          label: category,
+          backgroundColor: color,
+          borderColor: color,
+          data: group.map((point) => {
+            return {
+              x: point.date,
+              y: point.records_count,
+              description: point.category_name
+            }
+          }),
+        }
+      })
     })
 
     var config = {
@@ -194,10 +211,17 @@ export default {
       options: {
         title: {
           display: true,
-          text: "Категории с наибольшим количеством транзакций"
+          text: "Категории с наибольшим количеством транзакций."
         },
         legend: {
-          display: true
+          display: true,
+          labels: {
+            filter: (current, data) => {
+              console.log(current.datasetIndex)
+              console.log(data)
+              return current.datasetIndex == data.datasets.findIndex((item) => item.label === current.text)
+            },
+          },
         },
         responsive: true,
         maintainAspectRatio: false,
@@ -234,7 +258,7 @@ export default {
             display: true,
             scaleLabel: {
               display: true,
-              labelString: 'Сумма'
+              labelString: 'Количество транзакций'
             },
             suggestedMin: 0,
             beginAtZero: true,
@@ -245,9 +269,102 @@ export default {
     new Chart(ctx, config)
   },
 
-  mounted(){
+  createMostExpensiveCategoriesChart() {
+    const ctx = document.getElementById('data-most-expensive-categories');
+
+    const data = this.mostExpensiveCategories()
+    let colors = this.colors()
+    const datasets = Object.entries(data).flatMap(([category, groups], index) => {
+      let color = colors[index % colors.length]
+
+      return groups.flatMap((group) => {
+        return {
+          fill: false,
+          label: category,
+          backgroundColor: color,
+          borderColor: color,
+          pointRadius: 4,
+          data: group.map((point) => {
+            return {
+              x: point.date,
+              y: point.sum_amount,
+              description: point.category_name
+            }
+          }),
+        }
+      })
+    })
+
+    var config = {
+      type: 'line',
+      data: {
+        datasets: datasets
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Категории с наибольшими тратами (BYN)."
+        },
+        legend: {
+          display: true,
+          labels: {
+            filter: (current, data) => {
+              console.log(current.datasetIndex)
+              console.log(data)
+              return current.datasetIndex == data.datasets.findIndex((item) => item.label === current.text)
+            },
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            title: function (item) {
+              return "";
+            },
+            label: function (item) {
+              return `${item.dataset.label}: ${item.formattedValue}`;
+            }
+          },
+          displayColors: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          x: {
+            display: true,
+            adapters: {
+              date: {
+                locale: ru
+              }
+            },
+            type: 'time',
+            time: {
+              unit: 'month'
+            },
+            offset: true
+          },
+          y: {
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Сумма транзакций'
+            },
+            suggestedMin: 0,
+            beginAtZero: true,
+          }
+        }
+      }
+    };
+    new Chart(ctx, config)
+  },
+
+  mounted() {
     this.createIncomeExpensesChart()
     this.createProfitsTrendChart()
     this.createPopularCategoriesChart()
+    this.createMostExpensiveCategoriesChart()
   }
 }
