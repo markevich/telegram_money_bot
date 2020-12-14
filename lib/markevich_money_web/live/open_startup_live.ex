@@ -11,10 +11,18 @@ defmodule MarkevichMoneyWeb.OpenStartupLive do
        incomes: fetch_incomes(),
        expenses: fetch_expenses(),
        profits: fetch_profits(),
-       popular_categories: fetch_popular_categories()
+       popular_categories: fetch_popular_categories(),
+       most_expensive_categories: fetch_most_expensive_categories()
      )}
   end
 
+  defp fetch_most_expensive_categories do
+    {:ok, list} =
+      OpenStartup.list_most_expensive_categories_by_month()
+      |> Jason.encode()
+
+    list
+  end
 
   defp fetch_popular_categories do
     {:ok, list} =
