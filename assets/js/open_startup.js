@@ -303,7 +303,7 @@ export default {
       options: {
         title: {
           display: true,
-          text: "Категории с наибольшими тратами (BYN)."
+          text: "Категории с наибольшими расходами (BYN)."
         },
         legend: {
           display: true,
