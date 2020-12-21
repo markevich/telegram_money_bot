@@ -1,5 +1,7 @@
 defmodule MarkevichMoney.Transactions.Transaction do
   use Ecto.Schema
+  use MarkevichMoney.Constants
+
   import Ecto.Changeset
 
   alias __MODULE__
@@ -67,6 +69,14 @@ defmodule MarkevichMoney.Transactions.Transaction do
 
       _ ->
         changeset
+    end
+  end
+
+  def type(transaction) do
+    case Decimal.compare(transaction.amount, 0) do
+      :gt -> @transaction_type_income
+      :lt -> @transaction_type_expense
+      :eq -> @transaction_type_unknown
     end
   end
 end

@@ -41,6 +41,12 @@ defmodule MarkevichMoney.Constants do
       # events
       @transaction_created_event "transaction_created"
       @transaction_updated_event "transaction_updated"
+
+      @transaction_type_income "income"
+      @transaction_type_expense "expense"
+      @transaction_type_unknown "unknown"
+
+      @manual_account "Добавленные вручную"
     end
   end
 end
