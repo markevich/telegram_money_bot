@@ -24,11 +24,9 @@ install:
 
 before_script:
   - mix do ecto.create, ecto.migrate
-  - cd assets && npm install && npm run deploy && cd ../
 
 script:
   - mix format --check-formatted
   - mix coveralls.travis
   - mix credo --strict
   - mix hex.audit
-  - cd assets && npm run test
