@@ -296,43 +296,16 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       Транзакция №#{transaction.id}(Поступление)
       ```
 
-       Сумма       #{amount} #{context.currency}
-       Категория
-       Кому        28.01.2020
-       Остаток     #{context.balance}
-       Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+       Сумма     #{amount} #{context.currency}
+       Кому      28.01.2020
+       Остаток   #{context.balance}
+       Дата      #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
       ```
       """
 
-      expected_reply_markup = %Nadia.Model.InlineKeyboardMarkup{
-        inline_keyboard: [
-          [
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data:
-                "{\"id\":#{transaction.id},\"pipeline\":\"#{@choose_category_callback}\"}",
-              switch_inline_query: nil,
-              text: "Категория",
-              url: nil
-            },
-            %Nadia.Model.InlineKeyboardButton{
-              callback_data:
-                "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{
-                  @delete_transaction_callback
-                }\"}",
-              switch_inline_query: nil,
-              text: "Удалить",
-              url: nil
-            }
-          ]
-        ]
-      }
-
       assert_called(
-        Nadia.send_message(user.telegram_chat_id, expected_message,
-          reply_markup: expected_reply_markup,
-          parse_mode: "Markdown"
-        )
+        Nadia.send_message(user.telegram_chat_id, expected_message, parse_mode: "Markdown")
       )
     end
   end

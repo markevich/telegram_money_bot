@@ -85,11 +85,10 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Поступление)
              ```
 
-              Сумма       #{transaction.amount} #{transaction.currency_code}
-              Категория
-              Кому        #{transaction.to}
-              Остаток     #{transaction.balance}
-              Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+              Сумма     #{transaction.amount} #{transaction.currency_code}
+              Кому      #{transaction.to}
+              Остаток   #{transaction.balance}
+              Дата      #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
              ```
              """
@@ -108,11 +107,10 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Сомнительная)
              ```
 
-              Сумма       #{transaction.amount} #{transaction.currency_code}
-              Категория
-              Кому        #{transaction.to}
-              Остаток     #{transaction.balance}
-              Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+              Сумма     #{transaction.amount} #{transaction.currency_code}
+              Кому      #{transaction.to}
+              Остаток   #{transaction.balance}
+              Дата      #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
              ```
              """
