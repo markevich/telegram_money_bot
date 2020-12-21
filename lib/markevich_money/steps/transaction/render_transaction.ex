@@ -5,19 +5,27 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
   alias MarkevichMoney.Transactions.Transaction
 
   def call(%{transaction: transaction} = payload) do
-    payload
-    |> Map.put(:output_message, render_message(transaction))
-    |> Map.put(:reply_markup, render_buttons(transaction))
+    transaction_type = Transaction.type(transaction)
+
+    payload =
+      payload
+      |> Map.put(:output_message, render_message(transaction, transaction_type))
+
+    if transaction_type == @transaction_type_expense do
+      Map.put(payload, :reply_markup, render_buttons(transaction))
+    else
+      payload
+    end
   end
 
-  defp render_message(%Transaction{} = transaction) do
+  defp render_message(%Transaction{} = transaction, transaction_type) do
     table =
       transaction
-      |> table_data()
+      |> table_data(transaction_type)
       |> TableRex.Table.new([], "")
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
-    type = human_type(transaction)
+    type = human_type(transaction_type)
 
     """
     Транзакция №#{transaction.id}(#{type})
@@ -28,23 +36,31 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
     """
   end
 
-  defp human_type(transaction) do
-    case Transaction.type(transaction) do
+  defp human_type(transaction_type) do
+    case transaction_type do
       @transaction_type_income -> "Поступление"
       @transaction_type_expense -> "Списание"
       @transaction_type_unknown -> "Сомнительная"
     end
   end
 
-  defp table_data(transaction) do
+  defp table_data(transaction, transaction_type) do
     list = []
     list = [["Сумма", amount(transaction)] | list]
-    list = [["Категория", category_name(transaction)] | list]
+    list = maybe_prepend_category(list, transaction, transaction_type)
     list = [["Кому", transaction.to] | list]
     list = maybe_prepend_balance(list, transaction)
     list = [["Дата", Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")] | list]
 
     Enum.reverse(list)
+  end
+
+  defp maybe_prepend_category(list, transaction, transaction_type) do
+    if transaction_type == @transaction_type_expense do
+      [["Категория", category_name(transaction)] | list]
+    else
+      list
+    end
   end
 
   defp maybe_prepend_balance(list, transaction) do
