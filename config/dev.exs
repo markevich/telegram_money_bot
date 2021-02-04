@@ -70,6 +70,6 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :markevich_money, Oban, crontab: false
+config :markevich_money, Oban, plugins: [{Oban.Plugins.Cron, crontab: []}]
 
 import_config "dev.secret.exs"

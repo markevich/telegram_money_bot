@@ -40,11 +40,11 @@ config :phoenix, :json_library, Jason
 config :markevich_money, Oban,
   repo: MarkevichMoney.Repo,
   # plugins: [{Oban.Plugins.Pruner, max_age: 60}, Oban.Pro.Plugins.Lifeline, Oban.Web.Plugins.Stats],
-  plugins: [{Oban.Plugins.Pruner, max_age: 60}],
-  queues: [events: 5, trackers: 5, mail_fetcher: 1],
-  crontab: [
-    {"* * * * *", EmailProcessor}
-  ]
+  plugins: [
+    {Oban.Plugins.Pruner, max_age: 60},
+    {Oban.Plugins.Cron, crontab: [{"* * * * *", EmailProcessor}]}
+  ],
+  queues: [events: 5, trackers: 5, mail_fetcher: 1]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
