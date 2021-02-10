@@ -3,7 +3,6 @@ defmodule MarkevichMoney.Factory do
 
   def user_factory do
     %MarkevichMoney.Users.User{
-      name: sequence(:name, &"username_#{&1}"),
       telegram_chat_id: sequence(:telegram_chat_id, & &1),
       notification_email: sequence(:notification_emaill, &"email#{&1}")
     }

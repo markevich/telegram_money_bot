@@ -137,19 +137,9 @@ defmodule MarkevichMoney.Pipelines.Start.Callbacks do
 
   defp upsert_user(callback_data) do
     %{
-      name: username(callback_data.from),
       telegram_chat_id: callback_data.chat_id
     }
     |> Users.upsert_user!()
-  end
-
-  # TODO: Move that to telegram context
-  defp username(from) do
-    if Map.has_key?(from, "username") do
-      from["username"]
-    else
-      from["first_name"]
-    end
   end
 
   defp get_file_id(picture_name) do
