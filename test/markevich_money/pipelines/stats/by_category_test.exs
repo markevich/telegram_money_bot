@@ -506,4 +506,93 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
     end
   end
+
+  describe "stats callback by category with custom description" do
+    setup do
+      user = insert(:user)
+      category2 = insert(:transaction_category, name: "Nomi")
+
+      transaction1 =
+        insert(:transaction,
+          user: user,
+          to: "Pizza",
+          amount: -15,
+          issued_at: Timex.now(),
+          transaction_category_id: category2.id,
+          custom_description: "My nomi nomi"
+        )
+
+      transaction2 =
+        insert(:transaction,
+          user: user,
+          to: "Nomis",
+          amount: -55,
+          issued_at: Timex.shift(Timex.now(), days: -1),
+          transaction_category_id: category2.id
+        )
+
+      message_id = 123
+      callback_id = 234
+
+      callback_data = %CallbackData{
+        callback_data: %{
+          "pipeline" => @stats_callback,
+          "type" => @stats_callback_current_week,
+          "c_id" => category2.id
+        },
+        callback_id: callback_id,
+        chat_id: user.telegram_chat_id,
+        current_user: user,
+        message_id: message_id,
+        message_text: "Выберите тип"
+      }
+
+      {:ok,
+       %{
+         user: user,
+         callback_data: callback_data,
+         category: category2,
+         transaction1: transaction1,
+         transaction2: transaction2,
+         message_id: message_id,
+         callback_id: callback_id
+       }}
+    end
+
+    mocked_test "current week stats callback by category", context do
+      Pipelines.call(context.callback_data)
+
+      stat_from = Timex.shift(Timex.now(), days: -7)
+      stat_to = Timex.shift(Timex.now(), days: 1)
+      from = Timex.format!(stat_from, "{0D}.{0M}.{YYYY}")
+      to = Timex.format!(stat_to, "{0D}.{0M}.{YYYY}")
+
+      transaction1_issued_at =
+        Timex.format!(context.transaction1.issued_at, "{0D}.{0M} {h24}:{m}")
+
+      transaction2_issued_at =
+        Timex.format!(context.transaction2.issued_at, "{0D}.{0M} {h24}:{m}")
+
+      expected_message = """
+      Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
+      ```
+        Всего: 70.0
+
+       55.0   #{context.transaction2.to}          #{transaction2_issued_at}
+       15.0   #{context.transaction1.custom_description}   #{transaction1_issued_at}
+
+      ```
+      """
+
+      assert_called(
+        Nadia.send_message(
+          context.user.telegram_chat_id,
+          expected_message,
+          parse_mode: "Markdown"
+        )
+      )
+
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+    end
+  end
 end

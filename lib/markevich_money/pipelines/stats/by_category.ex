@@ -38,7 +38,7 @@ defmodule MarkevichMoney.Pipelines.Stats.ByCategory do
   defp put_stats_total(%{stats: stats} = payload) do
     total =
       stats
-      |> Enum.reduce(0, fn {_to, amount, _issued_at}, acc ->
+      |> Enum.reduce(0, fn {_to, _custom_description, amount, _issued_at}, acc ->
         acc + abs(Decimal.to_float(amount))
       end)
 
@@ -68,10 +68,11 @@ defmodule MarkevichMoney.Pipelines.Stats.ByCategory do
 
     table =
       stats
-      |> Enum.map(fn {to, amount, issued_at} ->
+      |> Enum.map(fn {to, custom_description, amount, issued_at} ->
         number = amount |> Decimal.to_float() |> abs() |> Float.ceil(2)
         issued_at = Timex.format!(issued_at, "{0D}.{0M} {h24}:{m}")
-        [number, to, issued_at]
+        description = custom_description || to
+        [number, description, issued_at]
       end)
       |> TableRex.Table.new([], "")
       |> TableRex.Table.put_column_meta(:all, align: :left, padding: 1)

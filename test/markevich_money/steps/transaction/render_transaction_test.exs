@@ -50,7 +50,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
     end
   end
 
-  describe "transaction (income)" do
+  describe "transaction (outcome)" do
     setup do
       {:ok, %{transaction: insert(:transaction)}}
     end
@@ -73,7 +73,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
     end
   end
 
-  describe "transaction (outcome)" do
+  describe "transaction (income)" do
     setup do
       {:ok, %{transaction: insert(:transaction, amount: 10)}}
     end
@@ -193,6 +193,30 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              } #{transaction.external_currency})
               Категория
               Кому        #{transaction.to}
+              Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+
+             ```
+             """
+    end
+  end
+
+  describe "transaction with custom description" do
+    setup do
+      {:ok, %{transaction: insert(:transaction, custom_description: "Big Mac")}}
+    end
+
+    test "renders transaction", %{transaction: transaction} do
+      reply_payload = RenderTransaction.call(%{transaction: transaction})
+
+      assert reply_payload[:output_message] == """
+             Транзакция №#{transaction.id}(Списание)
+             ```
+
+              Сумма       #{transaction.amount} #{transaction.currency_code}
+              Категория
+              Описание    #{transaction.custom_description}
+              Кому        #{transaction.to}
+              Остаток     #{transaction.balance}
               Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
 
              ```

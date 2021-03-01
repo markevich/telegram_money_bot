@@ -18,6 +18,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
     field :balance, :decimal
     field :to, :string
     field :lookup_hash, :string
+    field :custom_description, :string
 
     belongs_to(:transaction_category, TransactionCategory)
     belongs_to(:user, User)
@@ -56,7 +57,8 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :external_currency,
       :balance,
       :to,
-      :transaction_category_id
+      :transaction_category_id,
+      :custom_description
     ])
     |> validate_required([:account, :issued_at, :amount, :currency_code, :balance, :to])
     |> upcase_currency_code
