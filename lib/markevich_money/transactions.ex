@@ -12,6 +12,15 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload([:transaction_category, :user])
   end
 
+  def get_user_transaction!(transaction_id, user_id) do
+    from(transaction in Transaction,
+      where: transaction.id == ^transaction_id,
+      where: transaction.user_id == ^user_id
+    )
+    |> Repo.one!()
+    |> Repo.preload([:transaction_category, :user])
+  end
+
   def category_id_by_name_similarity(category_name) do
     from(category in TransactionCategory,
       where: fragment("similarity(?, ?) > 0.1", category.name, ^category_name),
@@ -51,10 +60,13 @@ defmodule MarkevichMoney.Transactions do
   def get_category!(id), do: Repo.get(TransactionCategory, id)
 
   def update_transaction(%Transaction{} = transaction, attrs) do
-    {:ok, _} =
+    updated =
       transaction
       |> Transaction.update_changeset(attrs)
-      |> Repo.update()
+      |> Repo.update!()
+      |> Repo.preload(:transaction_category, force: true)
+
+    {:ok, updated}
   end
 
   def stats(current_user, from, to) do
@@ -82,7 +94,9 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.amount < ^0,
         where: transaction.issued_at >= ^from,
         where: transaction.issued_at <= ^to,
-        select: {transaction.to, transaction.amount, transaction.issued_at},
+        select:
+          {transaction.to, transaction.custom_description, transaction.amount,
+           transaction.issued_at},
         order_by: [asc: transaction.issued_at]
       )
 

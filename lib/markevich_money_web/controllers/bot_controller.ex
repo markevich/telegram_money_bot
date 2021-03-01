@@ -47,10 +47,12 @@ defmodule MarkevichMoneyWeb.BotController do
 
   def webhook(
         conn,
-        %{"message" => %{"text" => input_message, "chat" => %{"id" => chat_id}}}
+        %{"message" => %{"text" => input_message, "chat" => %{"id" => chat_id}} = message}
       ) do
     try do
-      %MessageData{message: input_message, chat_id: chat_id}
+      reply_to_message = get_in(message, ["reply_to_message", "text"])
+
+      %MessageData{message: input_message, chat_id: chat_id, reply_to_message: reply_to_message}
       |> Pipelines.call()
     rescue
       e ->

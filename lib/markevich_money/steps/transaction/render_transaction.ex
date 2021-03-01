@@ -48,6 +48,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
     list = []
     list = [["Сумма", amount(transaction)] | list]
     list = maybe_prepend_category(list, transaction, transaction_type)
+    list = maybe_prepend_custom_description(list, transaction)
     list = [["Кому", transaction.to] | list]
     list = maybe_prepend_balance(list, transaction)
     list = [["Дата", Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")] | list]
@@ -58,6 +59,14 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
   defp maybe_prepend_category(list, transaction, transaction_type) do
     if transaction_type == @transaction_type_expense do
       [["Категория", category_name(transaction)] | list]
+    else
+      list
+    end
+  end
+
+  defp maybe_prepend_custom_description(list, transaction) do
+    if transaction.custom_description do
+      [["Описание", transaction.custom_description] | list]
     else
       list
     end
