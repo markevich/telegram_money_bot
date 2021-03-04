@@ -50,6 +50,15 @@ defmodule MarkevichMoney.Pipelines.Help.MessagesTest do
           [
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
+                "{\"pipeline\":\"#{@help_callback}\",\"type\":\"#{@help_callback_edit_description}\"}",
+              switch_inline_query: nil,
+              text: "📝 Как добавить описание транзакции?",
+              url: nil
+            }
+          ],
+          [
+            %Nadia.Model.InlineKeyboardButton{
+              callback_data:
                 "{\"pipeline\":\"#{@help_callback}\",\"type\":\"#{@help_callback_limits}\"}",
               switch_inline_query: nil,
               text: "✋ Работа с лимитами.",

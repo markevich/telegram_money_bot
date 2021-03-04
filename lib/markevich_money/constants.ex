@@ -29,6 +29,7 @@ defmodule MarkevichMoney.Constants do
       @help_callback_limits "limits"
       @help_callback_support "support"
       @help_callback_bug "bug"
+      @help_callback_edit_description "edit_description"
 
       # messages
       @help_message "/help"

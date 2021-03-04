@@ -22,7 +22,7 @@ defmodule MarkevichMoney.Pipelines.Help.Callbacks do
     |> SendMessage.call()
 
     payload
-    |> Map.put(:output_file_id, get_file_id(:transaction_example))
+    |> Map.put(:output_file_id, get_file_id(:newby_transaction_example))
     |> SendPhoto.call()
 
     message = """
@@ -108,6 +108,44 @@ defmodule MarkevichMoney.Pipelines.Help.Callbacks do
 
   def call(
         %CallbackData{
+          callback_data: %{
+            "pipeline" => @help_callback,
+            "type" => @help_callback_edit_description
+          }
+        } = callback_data
+      ) do
+    payload = callback_data |> Map.from_struct()
+
+    message = """
+    `> 📝 Как добавить описание транзакции?`
+
+    К каждой транзакции можно добавить комментарий, который отобразится в пункте «Описание» и в статистике по установленной категории. Для этого нужно ответить на сообщение бота с той транзакцией, которая тебя интересует. Напиши в ответе любой комментарий и отправь боту — тебе тут же придёт новая версия сообщения о транзакции. Так это выглядит в десктоп-версии Телеграма:
+    """
+
+    payload
+    |> Map.put(:output_message, message)
+    |> SendMessage.call()
+
+    payload
+    |> Map.put(:output_file_id, get_file_id(:edit_description_example))
+    |> SendPhoto.call()
+
+    message = """
+    Если захочешь исправить описание, то сможешь сделать это в любой момент тем же способом, что описан выше!
+
+    Комментарий можно добавить только к сообщению о транзакции. Если попытаться ответить на любое другое сообщение бота, то ты увидишь следующее предупреждение: `Что-то пошло не так, бот не смог распознать твой ответ. Возможно, ответ был отправлен не на сообщение с транзакцией.`.
+    """
+
+    payload
+    |> Map.put(:output_message, message)
+    |> SendMessage.call()
+
+    payload
+    |> HelpPipeline.call()
+  end
+
+  def call(
+        %CallbackData{
           callback_data: %{"pipeline" => @help_callback, "type" => @help_callback_limits}
         } = callback_data
       ) do
@@ -177,6 +215,6 @@ defmodule MarkevichMoney.Pipelines.Help.Callbacks do
   end
 
   defp get_file_id(picture_name) do
-    Application.get_env(:markevich_money, :tg_file_ids)[:help][:newby][picture_name]
+    Application.get_env(:markevich_money, :tg_file_ids)[:help][picture_name]
   end
 end
