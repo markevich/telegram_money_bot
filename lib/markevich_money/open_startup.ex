@@ -98,6 +98,7 @@ defmodule MarkevichMoney.OpenStartup do
         WHERE (st0."amount" < 0)
         AND (date_trunc('month', st0."issued_at")::date = generated::date)
         AND (NOT (st0."transaction_category_id" IS NULL))
+        AND st0.currency_code = 'BYN'
         GROUP BY month, st1."name"
         ORDER BY month, st0."count" DESC
         LIMIT 4) AS s1
