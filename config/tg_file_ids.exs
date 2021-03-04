@@ -18,10 +18,10 @@ config :markevich_money, :tg_file_ids,
       "AgACAgIAAxkBAAInC1_OAAGH0_wewjzrgM4pv6hw60I3AwACB68xGxRKcEqQ-SSbjldHIyWf6JcuAAMBAAMCAAN5AAO4DAQAAR4E"
   },
   help: %{
-    newby: %{
-      transaction_example:
-        "AgACAgIAAxkBAAInDV_OAAHeA4LMB6iOZ3e4GxMufv5jOgACCK8xGxRKcEo0Vy-knxjFc76odJcuAAMBAAMCAAN4AAOvHQQAAR4E"
-    }
+    newby_transaction_example:
+      "AgACAgIAAxkBAAInDV_OAAHeA4LMB6iOZ3e4GxMufv5jOgACCK8xGxRKcEo0Vy-knxjFc76odJcuAAMBAAMCAAN4AAOvHQQAAR4E",
+    edit_description_example:
+      "AgACAgIAAxkBAAI4v2BAtVKQaySszJMhhVl1ODC4qQnWAAJXsTEbJy4ISgRAcynYpTQItKxsli4AAwEAAwIAA20AA1xfBwABHgQ"
   },
   releases: %{
     "1.0" =>

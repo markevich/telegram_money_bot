@@ -48,6 +48,16 @@ defmodule MarkevichMoney.Pipelines.Help.Messages do
         ],
         [
           %Nadia.Model.InlineKeyboardButton{
+            text: "📝 Как добавить описание транзакции?",
+            callback_data:
+              Jason.encode!(%{
+                pipeline: @help_callback,
+                type: @help_callback_edit_description
+              })
+          }
+        ],
+        [
+          %Nadia.Model.InlineKeyboardButton{
             text: "✋ Работа с лимитами.",
             callback_data:
               Jason.encode!(%{
