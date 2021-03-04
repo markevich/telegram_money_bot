@@ -126,6 +126,60 @@ defmodule MarkevichMoney.OpenStartup do
     |> Enum.into(%{})
   end
 
+  def list_active_users_grouped_by_month do
+    {:ok, %{rows: rows}} =
+      Repo.query("""
+      SELECT generated::date as gen_date, active_users.c from
+      generate_series(date_trunc('month', current_date - interval '1 year'), date_trunc('month', current_date), '1 month') AS generated
+      INNER JOIN LATERAL (
+        SELECT count(u.id) as c
+        FROM users u
+        WHERE EXISTS(
+          SELECT 1
+          FROM transactions t
+          WHERE t.user_id = u.id
+          AND (date_trunc('month', t.inserted_at)::date = generated::date))
+      ) as active_users
+      ON TRUE
+      ORDER BY gen_date
+      """)
+
+    rows
+    |> Enum.map(fn row ->
+      [date, users_count] = row
+
+      %{
+        date: date,
+        users_count: users_count
+      }
+    end)
+  end
+
+  def list_users_grouped_by_month do
+    {:ok, %{rows: rows}} =
+      Repo.query("""
+      SELECT generated::date as gen_date, monthly_users.c from
+      generate_series(date_trunc('month', current_date - interval '1 year'), date_trunc('month', current_date), '1 month') AS generated
+      INNER JOIN LATERAL (
+        SELECT count(u.id) as c
+        FROM users u
+        WHERE date_trunc('month', u.inserted_at)::date <= generated::date
+      ) as monthly_users
+      ON TRUE
+      ORDER BY gen_date
+      """)
+
+    rows
+    |> Enum.map(fn row ->
+      [date, users_count] = row
+
+      %{
+        date: date,
+        users_count: users_count
+      }
+    end)
+  end
+
   defp group_by_near_months(current_row, [] = _acc) do
     [[current_row]]
   end

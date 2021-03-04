@@ -12,7 +12,9 @@ defmodule MarkevichMoneyWeb.OpenStartupLive do
        expenses: fetch_expenses(),
        profits: fetch_profits(),
        popular_categories: fetch_popular_categories(),
-       most_expensive_categories: fetch_most_expensive_categories()
+       most_expensive_categories: fetch_most_expensive_categories(),
+       active_users_by_month: fetch_active_users_by_month(),
+       users_by_month: fetch_users_by_month()
      )}
   end
 
@@ -62,6 +64,22 @@ defmodule MarkevichMoneyWeb.OpenStartupLive do
       |> Jason.encode()
 
     profits
+  end
+
+  defp fetch_active_users_by_month do
+    {:ok, users} =
+      OpenStartup.list_active_users_grouped_by_month()
+      |> Jason.encode()
+
+    users
+  end
+
+  defp fetch_users_by_month do
+    {:ok, users} =
+      OpenStartup.list_users_grouped_by_month()
+      |> Jason.encode()
+
+    users
   end
 
   defp map_profit(profit) do
