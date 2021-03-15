@@ -30,9 +30,9 @@ defmodule MarkevichMoney.OpenStartupTest do
     end
 
     test "list_profits_grouped_by_month/0 returns grouped profits" do
-      insert(:profit, %{amount: 10, date: ~D[2020-10-22]})
-      insert(:profit, %{amount: 10, date: ~D[2020-10-12]})
-      insert(:profit, %{amount: -10, date: ~D[2020-09-12]})
+      insert(:profit, %{amount: 10, date: ~D[2021-02-22]})
+      insert(:profit, %{amount: 10, date: ~D[2021-02-12]})
+      insert(:profit, %{amount: -10, date: ~D[2021-01-12]})
 
       [group1, group2] = OpenStartup.list_profits_grouped_by_month()
 
