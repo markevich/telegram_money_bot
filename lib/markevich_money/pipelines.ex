@@ -93,7 +93,10 @@ defmodule MarkevichMoney.Pipelines do
     if user do
       call(%MessageData{message_data | current_user: user})
     else
-      SendMessage.call(%{output_message: "Unauthorized", chat_id: chat_id})
+      SendMessage.call(%{
+        output_message: "Бот не настроен. Введите команду `/start` чтобы приступить к настройке.",
+        chat_id: chat_id
+      })
     end
   end
 

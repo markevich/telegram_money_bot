@@ -87,7 +87,13 @@ defmodule MarkevichMoney.PipelinesTest do
     mocked_test "renders unauthorized message when user is not exists" do
       Pipelines.call(%MessageData{chat_id: -1, current_user: nil})
 
-      assert_called(Nadia.send_message(-1, "Unauthorized", parse_mode: "Markdown"))
+      assert_called(
+        Nadia.send_message(
+          -1,
+          "Бот не настроен. Введите команду `/start` чтобы приступить к настройке.",
+          parse_mode: "Markdown"
+        )
+      )
     end
   end
 
