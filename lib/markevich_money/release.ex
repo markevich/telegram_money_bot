@@ -1,4 +1,6 @@
 defmodule MarkevichMoney.Release do
+  require Logger
+
   alias MarkevichMoney.Steps.Telegram.{SendMessage, SendPhoto}
   alias MarkevichMoney.Users
 
@@ -609,6 +611,8 @@ defmodule MarkevichMoney.Release do
   defp send_message_to_all_users(message) do
     Users.all_users()
     |> Enum.each(fn user ->
+      Logger.info("Sending message to user with id `#{user.id}`")
+
       SendMessage.call(%{
         output_message: message,
         chat_id: user.telegram_chat_id

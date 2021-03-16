@@ -1,4 +1,6 @@
 defmodule MarkevichMoney.Steps.Telegram.SendMessage do
+  use MarkevichMoney.LoggerWithSentry
+
   def call(callback_data) do
     call(callback_data, [])
   end
@@ -66,10 +68,56 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
       {:ok, _result} ->
         payload
 
-      {:error, %Nadia.Model.Error{reason: "Forbidden: bot was blocked by the user"}} ->
+      {:error, %Nadia.Model.Error{reason: "Forbidden: bot was blocked by the user"} = reason} ->
+        log_error_message(
+          """
+          Bot was blocked by the user.
+          """,
+          %{
+            payload: payload,
+            reason: reason
+          }
+        )
+
+        payload
+
+      {:error, %Nadia.Model.Error{reason: "Forbidden: user is deactivated"} = reason} ->
+        log_error_message(
+          """
+          Telegram user is deactivated.
+          """,
+          %{
+            payload: payload,
+            reason: reason
+          }
+        )
+
+        payload
+
+      {:error, %Nadia.Model.Error{reason: "Bad Request: chat not found"} = reason} ->
+        log_error_message(
+          """
+          Telegram user no longer exists.
+          """,
+          %{
+            payload: payload,
+            reason: reason
+          }
+        )
+
         payload
 
       {:error, other_reason} ->
+        log_error_message(
+          """
+          Received unknown response from nadia.
+          """,
+          %{
+            payload: payload,
+            reason: other_reason
+          }
+        )
+
         raise RuntimeError, message: other_reason
     end
   end
