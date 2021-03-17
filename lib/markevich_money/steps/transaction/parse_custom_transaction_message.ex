@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessage do
   use MarkevichMoney.Constants
 
-  @regex ~r/#{@add_message}\s(?<amount>\d+\.?\d*)\s(?<to>.+)/u
+  @regex ~r/#{@add_message}\s(?<amount>\d+[\.,]?\d*)\s(?<to>.+)/u
 
   def call(%{message: input_message, current_user: current_user} = payload) do
     payload
@@ -10,7 +10,9 @@ defmodule MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessage do
 
   defp extract_attrs(input_message, current_user) do
     result = Regex.named_captures(@regex, input_message)
-    {float_amount, _} = Float.parse(result["amount"])
+    amount = String.replace(result["amount"], ",", ".")
+
+    {float_amount, _} = Float.parse(amount)
 
     # TODO: add correct currency code for show
     %{

@@ -82,7 +82,13 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
     table =
       stats
       |> Enum.map(fn {amount, category_name, _category_id} ->
-        number = amount |> Decimal.to_float() |> abs() |> Float.ceil(2)
+        number =
+          amount
+          |> Decimal.to_float()
+          |> abs()
+          |> Float.ceil(2)
+          |> :erlang.float_to_binary([:compact, decimals: 2])
+
         [category_name, number]
       end)
       |> TableRex.Table.new(header, "")
