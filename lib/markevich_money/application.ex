@@ -5,6 +5,8 @@ defmodule MarkevichMoney.Application do
 
   use Application
 
+  alias MarkevichMoney.Priorbank.Api
+
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
@@ -18,7 +20,8 @@ defmodule MarkevichMoney.Application do
       # Start a worker by calling: SampleApp.Worker.start_link(arg)
       # {MarkevichMoney.Worker, arg}
       # Starts Oban
-      {Oban, oban_config()}
+      {Oban, oban_config()},
+      Api.child_spec()
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

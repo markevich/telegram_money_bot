@@ -41,15 +41,15 @@ defmodule MarkevichMoney.OpenStartupTest do
     end
 
     test "list_incomes/0 returns list of positive profits" do
-      _expense = insert(:profit, %{amount: -10, date: ~D[2020-10-22]})
-      income = insert(:profit, %{amount: 10, date: ~D[2020-10-12]})
+      _expense = insert(:profit, %{amount: -10, date: ~D[2021-04-12]})
+      income = insert(:profit, %{amount: 10, date: ~D[2021-04-02]})
 
       assert OpenStartup.list_incomes() == [income]
     end
 
     test "list_expenses/0 returns list of negative profits" do
-      expense = insert(:profit, %{amount: -10, date: ~D[2020-10-22]})
-      _income = insert(:profit, %{amount: 10, date: ~D[2020-10-12]})
+      expense = insert(:profit, %{amount: -10, date: ~D[2021-04-12]})
+      _income = insert(:profit, %{amount: 10, date: ~D[2021-04-02]})
 
       assert OpenStartup.list_expenses() == [expense]
     end
