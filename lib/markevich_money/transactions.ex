@@ -21,6 +21,13 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload([:transaction_category, :user])
   end
 
+  def get_transaction_by_lookup_hash(lookup_hash) do
+    from(transaction in Transaction,
+      where: transaction.lookup_hash == ^lookup_hash
+    )
+    |> Repo.one()
+  end
+
   def category_id_by_name_similarity(category_name) do
     from(category in TransactionCategory,
       where: fragment("similarity(?, ?) > 0.1", category.name, ^category_name),

@@ -70,6 +70,7 @@ defmodule MarkevichMoney.MixProject do
       {:pop3mail, "~> 1.3"},
       {:sentry, "~> 8.0"},
       {:hackney, "~> 1.8"},
+      {:finch, "~> 0.6"},
       {:jason, "~> 1.1"},
       {:oban, "~> 2.0"}
       # {:oban_web, "~> 2.0", organization: "oban"},
