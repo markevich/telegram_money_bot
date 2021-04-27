@@ -164,6 +164,26 @@ defmodule MarkevichMoney.Transactions do
         order_by: [desc: t.id],
         limit: 1
 
-    Repo.one(query_for_current_user) || Repo.one(query_for_all_users)
+    similarity_for_current_user =
+      from t in Transaction,
+        select: t.transaction_category_id,
+        where: t.user_id == ^user_id,
+        where: fragment("similarity(?, ?) > 0.7", t.to, ^transaction_to),
+        where: not is_nil(t.transaction_category_id),
+        order_by: [desc: fragment("similarity(?, ?)", t.to, ^transaction_to)],
+        limit: 1
+
+    similarity_for_all_users =
+      from t in Transaction,
+        select: t.transaction_category_id,
+        where: fragment("similarity(?, ?) > 0.7", t.to, ^transaction_to),
+        where: not is_nil(t.transaction_category_id),
+        order_by: [desc: fragment("similarity(?, ?)", t.to, ^transaction_to)],
+        limit: 1
+
+    Repo.one(query_for_current_user) ||
+      Repo.one(query_for_all_users) ||
+      Repo.one(similarity_for_current_user) ||
+      Repo.one(similarity_for_all_users)
   end
 end
