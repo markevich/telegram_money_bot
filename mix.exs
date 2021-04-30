@@ -72,9 +72,9 @@ defmodule MarkevichMoney.MixProject do
       {:hackney, "~> 1.8"},
       {:finch, "~> 0.6"},
       {:jason, "~> 1.1"},
-      {:oban, "~> 2.0"}
-      # {:oban_web, "~> 2.0", organization: "oban"},
-      # {:oban_pro, "~> 0.3.0", organization: "oban"}
+      {:oban, "~> 2.6"},
+      {:oban_web, "~> 2.6.1", organization: "oban"},
+      {:oban_pro, "~> 0.7", organization: "oban"}
     ]
   end
 

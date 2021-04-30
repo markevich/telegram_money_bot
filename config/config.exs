@@ -39,10 +39,14 @@ config :phoenix, :json_library, Jason
 
 config :markevich_money, Oban,
   repo: MarkevichMoney.Repo,
+  engine: Oban.Pro.Queue.SmartEngine,
   # plugins: [{Oban.Plugins.Pruner, max_age: 60}, Oban.Pro.Plugins.Lifeline, Oban.Web.Plugins.Stats],
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60},
-    {Oban.Plugins.Cron, crontab: [{"* * * * *", EmailProcessor}]}
+    {Oban.Plugins.Cron, crontab: [{"* * * * *", EmailProcessor}]},
+    Oban.Pro.Plugins.Lifeline,
+    Oban.Plugins.Gossip,
+    Oban.Web.Plugins.Stats
   ],
   queues: [events: 5, trackers: 5, mail_fetcher: 1]
 
