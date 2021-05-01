@@ -224,7 +224,7 @@ defmodule MarkevichMoney.PriorbankTest do
                  balance: "0",
                  currency_code: "BYN",
                  issued_at: ~N[2021-04-16 13:42:36],
-                 to: "CH Payment BLR MINSK P2P SDBO NO FEE"
+                 to: "BLR MINSK P2P SDBO NO FEE"
                },
                %{
                  account: "BYN cards",
@@ -234,7 +234,7 @@ defmodule MarkevichMoney.PriorbankTest do
                  external_amount: -200.0,
                  external_currency: "USD",
                  issued_at: ~N[2021-04-16 13:38:03],
-                 to: "CH Debit BLR MINSK P2P SDBO NO FEE"
+                 to: "BLR MINSK P2P SDBO NO FEE"
                },
                %{
                  account: "BYN cards",
@@ -242,7 +242,7 @@ defmodule MarkevichMoney.PriorbankTest do
                  balance: "0",
                  currency_code: "BYN",
                  issued_at: ~N[2021-04-15 17:19:53],
-                 to: "Retail BLR MINSK IR WWW.NEW.BYCARD.BY B"
+                 to: "BLR MINSK IR WWW.NEW.BYCARD.BY B"
                },
                %{
                  account: "BYN cards",

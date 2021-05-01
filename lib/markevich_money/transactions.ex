@@ -46,16 +46,31 @@ defmodule MarkevichMoney.Transactions do
     from(t in Transaction, where: t.id == ^id) |> Repo.delete_all()
   end
 
+  @spec upsert_transaction(integer, String.t(), Decimal.t(), String.t()) ::
+          {:exists, %Transaction{}} | {:new, %Transaction{}}
   def upsert_transaction(user_id, account, amount, issued_at) do
-    lookup_hash =
-      :crypto.hash(:sha, "#{user_id}-#{account}-#{amount}-#{issued_at}") |> Base.encode16()
+    lookup_hash = calculate_lookup_hash(user_id, account, amount, issued_at)
 
-    Repo.insert(
-      %Transaction{user_id: user_id, lookup_hash: lookup_hash},
-      returning: true,
-      on_conflict: [set: [lookup_hash: lookup_hash]],
-      conflict_target: :lookup_hash
-    )
+    existing_transaction = get_transaction_by_lookup_hash(lookup_hash)
+
+    # TODO: Race condition is possible here. Use something more efficient
+    if existing_transaction do
+      {:exists, existing_transaction}
+    else
+      {:ok, transaction} =
+        Repo.insert(
+          %Transaction{user_id: user_id, lookup_hash: lookup_hash},
+          returning: true,
+          on_conflict: [set: [lookup_hash: lookup_hash]],
+          conflict_target: :lookup_hash
+        )
+
+      {:new, transaction}
+    end
+  end
+
+  def calculate_lookup_hash(user_id, account, amount, issued_at) do
+    :crypto.hash(:sha, "#{user_id}-#{account}-#{amount}-#{issued_at}") |> Base.encode16()
   end
 
   def get_categories do
@@ -71,7 +86,7 @@ defmodule MarkevichMoney.Transactions do
       transaction
       |> Transaction.update_changeset(attrs)
       |> Repo.update!()
-      |> Repo.preload(:transaction_category, force: true)
+      |> Repo.preload([:transaction_category, :user], force: true)
 
     {:ok, updated}
   end

@@ -5,6 +5,7 @@ defmodule MarkevichMoney.Priorbank do
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Steps.Transaction.RenderTransaction
   alias MarkevichMoney.Transactions
+  alias MarkevichMoney.Workers.CreateTransaction
 
   def go(connection) do
     connection
@@ -20,36 +21,11 @@ defmodule MarkevichMoney.Priorbank do
     transactions_attributes = extract_transactions_attributes(api_response)
 
     Enum.map(transactions_attributes, fn attributes ->
-      lookup_hash =
-        :crypto.hash(
-          :sha,
-          "#{user.id}-#{attributes.account}-#{attributes.amount}-#{attributes.issued_at}"
-        )
-        |> Base.encode16()
+      attributes = Map.put(attributes, :user_id, user.id)
 
-      existing_transaction = Transactions.get_transaction_by_lookup_hash(lookup_hash)
-
-      if existing_transaction do
-        existing_transaction
-      else
-        {:ok, transaction} =
-          Transactions.upsert_transaction(
-            user.id,
-            attributes.account,
-            attributes.amount,
-            attributes.issued_at
-          )
-
-        Transactions.update_transaction(transaction, attributes)
-        transaction = Transactions.get_transaction!(transaction.id)
-
-        %{
-          transaction: transaction,
-          current_user: user
-        }
-        |> RenderTransaction.call()
-        |> SendMessage.call()
-      end
+      %{transaction_attributes: attributes, source: :priorbank}
+      |> CreateTransaction.new()
+      |> Oban.insert()
     end)
   end
 
@@ -73,15 +49,17 @@ defmodule MarkevichMoney.Priorbank do
   end
 
   def select_blocked_transactions(data) do
-    [aborted_contract] = get_in(data, ["contract", "abortedContractList"])
-
-    aborted_contract["abortedTransactionList"]
+    get_in(data, ["contract", "abortedContractList"])
+    |> Enum.flat_map(fn account ->
+      account["abortedTransactionList"]
+    end)
   end
 
   def select_regular_transactions(data) do
-    [trans_card_list] = get_in(data, ["contract", "account", "transCardList"])
-
-    trans_card_list["transactionList"]
+    get_in(data, ["contract", "account", "transCardList"])
+    |> Enum.flat_map(fn account ->
+      account["transactionList"]
+    end)
   end
 
   def convert_blocked_transactions(blocked_transactions) do
@@ -95,7 +73,7 @@ defmodule MarkevichMoney.Priorbank do
         currency_code: "BYN",
         balance: "0",
         issued_at: issued_at,
-        to: transaction["transDetails"]
+        to: transaction["transDetails"] |> cleanup_to()
       }
 
       if transaction["transCurrIso"] != "BYN" do
