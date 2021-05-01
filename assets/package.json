@@ -17,7 +17,7 @@
     "phoenix_live_view": "file:../deps/phoenix_live_view"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.10",
+    "@babel/core": "^7.14.0",
     "@babel/preset-env": "^7.13.10",
     "@size-limit/preset-app": "^4.10.1",
     "@size-limit/webpack": "^4.10.1",
