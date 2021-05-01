@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "chart.js": "^3.0.0-beta.4",
-    "date-fns": "^2.19.0",
+    "date-fns": "^2.21.1",
     "npm-check": "^5.9.2",
     "topbar": "^0.1.4",
     "phoenix": "file:../deps/phoenix",
