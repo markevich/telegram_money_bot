@@ -4,12 +4,18 @@
 # https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
 
 version: 2
+registries:
+  oban:
+    type: hex-organization
+    organization: oban
+    key: ${{secrets.OBAN_LICENCE_KEY}}
 updates:
   - package-ecosystem: mix
     directory: "/"
     schedule:
       interval: "monthly"
       time: "03:00"
+    insecure-external-code-execution: allow
   - package-ecosystem: npm
     directory: "/assets"
     schedule:
