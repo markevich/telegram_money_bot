@@ -8,7 +8,7 @@
     "test": "npm run size"
   },
   "dependencies": {
-    "chart.js": "^3.0.0-beta.4",
+    "chart.js": "^3.2.1",
     "date-fns": "^2.21.1",
     "npm-check": "^5.9.2",
     "phoenix": "file:../deps/phoenix",
