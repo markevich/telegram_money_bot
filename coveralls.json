@@ -2,6 +2,7 @@
   "skip_files": [
     "lib/markevich_money.ex",
     "lib/markevich_money/application.ex",
+    "lib/markevich_money/priorbank/api.ex",
     "lib/markevich_money/repo.ex",
     "lib/markevich_money/release.ex",
     "lib/markevich_money_web.ex",

@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Workers.CreateTransactionTest do
+defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
   use MecksUnit.Case
@@ -7,7 +7,7 @@ defmodule MarkevichMoney.Workers.CreateTransactionTest do
   import ExUnit.CaptureLog
 
   alias MarkevichMoney.Transactions
-  alias MarkevichMoney.Workers.CreateTransaction
+  alias MarkevichMoney.Transactions.CreateTransactionWorker
 
   describe ".perform with attributes for new transactions" do
     setup do
@@ -35,7 +35,7 @@ defmodule MarkevichMoney.Workers.CreateTransactionTest do
 
     mocked_test "creates new transaction, predict category, fire required events", context do
       {:ok, result} =
-        CreateTransaction
+        CreateTransactionWorker
         |> perform_job(%{"transaction_attributes" => context.attributes})
 
       transaction = result[:transaction]
@@ -113,7 +113,7 @@ defmodule MarkevichMoney.Workers.CreateTransactionTest do
 
     test "Does nothing if transaction already exists", context do
       {:ok, result} =
-        CreateTransaction
+        CreateTransactionWorker
         |> perform_job(%{"transaction_attributes" => context.attributes_for_new_transaction})
 
       assert(result.transaction.id == context.existing_transaction.id)
@@ -125,6 +125,16 @@ defmodule MarkevichMoney.Workers.CreateTransactionTest do
           transaction_id: context.existing_transaction.id,
           user_id: context.user.id
         }
+      )
+    end
+  end
+
+  describe "when payload is unknown" do
+    test "sends error message to logger" do
+      assert(
+        capture_log(fn ->
+          assert :ok = perform_job(CreateTransactionWorker, %{"foo" => "bar"})
+        end) =~ "worker received unknown arguments"
       )
     end
   end

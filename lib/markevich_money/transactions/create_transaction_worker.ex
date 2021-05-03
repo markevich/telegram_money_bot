@@ -1,5 +1,5 @@
-defmodule MarkevichMoney.Workers.CreateTransaction do
-  use Oban.Worker, queue: :transactions, max_attempts: 1
+defmodule MarkevichMoney.Transactions.CreateTransactionWorker do
+  use Oban.Worker, queue: :transactions, max_attempts: 1, unique: [period: :infinity]
   use MarkevichMoney.LoggerWithSentry
 
   alias MarkevichMoney.Steps.Telegram.SendMessage
