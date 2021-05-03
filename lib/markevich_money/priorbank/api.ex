@@ -1,8 +1,6 @@
 defmodule MarkevichMoney.Priorbank.Api do
-  alias Finch.Response
-
   @user_agent "PriorMobile3/3.17.03.22 (Android 24; versionCode 37)"
-  @api_url "https://www.prior.by"
+  @api_url Application.compile_env(:markevich_money, :priorbank_api_url)
   @pool_size 25
 
   def child_spec do
@@ -23,6 +21,7 @@ defmodule MarkevichMoney.Priorbank.Api do
     response.status != 401
   end
 
+  # FYI: It used only for authentication verification
   def get_cards(connection) do
     url = make_api_url("/Cards")
 
@@ -40,10 +39,9 @@ defmodule MarkevichMoney.Priorbank.Api do
       }
       |> Jason.encode!()
 
-    response =
-      :post
-      |> Finch.build(url, headers, body)
-      |> Finch.request(__MODULE__)
+    :post
+    |> Finch.build(url, headers, body)
+    |> Finch.request(__MODULE__)
   end
 
   def get_cards_details(connection) do
@@ -67,11 +65,10 @@ defmodule MarkevichMoney.Priorbank.Api do
       }
       |> Jason.encode!()
 
-    response =
-      :post
-      |> Finch.build(url, headers, body)
-      |> Finch.request(__MODULE__)
-      |> get_json_body()
+    :post
+    |> Finch.build(url, headers, body)
+    |> Finch.request(__MODULE__)
+    |> get_json_body()
   end
 
   def authenticate(login, encrypted_password) do
@@ -113,16 +110,11 @@ defmodule MarkevichMoney.Priorbank.Api do
       }
       |> Jason.encode!()
 
-    response =
-      :post
-      |> Finch.build(url, headers, body)
-      |> Finch.request(__MODULE__)
-      |> get_json_body()
+    :post
+    |> Finch.build(url, headers, body)
+    |> Finch.request(__MODULE__)
+    |> get_json_body()
   end
-
-  # users ->
-  #    priorbank_authorizations
-  #    alfabank_authorizations
 
   def get_mobile_token do
     url = make_api_url("/Authorization/MobileToken")
@@ -141,7 +133,6 @@ defmodule MarkevichMoney.Priorbank.Api do
 
   def calculate_password_hash(login_salt, password) do
     # password_hash = :crypto.hash(:sha512, password) |> Base.encode16 |> String.downcase()
-
     :crypto.hash(:sha512, "#{password}#{login_salt}") |> Base.encode16() |> String.downcase()
   end
 
@@ -174,7 +165,7 @@ defmodule MarkevichMoney.Priorbank.Api do
     |> Map.get("salt")
   end
 
-  def get_json_body({_state, %Finch.Response{body: body, headers: _headers, status: status}}) do
+  def get_json_body({_state, %Finch.Response{body: body, headers: _headers, status: _status}}) do
     body
     |> Jason.decode!()
   end

@@ -42,4 +42,16 @@ defmodule MarkevichMoney.Factory do
       description: "description"
     }
   end
+
+  def priorbank_connection_factory do
+    %MarkevichMoney.Priorbank.PriorbankConnection{
+      login: sequence(:login, &"connection-#{&1}"),
+      encrypted_password: sequence(:encrypted_password, &"password-#{&1}"),
+      client_secret: "client_secret",
+      access_token: "access_token",
+      user_session: "user_session",
+      last_fetched_at: DateTime.utc_now(),
+      user: build(:user)
+    }
+  end
 end

@@ -72,8 +72,12 @@ config :phoenix, :plug_init_mode, :runtime
 
 config :markevich_money, Oban,
   plugins: [
-    {Oban.Plugins.Pruner, max_age: 60},
+    {Oban.Plugins.Pruner, max_age: 365 * 24 * 3600},
     {Oban.Plugins.Cron, crontab: []},
+    # {Oban.Plugins.Cron,
+    #  crontab: [
+    #    {"* * * * *", MarkevichMoney.Priorbank.SchedulerWorker}
+    #  ]},
     Oban.Pro.Plugins.Lifeline,
     Oban.Plugins.Gossip,
     Oban.Web.Plugins.Stats

@@ -13,3 +13,4 @@ config :markevich_money, MarkevichMoney.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :nadia, token: "bot token"
+config :markevich_money, priorbank_api_url: "https://www.fobar.foo"
