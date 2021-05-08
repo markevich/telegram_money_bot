@@ -201,7 +201,9 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"id\":#{context.transaction.id},\"pipeline\":\"#{@choose_category_callback}\"}",
+                  "{\"id\":#{context.transaction.id},\"mode\":\"#{@choose_category_short_mode}\",\"pipeline\":\"#{
+                    @choose_category_callback
+                  }\"}",
                 switch_inline_query: nil,
                 text: "Категория",
                 url: nil

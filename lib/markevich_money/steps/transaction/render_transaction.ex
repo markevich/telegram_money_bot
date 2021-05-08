@@ -23,6 +23,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       transaction
       |> table_data(transaction_type)
       |> TableRex.Table.new([], "")
+      |> TableRex.Table.put_column_meta(0, padding: 0)
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
     type = human_type(transaction_type)
@@ -51,7 +52,10 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
     list = maybe_prepend_custom_description(list, transaction)
     list = [["Кому", transaction.to] | list]
     list = maybe_prepend_balance(list, transaction)
-    list = [["Дата", Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")] | list]
+
+    list = [
+      ["Дата", Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")] | list
+    ]
 
     Enum.reverse(list)
   end
@@ -100,7 +104,11 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
           %Nadia.Model.InlineKeyboardButton{
             text: "Категория",
             callback_data:
-              Jason.encode!(%{pipeline: @choose_category_callback, id: transaction.id})
+              Jason.encode!(%{
+                pipeline: @choose_category_callback,
+                id: transaction.id,
+                mode: @choose_category_short_mode
+              })
           },
           %Nadia.Model.InlineKeyboardButton{
             text: "Удалить",

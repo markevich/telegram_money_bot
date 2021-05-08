@@ -5,6 +5,8 @@ defmodule MarkevichMoney.Constants do
     quote do
       # callbacks
       @choose_category_callback "choose_category"
+      @choose_category_short_mode "ccsm"
+      @choose_category_full_mode "ccfm"
       @set_category_callback "set_category"
 
       @stats_callback "stats"

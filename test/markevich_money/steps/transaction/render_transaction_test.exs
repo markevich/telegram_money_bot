@@ -30,7 +30,9 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
                  [
                    %Nadia.Model.InlineKeyboardButton{
                      callback_data:
-                       "{\"id\":#{transaction.id},\"pipeline\":\"#{@choose_category_callback}\"}",
+                       "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_short_mode}\",\"pipeline\":\"#{
+                         @choose_category_callback
+                       }\"}",
                      switch_inline_query: nil,
                      text: "Категория",
                      url: nil
@@ -62,11 +64,11 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Списание)
              ```
 
-              Сумма       #{transaction.amount} #{transaction.currency_code}
-              Категория
-              Кому        #{transaction.to}
-              Остаток     #{transaction.balance}
-              Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+             Сумма      #{transaction.amount} #{transaction.currency_code}
+             Категория
+             Кому       #{transaction.to}
+             Остаток    #{transaction.balance}
+             Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
 
              ```
              """
@@ -85,10 +87,10 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Поступление)
              ```
 
-              Сумма     #{transaction.amount} #{transaction.currency_code}
-              Кому      #{transaction.to}
-              Остаток   #{transaction.balance}
-              Дата      #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+             Сумма    #{transaction.amount} #{transaction.currency_code}
+             Кому     #{transaction.to}
+             Остаток  #{transaction.balance}
+             Дата     #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
 
              ```
              """
@@ -107,10 +109,10 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Сомнительная)
              ```
 
-              Сумма     #{transaction.amount} #{transaction.currency_code}
-              Кому      #{transaction.to}
-              Остаток   #{transaction.balance}
-              Дата      #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+             Сумма    #{transaction.amount} #{transaction.currency_code}
+             Кому     #{transaction.to}
+             Остаток  #{transaction.balance}
+             Дата     #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
 
              ```
              """
@@ -132,11 +134,11 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Списание)
              ```
 
-              Сумма       #{transaction.amount} #{transaction.currency_code}
-              Категория   #{category.name}
-              Кому        #{transaction.to}
-              Остаток     #{transaction.balance}
-              Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+             Сумма      #{transaction.amount} #{transaction.currency_code}
+             Категория  #{category.name}
+             Кому       #{transaction.to}
+             Остаток    #{transaction.balance}
+             Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
 
              ```
              """
@@ -155,13 +157,13 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Списание)
              ```
 
-              Сумма       #{transaction.amount} #{transaction.currency_code} (#{
+             Сумма      #{transaction.amount} #{transaction.currency_code} (#{
                transaction.external_amount
              } #{transaction.external_currency})
-              Категория
-              Кому        #{transaction.to}
-              Остаток     #{transaction.balance}
-              Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+             Категория
+             Кому       #{transaction.to}
+             Остаток    #{transaction.balance}
+             Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
 
              ```
              """
@@ -188,12 +190,12 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Списание)
              ```
 
-              Сумма       #{transaction.amount} #{transaction.currency_code} (#{
+             Сумма      #{transaction.amount} #{transaction.currency_code} (#{
                transaction.external_amount
              } #{transaction.external_currency})
-              Категория
-              Кому        #{transaction.to}
-              Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+             Категория
+             Кому       #{transaction.to}
+             Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
 
              ```
              """
@@ -212,12 +214,12 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Списание)
              ```
 
-              Сумма       #{transaction.amount} #{transaction.currency_code}
-              Категория
-              Описание    #{transaction.custom_description}
-              Кому        #{transaction.to}
-              Остаток     #{transaction.balance}
-              Дата        #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+             Сумма      #{transaction.amount} #{transaction.currency_code}
+             Категория
+             Описание   #{transaction.custom_description}
+             Кому       #{transaction.to}
+             Остаток    #{transaction.balance}
+             Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
 
              ```
              """
