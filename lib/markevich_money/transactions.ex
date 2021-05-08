@@ -4,7 +4,7 @@ defmodule MarkevichMoney.Transactions do
   alias MarkevichMoney.Transactions.Transaction
   alias MarkevichMoney.Transactions.TransactionCategory
 
-  import Ecto.Query, only: [from: 2, order_by: 2]
+  import Ecto.Query, only: [from: 2]
 
   def get_transaction!(id) do
     Transaction
@@ -73,9 +73,18 @@ defmodule MarkevichMoney.Transactions do
     :crypto.hash(:sha, "#{user_id}-#{account}-#{amount}-#{issued_at}") |> Base.encode16()
   end
 
-  def get_categories do
-    TransactionCategory
-    |> order_by(asc: :id)
+  def get_categories_ordered_by_popularity(user_id) do
+    two_month_ago = Timex.shift(Timex.now(), months: -2)
+
+    from(
+      category in TransactionCategory,
+      left_join: transaction in Transaction,
+      on: transaction.transaction_category_id == category.id,
+      on: transaction.inserted_at >= ^two_month_ago,
+      on: transaction.user_id == ^user_id,
+      group_by: category.id,
+      order_by: [desc: count(transaction.id), asc: category.id]
+    )
     |> Repo.all()
   end
 

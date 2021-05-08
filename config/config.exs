@@ -53,7 +53,7 @@ config :markevich_money, Oban,
     Oban.Web.Plugins.Stats
   ],
   queues: [
-    transactions: 5,
+    transactions: [local_limit: 5, rate_limit: [allowed: 20, period: {1, :second}]],
     events: 5,
     trackers: 5,
     mail_fetcher: 1,

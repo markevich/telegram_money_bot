@@ -296,10 +296,10 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       Транзакция №#{transaction.id}(Поступление)
       ```
 
-       Сумма     #{amount} #{context.currency}
-       Кому      28.01.2020
-       Остаток   #{context.balance}
-       Дата      #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YY} {h24}:{0m}")}
+      Сумма    #{amount} #{context.currency}
+      Кому     28.01.2020
+      Остаток  #{context.balance}
+      Дата     #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
 
       ```
       """
