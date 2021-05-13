@@ -116,11 +116,11 @@ defmodule MarkevichMoney.Pipelines do
     |> ReceiveTransactionPipeline.call()
   end
 
-  def call(%MessageData{message: @help_message, current_user: user}) do
+  def call(%MessageData{message: @help_message <> _rest, current_user: user}) do
     HelpMessagesPipeline.call(%MessageData{current_user: user})
   end
 
-  def call(%MessageData{message: @stats_message, current_user: user}) do
+  def call(%MessageData{message: @stats_message <> _rest, current_user: user}) do
     StatsMessagesPipeline.call(%MessageData{current_user: user})
   end
 
