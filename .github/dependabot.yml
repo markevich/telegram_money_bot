@@ -11,6 +11,8 @@ registries:
     key: ${{secrets.OBAN_LICENCE_KEY}}
 updates:
   - package-ecosystem: mix
+    registries:
+      - oban
     directory: "/"
     schedule:
       interval: "monthly"
