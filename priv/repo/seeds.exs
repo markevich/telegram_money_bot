@@ -10,30 +10,105 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-categories = [
-  "🍔 Еда",
-  "🚗 Транспорт",
+categories_with_same_folders = [
   "🏔️ Туризм",
   "👕 Одежда",
   "💈 Красота",
-  "🎉 Развлечения",
   "🏅 Спорт",
   "🧾 Налоги",
-  "🏠 Дом",
   "🎨 Хобби",
   "👪 Семья",
   "🏷️ Другое",
-  "🎄 Праздники",
+  "🎁 Праздники",
   "🔋 Техника",
   "💖 Здоровье",
   "📚 Образование",
   "🐈 Питомцы",
   "🤍 Солидарность",
-  "🏦 Кредит"
+  "🏦 Кредит",
+  "🔄 Подписки"
 ]
 
-Enum.each(categories, fn category_name ->
+Enum.each(categories_with_same_folders, fn category_name ->
+  folder =
+    MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
+      name: category_name
+    })
+
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
-    name: category_name
+    name: category_name,
+    transaction_category_folder: folder
+  })
+end)
+
+food_folder_name = "🍔 Еда"
+entertainment_folder_name = "🎉 Развлечения"
+transport_folder_name = "🚜 Транспорт"
+home_folder_name = "🏠 Дом"
+
+food_folder =
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
+    name: food_folder_name
+  })
+
+entertainment_folder =
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
+    name: entertainment_folder_name
+  })
+
+transport_folder =
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
+    name: transport_folder_name
+  })
+
+home_folder =
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
+    name: home_folder_name
+  })
+
+[
+  "🍽 Кафе",
+  "🛒 Продукты"
+]
+|> Enum.each(fn category_name ->
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
+    name: category_name,
+    transaction_category_folder: food_folder
+  })
+end)
+
+[
+  "🌐 Онлайн",
+  "🎲 Оффлайн"
+]
+|> Enum.each(fn category_name ->
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
+    name: category_name,
+    transaction_category_folder: entertainment_folder
+  })
+end)
+
+[
+  "🏎️ Личный",
+  "🚖 Такси",
+  "🚃 Общественный"
+]
+|> Enum.each(fn category_name ->
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
+    name: category_name,
+    transaction_category_folder: transport_folder
+  })
+end)
+
+[
+  "🧾 Платежи",
+  "🛋️ Мебель",
+  "💡 Обслуживание",
+  "🛠️️ Ремонт"
+]
+|> Enum.each(fn category_name ->
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
+    name: category_name,
+    transaction_category_folder: home_folder
   })
 end)
