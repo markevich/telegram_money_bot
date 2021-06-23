@@ -27,7 +27,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
   def call(%{"transaction_id" => transaction_id} = payload) do
     with transaction <- Transactions.get_transaction!(transaction_id),
          user <- Users.get_user!(transaction.user_id),
-         {:ok, category_id} <- Map.fetch(transaction, :transaction_category_id),
+         {:ok, category_id} when category_id != nil <-
+           Map.fetch(transaction, :transaction_category_id),
          category_limit when category_limit > 0 <-
            Gamifications.get_category_limit_value(transaction.user_id, category_id) do
       #
