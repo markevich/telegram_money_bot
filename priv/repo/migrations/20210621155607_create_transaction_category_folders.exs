@@ -4,6 +4,7 @@ defmodule MarkevichMoney.Repo.Migrations.CreateTransactionCategoryFolders do
   def change do
     create table(:transaction_category_folders) do
       add :name, :string, null: false
+      add :has_single_category, :boolean, null: false
 
       timestamps()
     end
