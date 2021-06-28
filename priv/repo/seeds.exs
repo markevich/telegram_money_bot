@@ -32,7 +32,8 @@ categories_with_same_folders = [
 Enum.each(categories_with_same_folders, fn category_name ->
   folder =
     MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
-      name: category_name
+      name: category_name,
+      has_single_category: true
     })
 
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
@@ -48,22 +49,26 @@ home_folder_name = "🏠 Дом"
 
 food_folder =
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
-    name: food_folder_name
+    name: food_folder_name,
+    has_single_category: false
   })
 
 entertainment_folder =
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
-    name: entertainment_folder_name
+    name: entertainment_folder_name,
+    has_single_category: false
   })
 
 transport_folder =
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
-    name: transport_folder_name
+    name: transport_folder_name,
+    has_single_category: false
   })
 
 home_folder =
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
-    name: home_folder_name
+    name: home_folder_name,
+    has_single_category: false
   })
 
 [

@@ -3,13 +3,23 @@ defmodule MarkevichMoney.Transactions do
 
   alias MarkevichMoney.Transactions.Transaction
   alias MarkevichMoney.Transactions.TransactionCategory
+  alias MarkevichMoney.Transactions.TransactionCategoryFolder
 
   import Ecto.Query, only: [from: 2]
 
   def get_transaction!(id) do
     Transaction
     |> Repo.get!(id)
-    |> Repo.preload([:transaction_category, :user])
+    |> Repo.preload(transaction_category: [:transaction_category_folder])
+    |> Repo.preload(:user)
+  end
+
+  def get_category!(id), do: Repo.get(TransactionCategory, id)
+
+  def get_category_folder!(id) do
+    TransactionCategoryFolder
+    |> Repo.get!(id)
+    |> Repo.preload(:transaction_categories)
   end
 
   def get_user_transaction!(transaction_id, user_id) do
@@ -73,22 +83,19 @@ defmodule MarkevichMoney.Transactions do
     :crypto.hash(:sha, "#{user_id}-#{account}-#{amount}-#{issued_at}") |> Base.encode16()
   end
 
-  def get_categories_ordered_by_popularity(user_id) do
-    two_month_ago = Timex.shift(Timex.now(), months: -2)
-
+  def get_folders_ordered_by_popularity(user_id) do
     from(
-      category in TransactionCategory,
+      folder in TransactionCategoryFolder,
+      join: category in assoc(folder, :transaction_categories),
       left_join: transaction in Transaction,
       on: transaction.transaction_category_id == category.id,
-      on: transaction.inserted_at >= ^two_month_ago,
+      on: transaction.inserted_at >= fragment("date_trunc('day', NOW() - interval '2 month')"),
       on: transaction.user_id == ^user_id,
-      group_by: category.id,
-      order_by: [desc: count(transaction.id), asc: category.id]
+      group_by: folder.id,
+      order_by: [desc: count(transaction.id), asc: folder.id]
     )
     |> Repo.all()
   end
-
-  def get_category!(id), do: Repo.get(TransactionCategory, id)
 
   def update_transaction(%Transaction{} = transaction, attrs) do
     updated =

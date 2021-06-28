@@ -62,7 +62,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
 
   defp maybe_prepend_category(list, transaction, transaction_type) do
     if transaction_type == @transaction_type_expense do
-      [["Категория", category_name(transaction)] | list]
+      [["Категория", category_with_folder_names(transaction)] | list]
     else
       list
     end
@@ -84,8 +84,19 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
     end
   end
 
-  defp category_name(transaction) do
-    if transaction.transaction_category_id, do: transaction.transaction_category.name
+  defp category_with_folder_names(transaction) do
+    if transaction.transaction_category_id do
+      if transaction.transaction_category.transaction_category_folder.has_single_category do
+        """
+        #{transaction.transaction_category.name}
+        """
+      else
+        """
+        #{transaction.transaction_category.transaction_category_folder.name}/
+        #{transaction.transaction_category.name}
+        """
+      end
+    end
   end
 
   defp amount(transaction) do

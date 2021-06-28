@@ -11,7 +11,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
     |> fetch_transaction_id()
     |> FetchTransaction.call()
     |> RenderTransaction.call()
-    |> insert_categories()
+    |> insert_folders()
     |> UpdateMessage.call()
     |> AnswerCallback.call()
   end
@@ -21,17 +21,17 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
     |> Map.put(:transaction_id, transaction_id)
   end
 
-  defp insert_categories(%{transaction: %{id: transaction_id, user_id: user_id}} = payload) do
+  defp insert_folders(%{transaction: %{id: transaction_id, user_id: user_id}} = payload) do
     keyboard =
-      Transactions.get_categories_ordered_by_popularity(user_id)
-      |> Enum.map(fn category ->
+      Transactions.get_folders_ordered_by_popularity(user_id)
+      |> Enum.map(fn folder ->
         %Nadia.Model.InlineKeyboardButton{
-          text: category.name,
+          text: folder_name(folder),
           callback_data:
             Jason.encode!(%{
               pipeline: @set_category_callback,
               id: transaction_id,
-              c_id: category.id
+              f_id: folder.id
             })
         }
       end)
@@ -42,6 +42,14 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
 
     payload
     |> Map.put(:reply_markup, reply_markup)
+  end
+
+  defp folder_name(folder) do
+    if folder.has_single_category do
+      folder.name
+    else
+      "#{folder.name}/"
+    end
   end
 
   defp apply_categories_keyboard_mode(keyboard, keyboard_mode, transaction_id) do
