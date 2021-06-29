@@ -32,7 +32,7 @@ defmodule MarkevichMoney.Pipelines do
   end
 
   def call(%CallbackData{callback_data: %{"pipeline" => pipeline}} = callback_data)
-      when pipeline in [@choose_category_callback, @set_category_callback] do
+      when pipeline in [@choose_category_folder_callback, @set_category_or_folder_callback] do
     callback_data
     |> CategoriesCallbacksPipeline.call()
   end

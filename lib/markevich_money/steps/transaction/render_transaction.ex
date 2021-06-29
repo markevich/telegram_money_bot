@@ -116,9 +116,9 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
             text: "Категория",
             callback_data:
               Jason.encode!(%{
-                pipeline: @choose_category_callback,
+                pipeline: @choose_category_folder_callback,
                 id: transaction.id,
-                mode: @choose_category_short_mode
+                mode: @choose_category_folder_short_mode
               })
           },
           %Nadia.Model.InlineKeyboardButton{

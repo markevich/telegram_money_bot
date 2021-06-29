@@ -58,7 +58,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransaction do
           text: category.name,
           callback_data:
             Jason.encode!(%{
-              pipeline: @set_category_callback,
+              pipeline: @set_category_or_folder_callback,
               id: payload.transaction_id,
               c_id: category.id
             })
@@ -71,9 +71,9 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransaction do
             text: "⬅️ Назад к категориям",
             callback_data:
               Jason.encode!(%{
-                pipeline: @choose_category_callback,
+                pipeline: @choose_category_folder_callback,
                 id: payload.transaction_id,
-                mode: @choose_category_full_mode
+                mode: @choose_category_folder_full_mode
               })
           }
         ]

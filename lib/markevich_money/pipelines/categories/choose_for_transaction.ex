@@ -29,7 +29,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
           text: folder_name(folder),
           callback_data:
             Jason.encode!(%{
-              pipeline: @set_category_callback,
+              pipeline: @set_category_or_folder_callback,
               id: transaction_id,
               f_id: folder.id
             })
@@ -54,7 +54,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
 
   defp apply_categories_keyboard_mode(keyboard, keyboard_mode, transaction_id) do
     case keyboard_mode do
-      mode when mode in [@choose_category_short_mode, nil] ->
+      mode when mode in [@choose_category_folder_short_mode, nil] ->
         keyboard
         |> Enum.take(4)
         |> Enum.concat([
@@ -63,15 +63,15 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
               text: "☰ Показать больше категорий️",
               callback_data:
                 Jason.encode!(%{
-                  pipeline: @choose_category_callback,
+                  pipeline: @choose_category_folder_callback,
                   id: transaction_id,
-                  mode: @choose_category_full_mode
+                  mode: @choose_category_folder_full_mode
                 })
             }
           ]
         ])
 
-      @choose_category_full_mode ->
+      @choose_category_folder_full_mode ->
         keyboard
     end
   end
