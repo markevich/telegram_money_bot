@@ -4,7 +4,7 @@ defmodule MarkevichMoney.Constants do
   defmacro __using__(_) do
     quote do
       # callbacks
-      # TODO: Rename those constant values to refer the `folder` and not the `category`
+      # TODO: Rename those constant values to refer the `folder` instead of the `category`
       #   We need to do that in 2 steps. Support old & new names for some time and then drop the old one.
       @choose_category_folder_callback "choose_category"
       @choose_category_folder_short_mode "ccsm"
