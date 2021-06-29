@@ -225,4 +225,42 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              """
     end
   end
+
+  describe "transaction with category with folder" do
+    setup do
+      folder =
+        insert(:transaction_category_folder, name: "RenderFood", has_single_category: false)
+
+      category =
+        insert(:transaction_category, name: "Fast Food", transaction_category_folder: folder)
+
+      transaction = insert(:transaction, transaction_category: category)
+
+      {
+        :ok,
+        %{transaction: transaction, category: category, folder: folder}
+      }
+    end
+
+    test "renders transaction", context do
+      transaction = context.transaction
+      category = context.category
+      folder = context.folder
+
+      reply_payload = RenderTransaction.call(%{transaction: transaction})
+
+      assert reply_payload[:output_message] == """
+             Транзакция №#{transaction.id}(Списание)
+             ```
+
+             Сумма      #{transaction.amount} #{transaction.currency_code}
+             Категория  #{folder.name}/        \n           #{category.name}
+             Кому       #{transaction.to}
+             Остаток    #{transaction.balance}
+             Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
+
+             ```
+             """
+    end
+  end
 end
