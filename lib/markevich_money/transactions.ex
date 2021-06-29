@@ -102,7 +102,8 @@ defmodule MarkevichMoney.Transactions do
       transaction
       |> Transaction.update_changeset(attrs)
       |> Repo.update!()
-      |> Repo.preload([:transaction_category, :user], force: true)
+      |> Repo.preload([transaction_category: [:transaction_category_folder]], force: true)
+      |> Repo.preload(:user)
 
     {:ok, updated}
   end

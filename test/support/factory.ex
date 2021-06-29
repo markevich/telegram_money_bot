@@ -23,7 +23,15 @@ defmodule MarkevichMoney.Factory do
 
   def transaction_category_factory do
     %MarkevichMoney.Transactions.TransactionCategory{
-      name: sequence(:name, &"category#{&1}")
+      name: sequence(:name, &"category#{&1}"),
+      transaction_category_folder: build(:transaction_category_folder)
+    }
+  end
+
+  def transaction_category_folder_factory do
+    %MarkevichMoney.Transactions.TransactionCategoryFolder{
+      name: sequence(:name, &"folder_#{&1}"),
+      has_single_category: true
     }
   end
 

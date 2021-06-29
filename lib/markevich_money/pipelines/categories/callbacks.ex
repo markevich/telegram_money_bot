@@ -4,13 +4,17 @@ defmodule MarkevichMoney.Pipelines.Categories.Callbacks do
   alias MarkevichMoney.Pipelines.Categories.{ChooseForTransaction, SetForTransaction}
 
   def call(
-        %CallbackData{callback_data: %{"pipeline" => @choose_category_callback}} = callback_data
+        %CallbackData{callback_data: %{"pipeline" => @choose_category_folder_callback}} =
+          callback_data
       ) do
     callback_data
     |> ChooseForTransaction.call()
   end
 
-  def call(%CallbackData{callback_data: %{"pipeline" => @set_category_callback}} = callback_data) do
+  def call(
+        %CallbackData{callback_data: %{"pipeline" => @set_category_or_folder_callback}} =
+          callback_data
+      ) do
     callback_data
     |> SetForTransaction.call()
   end
