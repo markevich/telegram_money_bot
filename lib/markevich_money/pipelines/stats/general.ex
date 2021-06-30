@@ -3,6 +3,7 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, SendMessage}
   alias MarkevichMoney.Transactions
 
+  # TODO: refactor that module. The calculation part should be outside
   def call(payload) do
     payload
     |> put_stats()
@@ -24,8 +25,8 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
   defp put_stats_total(%{stats: stats} = payload) do
     total =
       stats
-      |> Enum.reduce(0, fn {amount, _category_name, _category_id}, acc ->
-        acc + abs(Decimal.to_float(amount))
+      |> Enum.reduce(0, fn stat, acc ->
+        acc + abs(Decimal.to_float(stat.sum))
       end)
 
     Map.put(payload, :stats_total, total)
@@ -42,14 +43,14 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
   defp put_details(%{stats: stats, callback_data: %{"type" => type}} = payload) do
     keyboard =
       stats
-      |> Enum.map(fn {_, category_name, category_id} ->
+      |> Enum.map(fn stat ->
         %Nadia.Model.InlineKeyboardButton{
-          text: category_name,
+          text: stat.category_name,
           callback_data:
             Jason.encode!(%{
               pipeline: @stats_callback,
               type: type,
-              c_id: category_id
+              c_id: stat.category_id
             })
         }
       end)
@@ -81,16 +82,7 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
 
     table =
       stats
-      |> Enum.map(fn {amount, category_name, _category_id} ->
-        number =
-          amount
-          |> Decimal.to_float()
-          |> abs()
-          |> Float.ceil(2)
-          |> :erlang.float_to_binary([:compact, decimals: 2])
-
-        [category_name, number]
-      end)
+      |> prepare_data_for_table()
       |> TableRex.Table.new(header, "")
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
@@ -106,5 +98,80 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
     """
 
     Map.put(payload, :output_message, result_table)
+  end
+
+  defp prepare_data_for_table(stats) do
+    stats
+    |> Enum.group_by(fn stat ->
+      %{name: stat.folder_name, has_single_category: stat.folder_with_single_category}
+    end)
+    |> Enum.map(fn {folder, categories} ->
+      sum =
+        categories
+        |> Enum.map(& &1[:sum])
+        |> Enum.reduce(Decimal.new(0), fn num, acc -> Decimal.add(acc, num) end)
+        |> Decimal.to_float()
+        |> abs()
+        |> Float.ceil(2)
+
+      {
+        Map.put(folder, :sum, sum),
+        categories
+      }
+    end)
+    |> Enum.sort_by(fn {folder, _categories} -> folder.sum end, :desc)
+    |> Enum.reduce([], fn {folder, categories}, acc ->
+      if folder.has_single_category do
+        acc ++ render_folder_with_single_category(folder, categories)
+      else
+        acc ++ render_folder_with_multiple_category(folder, categories)
+      end
+    end)
+  end
+
+  defp render_folder_with_single_category(_folder, categories) do
+    Enum.map(categories, fn category ->
+      number =
+        category.sum
+        |> Decimal.to_float()
+        |> abs()
+        |> Float.ceil(2)
+        |> :erlang.float_to_binary([:compact, decimals: 2])
+
+      ["#{category.category_name}", number]
+    end)
+  end
+
+  defp render_folder_with_multiple_category(folder, categories) do
+    acc = []
+    folder_sum = :erlang.float_to_binary(folder.sum, [:compact, decimals: 2])
+    acc = acc ++ [["#{folder.name}", "= #{folder_sum}"]]
+
+    sorted =
+      Enum.map(categories, fn category ->
+        float_sum =
+          category.sum
+          |> Decimal.to_float()
+          |> abs()
+          |> Float.ceil(2)
+
+        Map.put(category, :sum, float_sum)
+      end)
+      |> Enum.sort_by(fn category -> category.sum end, :desc)
+
+    rendered =
+      Enum.map(sorted, fn category ->
+        number =
+          category.sum
+          |> :erlang.float_to_binary([:compact, decimals: 2])
+
+        if List.last(sorted) == category do
+          [" └#{category.category_name}", number]
+        else
+          [" ├#{category.category_name}", number]
+        end
+      end)
+
+    acc ++ rendered
   end
 end

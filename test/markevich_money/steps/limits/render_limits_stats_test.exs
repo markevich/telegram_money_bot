@@ -8,31 +8,45 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsStatsTest do
   describe "Non empty limits" do
     setup do
       user = insert(:user)
-      insert(:transaction_category, name: "Food")
+      food_folder = insert(:transaction_category_folder, name: "Food", has_single_category: false)
+
+      cafe_category =
+        insert(:transaction_category, name: "Cafe", transaction_category_folder: food_folder)
+
+      restaraunt_category =
+        insert(:transaction_category, name: "Restaraunt", transaction_category_folder: food_folder)
+
+      transport_folder =
+        insert(:transaction_category_folder, name: "Transport", has_single_category: false)
+
+      insert(:transaction_category, name: "Taxi", transaction_category_folder: transport_folder)
+      insert(:transaction_category, name: "Car", transaction_category_folder: transport_folder)
+
       home_category = insert(:transaction_category, name: "HomeCbTest")
-      food_category = insert(:transaction_category, name: "FoodCbTest")
+      insert(:transaction_category, name: "FoodCbTest")
       health_category = insert(:transaction_category, name: "HealthCbTest")
 
       insert(:transaction, amount: 50, user: user)
 
-      home_transaction =
-        insert(:transaction, transaction_category: home_category, amount: -100, user: user)
+      insert(:transaction, transaction_category: home_category, amount: -100, user: user)
 
-      home_transaction_amount = abs(Decimal.to_integer(home_transaction.amount))
+      insert(:transaction_category_limit,
+        transaction_category: home_category,
+        limit: 200,
+        user: user
+      )
 
-      home_limit =
-        insert(:transaction_category_limit,
-          transaction_category: home_category,
-          limit: 200,
-          user: user
-        )
+      insert(:transaction_category_limit,
+        transaction_category: restaraunt_category,
+        limit: 500,
+        user: user
+      )
 
-      food_limit =
-        insert(:transaction_category_limit,
-          transaction_category: food_category,
-          limit: 100,
-          user: user
-        )
+      insert(:transaction_category_limit,
+        transaction_category: cafe_category,
+        limit: 100,
+        user: user
+      )
 
       # 0 limit must not be drawn
       insert(:transaction_category_limit,
@@ -51,11 +65,6 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsStatsTest do
       {:ok,
        %{
          user: user,
-         home_category: home_category,
-         food_category: food_category,
-         home_transaction_amount: home_transaction_amount,
-         home_limit: home_limit,
-         food_limit: food_limit,
          payload: payload
        }}
     end
@@ -69,12 +78,12 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsStatsTest do
       ```
        Расходы за текущий месяц
 
-       Категория     Расходы
+       Категория      Расходы
 
-       #{context.home_category.name}    #{context.home_transaction_amount} из #{
-        context.home_limit.limit
-      }
-       #{context.food_category.name}    0 из #{context.food_limit.limit}
+       Food
+        ├Cafe         0 из 100
+        └Restaraunt   0 из 500
+       HomeCbTest     100 из 200
 
       ```
       """
