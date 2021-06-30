@@ -113,13 +113,19 @@ defmodule MarkevichMoney.Transactions do
       from(transaction in Transaction,
         join: user in assoc(transaction, :user),
         left_join: category in assoc(transaction, :transaction_category),
+        left_join: folder in assoc(category, :transaction_category_folder),
         where: user.id == ^current_user.id,
         where: transaction.amount < ^0,
         where: transaction.issued_at >= ^from,
         where: transaction.issued_at <= ^to,
-        group_by: [category.name, category.id],
-        select: {sum(transaction.amount), coalesce(category.name, "❓Без категории"), category.id},
-        order_by: [asc: 1]
+        group_by: [category.name, category.id, folder.name, folder.has_single_category],
+        select: %{
+          sum: sum(transaction.amount),
+          category_name: coalesce(category.name, "❓Без категории"),
+          category_id: category.id,
+          folder_name: coalesce(folder.name, "❓Без категории"),
+          folder_with_single_category: coalesce(folder.has_single_category, true)
+        }
       )
 
     Repo.all(query)

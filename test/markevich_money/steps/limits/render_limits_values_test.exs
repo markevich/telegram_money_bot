@@ -8,9 +8,9 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValuesTest do
   describe ".call" do
     setup do
       user = insert(:user)
-      category_without_limit = insert(:transaction_category, id: -3, name: "limit_cat1")
+      insert(:transaction_category, id: -3, name: "limit_cat1")
       category_with_limit = insert(:transaction_category, id: -2, name: "limit_cat2")
-      category_with_0_limit = insert(:transaction_category, id: -1, name: "limit_cat3")
+      insert(:transaction_category, id: -1, name: "limit_cat3")
 
       insert(:transaction_category_limit,
         transaction_category: category_with_limit,
@@ -24,14 +24,51 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValuesTest do
         amount: 100
       )
 
+      food_folder = insert(:transaction_category_folder, name: "Food", has_single_category: false)
+
+      cafe_category =
+        insert(:transaction_category, name: "Cafe", transaction_category_folder: food_folder)
+
+      insert(:transaction_category, name: "Restaraunt", transaction_category_folder: food_folder)
+
+      transport_folder =
+        insert(:transaction_category_folder, name: "Transport", has_single_category: false)
+
+      insert(:transaction_category, name: "Taxi", transaction_category_folder: transport_folder)
+      insert(:transaction_category, name: "Car", transaction_category_folder: transport_folder)
+
+      home_category = insert(:transaction_category, name: "HomeCbTest")
+      insert(:transaction_category, name: "FoodCbTest")
+      health_category = insert(:transaction_category, name: "HealthCbTest")
+
+      insert(:transaction, amount: 50, user: user)
+
+      insert(:transaction, transaction_category: home_category, amount: -100, user: user)
+
+      insert(:transaction_category_limit,
+        transaction_category: home_category,
+        limit: 200,
+        user: user
+      )
+
+      insert(:transaction_category_limit,
+        transaction_category: cafe_category,
+        limit: 100,
+        user: user
+      )
+
+      # 0 limit must not be drawn
+      insert(:transaction_category_limit,
+        transaction_category: health_category,
+        limit: 0,
+        user: user
+      )
+
       limits = Gamifications.list_categories_limits(user)
 
       %{
         user: user,
-        limits: limits,
-        category_without_limit: category_without_limit,
-        category_with_limit: category_with_limit,
-        category_with_0_limit: category_with_0_limit
+        limits: limits
       }
     end
 
@@ -45,19 +82,31 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValuesTest do
 
          Лимиты по категориям
 
-         Категория     Лимит
+         Категория      Лимит
 
-         #{context.category_without_limit.name}    ♾️
-         #{context.category_with_limit.name}    125
-         #{context.category_with_0_limit.name}    ♾️
+         Food
+          ├Cafe         100
+          └Restaraunt   ♾️
+         Transport
+          ├Taxi         ♾️
+          └Car          ♾️
+         limit_cat1     ♾️
+         limit_cat2     125
+         limit_cat3     ♾️
+         HomeCbTest     200
+         FoodCbTest     ♾️
+         HealthCbTest   ♾️
 
         ```
         ```
          Расходы за текущий месяц
 
-         Категория      Расходы
+         Категория     Расходы
 
-         limit_cat2     0 из 125
+         Food
+          └Cafe        0 из 100
+         limit_cat2    0 из 125
+         HomeCbTest    100 из 200
 
         ```
 

@@ -30,18 +30,49 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsStats do
 
   defp render_limits_stats(limits, current_user) do
     limits
-    |> Enum.map(fn category ->
+    |> Enum.group_by(fn category -> category.transaction_category_folder end)
+    |> Enum.reduce([], fn {folder, categories}, acc ->
+      if folder.has_single_category do
+        acc ++ render_folder_with_single_category(current_user, folder, categories)
+      else
+        acc ++ render_folder_with_multiple_category(current_user, folder, categories)
+      end
+    end)
+    |> TableRex.Table.new(["Категория", "Расходы"], "Расходы за текущий месяц")
+    |> TableRex.Table.put_column_meta(:all, align: :left, padding: 1)
+    |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
+  end
+
+  defp render_folder_with_single_category(current_user, _folder, categories) do
+    Enum.map(categories, fn category ->
       total_spending =
         Transactions.get_category_monthly_spendings(current_user.id, category.id, [])
         |> round()
 
       limit = limit_value(category)
 
-      [category.name, "#{total_spending} из #{limit}"]
+      ["#{category.name}", "#{total_spending} из #{limit}"]
     end)
-    |> TableRex.Table.new(["Категория", "Расходы"], "Расходы за текущий месяц")
-    |> TableRex.Table.put_column_meta(:all, align: :left, padding: 1)
-    |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
+  end
+
+  defp render_folder_with_multiple_category(current_user, folder, categories) do
+    acc = []
+    acc = acc ++ [["#{folder.name}", ""]]
+
+    acc ++
+      Enum.map(categories, fn category ->
+        total_spending =
+          Transactions.get_category_monthly_spendings(current_user.id, category.id, [])
+          |> round()
+
+        limit = limit_value(category)
+
+        if List.last(categories) == category do
+          [" └#{category.name}", "#{total_spending} из #{limit}"]
+        else
+          [" ├#{category.name}", "#{total_spending} из #{limit}"]
+        end
+      end)
   end
 
   defp limit_value(category) do

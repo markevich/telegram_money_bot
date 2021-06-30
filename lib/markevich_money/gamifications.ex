@@ -23,8 +23,10 @@ defmodule MarkevichMoney.Gamifications do
       from(category in TransactionCategory,
         left_join: category_limit in assoc(category, :transaction_category_limit),
         on: category_limit.user_id == ^user_id,
+        join: folder in assoc(category, :transaction_category_folder),
         order_by: [asc: category.id],
-        preload: [transaction_category_limit: category_limit]
+        preload: [transaction_category_limit: category_limit],
+        preload: [transaction_category_folder: folder]
       )
 
     Repo.all(query)
