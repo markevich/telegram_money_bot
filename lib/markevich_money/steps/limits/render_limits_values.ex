@@ -36,7 +36,7 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValues do
     |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
   end
 
-  defp render_folder_with_single_category(folder, categories) do
+  defp render_folder_with_single_category(_folder, categories) do
     Enum.map(categories, fn category ->
       limit = limit_value(category)
 
