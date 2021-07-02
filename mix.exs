@@ -4,8 +4,8 @@ defmodule MarkevichMoney.MixProject do
   def project do
     [
       app: :markevich_money,
-      version: "1.2.0",
-      elixir: "~> 1.11.2",
+      version: "1.2.1",
+      elixir: "~> 1.12.2",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -46,12 +46,12 @@ defmodule MarkevichMoney.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.8"},
+      {:phoenix, "~> 1.5"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
       {:ecto_psql_extras, "~> 0.6.5"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.15.1"},
+      {:phoenix_live_view, "~> 0.15"},
       {:floki, ">= 0.27.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -73,8 +73,8 @@ defmodule MarkevichMoney.MixProject do
       {:finch, "~> 0.6"},
       {:jason, "~> 1.1"},
       {:oban, "~> 2.6"},
-      {:oban_web, "~> 2.6.1", organization: "oban"},
-      {:oban_pro, "~> 0.7", organization: "oban"}
+      {:oban_web, "~> 2.6", organization: "oban"},
+      {:oban_pro, "~> 0.8", organization: "oban"}
     ]
   end
 

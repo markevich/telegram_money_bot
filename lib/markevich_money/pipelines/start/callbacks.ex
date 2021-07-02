@@ -107,9 +107,7 @@ defmodule MarkevichMoney.Pipelines.Start.Callbacks do
 
   defp send_instruction6(callback_data, personal_email) do
     message = """
-    Перепроверь правильность введенного адреса. Твой персональный E-mail выглядит следующим образом: #{
-      personal_email
-    }
+    Перепроверь правильность введенного адреса. Твой персональный E-mail выглядит следующим образом: #{personal_email}
     """
 
     callback_data

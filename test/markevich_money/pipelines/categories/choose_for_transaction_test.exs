@@ -89,18 +89,14 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"f_id\":#{context.folder2.id},\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"f_id\":#{context.folder2.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: context.folder2.name,
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"f_id\":#{context.folder1.id},\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"f_id\":#{context.folder1.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: context.folder1.name,
                 url: nil
@@ -109,9 +105,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"f_id\":#{context.folder_with_many_categories.id},\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"f_id\":#{context.folder_with_many_categories.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: "#{context.folder_with_many_categories.name}/",
                 url: nil
@@ -120,9 +114,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_full_mode}\",\"pipeline\":\"#{
-                    @choose_category_folder_callback
-                  }\"}",
+                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_full_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
                 switch_inline_query: nil,
                 switch_inline_query_current_chat: nil,
                 text: "☰ Показать больше категорий️",
@@ -188,18 +180,14 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"f_id\":#{context.folder2.id},\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"f_id\":#{context.folder2.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: context.folder2.name,
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"f_id\":#{context.folder1.id},\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"f_id\":#{context.folder1.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: context.folder1.name,
                 url: nil
@@ -208,9 +196,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"f_id\":#{context.folder_with_many_categories.id},\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"f_id\":#{context.folder_with_many_categories.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: "#{context.folder_with_many_categories.name}/",
                 url: nil
@@ -219,9 +205,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_full_mode}\",\"pipeline\":\"#{
-                    @choose_category_folder_callback
-                  }\"}",
+                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_full_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
                 switch_inline_query: nil,
                 switch_inline_query_current_chat: nil,
                 text: "☰ Показать больше категорий️",
@@ -287,18 +271,14 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"f_id\":#{context.folder2.id},\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"f_id\":#{context.folder2.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: context.folder2.name,
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"f_id\":#{context.folder1.id},\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"f_id\":#{context.folder1.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: context.folder1.name,
                 url: nil
@@ -307,9 +287,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"f_id\":#{context.folder_with_many_categories.id},\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"f_id\":#{context.folder_with_many_categories.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: "#{context.folder_with_many_categories.name}/",
                 url: nil

@@ -113,18 +113,14 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"#{@delete_transaction_callback_confirm}\",\"id\":#{
-                    context.transaction.id
-                  },\"pipeline\":\"#{@delete_transaction_callback}\"}",
+                  "{\"action\":\"#{@delete_transaction_callback_confirm}\",\"id\":#{context.transaction.id},\"pipeline\":\"#{@delete_transaction_callback}\"}",
                 switch_inline_query: nil,
                 text: "❌ Удалить ❌",
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"#{@delete_transaction_callback_cancel}\",\"id\":#{
-                    context.transaction.id
-                  },\"pipeline\":\"#{@delete_transaction_callback}\"}",
+                  "{\"action\":\"#{@delete_transaction_callback_cancel}\",\"id\":#{context.transaction.id},\"pipeline\":\"#{@delete_transaction_callback}\"}",
                 switch_inline_query: nil,
                 text: "Отмена",
                 url: nil
@@ -201,18 +197,14 @@ defmodule MarkevichMoney.Pipelines.DeleteTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"id\":#{context.transaction.id},\"mode\":\"#{
-                    @choose_category_folder_short_mode
-                  }\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
+                  "{\"id\":#{context.transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: "Категория",
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{
-                    context.transaction.id
-                  },\"pipeline\":\"#{@delete_transaction_callback}\"}",
+                  "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{context.transaction.id},\"pipeline\":\"#{@delete_transaction_callback}\"}",
                 switch_inline_query: nil,
                 text: "Удалить",
                 url: nil

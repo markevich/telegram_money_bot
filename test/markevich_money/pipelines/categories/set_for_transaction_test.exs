@@ -67,9 +67,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"c_id\":#{context.category2.id},\"id\":#{context.transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"c_id\":#{context.category2.id},\"id\":#{context.transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 switch_inline_query_current_chat: nil,
                 text: context.category2.name,
@@ -77,9 +75,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"c_id\":#{context.category1.id},\"id\":#{context.transaction.id},\"pipeline\":\"#{
-                    @set_category_or_folder_callback
-                  }\"}",
+                  "{\"c_id\":#{context.category1.id},\"id\":#{context.transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 switch_inline_query_current_chat: nil,
                 text: context.category1.name,
@@ -89,9 +85,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"id\":#{context.transaction.id},\"mode\":\"ccfm\",\"pipeline\":\"#{
-                    @choose_category_folder_callback
-                  }\"}",
+                  "{\"id\":#{context.transaction.id},\"mode\":\"ccfm\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
                 switch_inline_query: nil,
                 switch_inline_query_current_chat: nil,
                 text: "⬅️ Назад к категориям",
@@ -177,18 +171,14 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{
-                    @choose_category_folder_callback
-                  }\"}",
+                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: "Категория",
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @delete_transaction_callback
-                  }\"}",
+                  "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{@delete_transaction_callback}\"}",
                 switch_inline_query: nil,
                 text: "Удалить",
                 url: nil
@@ -279,18 +269,14 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{
-                    @choose_category_folder_callback
-                  }\"}",
+                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: "Категория",
                 url: nil
               },
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{
-                    @delete_transaction_callback
-                  }\"}",
+                  "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{@delete_transaction_callback}\"}",
                 switch_inline_query: nil,
                 text: "Удалить",
                 url: nil
