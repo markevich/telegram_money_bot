@@ -105,18 +105,14 @@ defmodule MarkevichMoney.Stats.GeneralTest do
           [
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category1.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
-                  @stats_callback_current_week
-                }\"}",
+                "{\"c_id\":#{context.category1.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{@stats_callback_current_week}\"}",
               switch_inline_query: nil,
               text: "Food",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category2.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
-                  @stats_callback_current_week
-                }\"}",
+                "{\"c_id\":#{context.category2.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{@stats_callback_current_week}\"}",
               switch_inline_query: nil,
               text: "Home",
               url: nil
@@ -269,18 +265,14 @@ defmodule MarkevichMoney.Stats.GeneralTest do
           [
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category1.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
-                  @stats_callback_current_month
-                }\"}",
+                "{\"c_id\":#{context.category1.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{@stats_callback_current_month}\"}",
               switch_inline_query: nil,
               text: "Food",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category2.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
-                  @stats_callback_current_month
-                }\"}",
+                "{\"c_id\":#{context.category2.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{@stats_callback_current_month}\"}",
               switch_inline_query: nil,
               text: "Home",
               url: nil
@@ -389,18 +381,14 @@ defmodule MarkevichMoney.Stats.GeneralTest do
           [
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category1.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
-                  @stats_callback_previous_month
-                }\"}",
+                "{\"c_id\":#{context.category1.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{@stats_callback_previous_month}\"}",
               switch_inline_query: nil,
               text: "Food",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category2.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
-                  @stats_callback_previous_month
-                }\"}",
+                "{\"c_id\":#{context.category2.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{@stats_callback_previous_month}\"}",
               switch_inline_query: nil,
               text: "Home",
               url: nil
@@ -654,18 +642,14 @@ defmodule MarkevichMoney.Stats.GeneralTest do
           [
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":#{context.category.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
-                  @stats_callback_previous_month
-                }\"}",
+                "{\"c_id\":#{context.category.id},\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{@stats_callback_previous_month}\"}",
               switch_inline_query: nil,
               text: "kek",
               url: nil
             },
             %Nadia.Model.InlineKeyboardButton{
               callback_data:
-                "{\"c_id\":null,\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{
-                  @stats_callback_previous_month
-                }\"}",
+                "{\"c_id\":null,\"pipeline\":\"#{@stats_callback}\",\"type\":\"#{@stats_callback_previous_month}\"}",
               switch_inline_query: nil,
               text: "❓Без категории",
               url: nil

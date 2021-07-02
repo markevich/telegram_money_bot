@@ -59,9 +59,7 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
           ProgressBar.call(total_with_current, category_limit, transaction.currency_code)
 
         output_message = """
-        *Внимание! В категории \"#{transaction.transaction_category.name}\" потрачено #{
-          trunc(total_with_current_percentage)
-        }% месячного бюджета.*
+        *Внимание! В категории \"#{transaction.transaction_category.name}\" потрачено #{trunc(total_with_current_percentage)}% месячного бюджета.*
         #{progress_bar}
         """
 

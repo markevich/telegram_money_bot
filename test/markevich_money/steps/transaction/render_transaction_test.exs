@@ -30,18 +30,14 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
                  [
                    %Nadia.Model.InlineKeyboardButton{
                      callback_data:
-                       "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{
-                         @choose_category_folder_callback
-                       }\"}",
+                       "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
                      switch_inline_query: nil,
                      text: "Категория",
                      url: nil
                    },
                    %Nadia.Model.InlineKeyboardButton{
                      callback_data:
-                       "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{
-                         transaction.id
-                       },\"pipeline\":\"#{@delete_transaction_callback}\"}",
+                       "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{@delete_transaction_callback}\"}",
                      switch_inline_query: nil,
                      text: "Удалить",
                      url: nil
@@ -157,9 +153,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Списание)
              ```
 
-             Сумма      #{transaction.amount} #{transaction.currency_code} (#{
-               transaction.external_amount
-             } #{transaction.external_currency})
+             Сумма      #{transaction.amount} #{transaction.currency_code} (#{transaction.external_amount} #{transaction.external_currency})
              Категория
              Кому       #{transaction.to}
              Остаток    #{transaction.balance}
@@ -190,9 +184,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              Транзакция №#{transaction.id}(Списание)
              ```
 
-             Сумма      #{transaction.amount} #{transaction.currency_code} (#{
-               transaction.external_amount
-             } #{transaction.external_currency})
+             Сумма      #{transaction.amount} #{transaction.currency_code} (#{transaction.external_amount} #{transaction.external_currency})
              Категория
              Кому       #{transaction.to}
              Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
