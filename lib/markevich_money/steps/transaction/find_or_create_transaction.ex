@@ -7,6 +7,7 @@ defmodule MarkevichMoney.Steps.Transaction.FindOrCreateTransaction do
     Map.put(payload, :transaction_id, transaction.id)
   end
 
+  # FYI: It's used only for alfabank integration
   defp find_or_create_transaction(%{
          parsed_attributes: %{account: account, amount: amount, issued_at: issued_at},
          current_user: current_user

@@ -59,7 +59,8 @@ defmodule MarkevichMoney.Priorbank.Integration do
         currency_code: "BYN",
         balance: "0",
         issued_at: issued_at,
-        to: transaction["transDetails"] |> cleanup_to()
+        to: transaction["transDetails"] |> cleanup_to(),
+        temporary: true
       }
 
       if transaction["transCurrIso"] != "BYN" do
@@ -83,7 +84,8 @@ defmodule MarkevichMoney.Priorbank.Integration do
         currency_code: "BYN",
         balance: "0",
         issued_at: issued_at,
-        to: transaction["transDetails"] |> cleanup_to()
+        to: transaction["transDetails"] |> cleanup_to(),
+        temporary: false
       }
 
       if transaction["transCurrIso"] != "BYN" do

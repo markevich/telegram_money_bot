@@ -54,6 +54,7 @@ defmodule MarkevichMoney.OpenStartup do
         FROM "transactions" AS st0
         INNER JOIN "transaction_categories" AS st1 ON st1."id" = st0."transaction_category_id"
         WHERE (st0."amount" < 0)
+        AND st0."temporary" = 'f'
         AND (date_trunc('month', st0."issued_at")::date = generated::date)
         AND (NOT (st0."transaction_category_id" IS NULL))
         GROUP BY month, st1."name"
@@ -96,6 +97,7 @@ defmodule MarkevichMoney.OpenStartup do
         FROM "transactions" AS st0
         INNER JOIN "transaction_categories" AS st1 ON st1."id" = st0."transaction_category_id"
         WHERE (st0."amount" < 0)
+        AND st0."temporary" = 'f'
         AND (date_trunc('month', st0."issued_at")::date = generated::date)
         AND (NOT (st0."transaction_category_id" IS NULL))
         AND st0.currency_code = 'BYN'

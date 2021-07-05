@@ -19,6 +19,7 @@ defmodule MarkevichMoney.Transactions.Transaction do
     field :to, :string
     field :lookup_hash, :string
     field :custom_description, :string
+    field :temporary, :boolean
 
     belongs_to(:transaction_category, TransactionCategory)
     belongs_to(:user, User)
@@ -41,7 +42,8 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :issued_at,
       :transaction_category_id,
       :lookup_hash,
-      :user_id
+      :user_id,
+      :temporary
     ])
     |> upcase_currency_code
   end
@@ -58,7 +60,8 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :balance,
       :to,
       :transaction_category_id,
-      :custom_description
+      :custom_description,
+      :temporary
     ])
     |> validate_required([:account, :issued_at, :amount, :currency_code, :balance, :to])
     |> upcase_currency_code
