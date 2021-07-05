@@ -255,4 +255,37 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              """
     end
   end
+
+  describe "Temporary transaction" do
+    setup do
+      category = insert(:transaction_category, name: "Fast Food temporary")
+
+      transaction = insert(:transaction, transaction_category: category, temporary: true)
+
+      {
+        :ok,
+        %{transaction: transaction, category: category}
+      }
+    end
+
+    test "renders transaction", context do
+      transaction = context.transaction
+      category = context.category
+
+      reply_payload = RenderTransaction.call(%{transaction: transaction})
+
+      assert reply_payload[:output_message] == """
+             Блокировка средств №#{transaction.id}(Списание)
+             ```
+
+             Сумма      #{transaction.amount} #{transaction.currency_code}
+             Категория  #{category.name}
+             Кому       #{transaction.to}
+             Остаток    #{transaction.balance}
+             Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
+
+             ```
+             """
+    end
+  end
 end

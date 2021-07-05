@@ -31,9 +31,10 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload([:transaction_category, :user])
   end
 
-  def get_transaction_by_lookup_hash(lookup_hash) do
+  defp get_transaction_by_lookup_hash_and_temporality(lookup_hash, temporary) do
     from(transaction in Transaction,
-      where: transaction.lookup_hash == ^lookup_hash
+      where: transaction.lookup_hash == ^lookup_hash,
+      where: transaction.temporary == ^temporary
     )
     |> Repo.one()
   end
@@ -58,10 +59,10 @@ defmodule MarkevichMoney.Transactions do
 
   @spec upsert_transaction(integer, String.t(), Decimal.t(), String.t()) ::
           {:exists, %Transaction{}} | {:new, %Transaction{}}
-  def upsert_transaction(user_id, account, amount, issued_at) do
+  def upsert_transaction(user_id, account, amount, issued_at, temporary \\ false) do
     lookup_hash = calculate_lookup_hash(user_id, account, amount, issued_at)
 
-    existing_transaction = get_transaction_by_lookup_hash(lookup_hash)
+    existing_transaction = get_transaction_by_lookup_hash_and_temporality(lookup_hash, temporary)
 
     # TODO: Race condition is possible here. Use something more efficient
     if existing_transaction do
@@ -118,6 +119,7 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.amount < ^0,
         where: transaction.issued_at >= ^from,
         where: transaction.issued_at <= ^to,
+        where: transaction.temporary == false,
         group_by: [category.name, category.id, folder.name, folder.has_single_category],
         select: %{
           sum: sum(transaction.amount),
@@ -139,6 +141,7 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.amount < ^0,
         where: transaction.issued_at >= ^from,
         where: transaction.issued_at <= ^to,
+        where: transaction.temporary == false,
         select:
           {transaction.to, transaction.custom_description, transaction.amount,
            transaction.issued_at},
@@ -175,6 +178,7 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.issued_at >= ^beginning_of_month,
         where: transaction.issued_at <= ^end_of_month,
         where: transaction.id not in ^exclude_transaction_ids,
+        where: transaction.temporary == false,
         select: sum(transaction.amount)
       )
 

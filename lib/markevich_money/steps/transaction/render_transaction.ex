@@ -26,10 +26,11 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       |> TableRex.Table.put_column_meta(0, padding: 0)
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
-    type = human_type(transaction_type)
+    flow_type = flow_type(transaction_type)
+    transaction_type = transaction_type(transaction.temporary)
 
     """
-    Транзакция №#{transaction.id}(#{type})
+    #{transaction_type} №#{transaction.id}(#{flow_type})
     ```
 
     #{table}
@@ -37,7 +38,15 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
     """
   end
 
-  defp human_type(transaction_type) do
+  defp transaction_type(temporary) do
+    if temporary do
+      "Блокировка средств"
+    else
+      "Транзакция"
+    end
+  end
+
+  defp flow_type(transaction_type) do
     case transaction_type do
       @transaction_type_income -> "Поступление"
       @transaction_type_expense -> "Списание"

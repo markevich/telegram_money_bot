@@ -14,3 +14,4 @@ npm-debug.log
 .idea/
 .vscode/
 /priv/static/
+*.coverdata

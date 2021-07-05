@@ -293,7 +293,8 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             balance: "0",
             currency_code: "BYN",
             issued_at: ~N[2021-04-16 13:42:36],
-            to: "BLR MINSK P2P SDBO NO FEE"
+            to: "BLR MINSK P2P SDBO NO FEE",
+            temporary: true
           },
           %{
             account: "BYN cards",
@@ -303,7 +304,8 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             external_amount: -200.0,
             external_currency: "USD",
             issued_at: ~N[2021-04-16 13:38:03],
-            to: "BLR MINSK P2P SDBO NO FEE"
+            to: "BLR MINSK P2P SDBO NO FEE",
+            temporary: true
           },
           %{
             account: "BYN cards",
@@ -311,7 +313,8 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             balance: "0",
             currency_code: "BYN",
             issued_at: ~N[2021-04-15 17:19:53],
-            to: "BLR MINSK IR WWW.NEW.BYCARD.BY B"
+            to: "BLR MINSK IR WWW.NEW.BYCARD.BY B",
+            temporary: true
           },
           %{
             account: "BYN cards",
@@ -319,7 +322,8 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             balance: "0",
             currency_code: "BYN",
             issued_at: ~N[2021-04-14 12:07:57],
-            to: "NLD Amsterdam Yandex.Taxi"
+            to: "NLD Amsterdam Yandex.Taxi",
+            temporary: false
           },
           %{
             account: "BYN cards",
@@ -329,7 +333,8 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             external_amount: -1.95,
             external_currency: "USD",
             issued_at: ~N[2021-04-14 17:02:00],
-            to: "LUX 19, RUE DE BI ALIEXPRESS"
+            to: "LUX 19, RUE DE BI ALIEXPRESS",
+            temporary: false
           }
         ]
       )

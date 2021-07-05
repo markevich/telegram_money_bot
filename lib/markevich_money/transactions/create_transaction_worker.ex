@@ -35,7 +35,8 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorker do
         user.id,
         attributes["account"],
         attributes["amount"],
-        attributes["issued_at"]
+        attributes["issued_at"],
+        attributes["temporary"]
       )
 
     case upsert_result do
