@@ -8,8 +8,6 @@ defmodule MarkevichMoneyWeb.OpenStartupLive do
     {:ok,
      assign(
        socket,
-       incomes: fetch_incomes(),
-       expenses: fetch_expenses(),
        profits: fetch_profits(),
        popular_categories: fetch_popular_categories(),
        most_expensive_categories: fetch_most_expensive_categories(),
@@ -32,24 +30,6 @@ defmodule MarkevichMoneyWeb.OpenStartupLive do
       |> Jason.encode()
 
     list
-  end
-
-  defp fetch_incomes do
-    {:ok, incomes} =
-      OpenStartup.list_incomes()
-      |> Enum.map(&map_profit/1)
-      |> Jason.encode()
-
-    incomes
-  end
-
-  defp fetch_expenses do
-    {:ok, expenses} =
-      OpenStartup.list_expenses()
-      |> Enum.map(&map_profit/1)
-      |> Jason.encode()
-
-    expenses
   end
 
   defp fetch_profits do
@@ -80,13 +60,5 @@ defmodule MarkevichMoneyWeb.OpenStartupLive do
       |> Jason.encode()
 
     users
-  end
-
-  defp map_profit(profit) do
-    %{
-      amount: profit.amount,
-      date: profit.date,
-      description: profit.description
-    }
   end
 end

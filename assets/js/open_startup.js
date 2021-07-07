@@ -6,8 +6,6 @@ Chart.register(LineController, Line, BarController, Rectangle, Point, LinearScal
 _adapters._date.override(dateAdatper);
 
 export default {
-  incomes() { return JSON.parse(this.el.dataset.incomes) },
-  expenses() { return JSON.parse(this.el.dataset.expenses) },
   profits() { return JSON.parse(this.el.dataset.profits) },
   popularCategories() { return JSON.parse(this.el.dataset.popularCategories) },
   mostExpensiveCategories() { return JSON.parse(this.el.dataset.mostExpensiveCategories) },
@@ -297,80 +295,6 @@ export default {
     new Chart(ctx, config)
   },
 
-  createIncomeExpensesChart() {
-    const ctx = document.getElementById('data-incomes-expenses');
-    const formattedIncomes = this.incomes().map((i) => {
-      return {
-        x: i.date,
-        y: i.amount,
-        description: i.description,
-      }
-    });
-    const formattedExpenses = this.expenses().map((e) => {
-      return {
-        x: e.date,
-        y: e.amount,
-        description: e.description
-      }
-    })
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        datasets: [
-          {
-            backgroundColor: "rgb(75, 192, 192)",
-            barThickness: 'flex',
-            label: 'Поступление',
-            data: formattedIncomes
-          },
-          {
-            backgroundColor: "rgb(255, 99, 132)",
-            label: 'Расход',
-            barThickness: 'flex',
-            data: formattedExpenses
-          }
-        ]
-      },
-      options: {
-        tooltips: {
-          callbacks: {
-            label: function (item) {
-              const description = item.dataset.data[item.dataIndex].description;
-              return ` ${description}: ${item.formattedValue} $`;
-            }
-          },
-          displayColors: false,
-        },
-        title: {
-          display: true,
-          text: "Движение средств."
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            suggestedMin: -100,
-            suggestedMax: 100,
-            offset: true,
-          },
-          x: {
-            type: 'time',
-            adapters: {
-              date: {
-                locale: ru
-              }
-            },
-            time: {
-              unit: 'month'
-            },
-            offset: true,
-          },
-        },
-        responsive: true,
-        maintainAspectRatio: false
-      }
-    })
-  },
-
   createProfitsTrendChart() {
     const ctx = document.getElementById('data-profits-trend');
 
@@ -451,7 +375,6 @@ export default {
     this.createUsersChart()
     this.createPopularCategoriesChart()
     this.createMostExpensiveCategoriesChart()
-    this.createIncomeExpensesChart()
     this.createProfitsTrendChart()
   }
 }

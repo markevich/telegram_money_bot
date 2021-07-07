@@ -96,7 +96,8 @@ end)
 [
   "🏎️ Личный",
   "🚖 Такси",
-  "🚃 Общественный"
+  "🚃 Общественный",
+  "🚴 Шеринг"
 ]
 |> Enum.each(fn category_name ->
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
