@@ -26,4 +26,10 @@ config :markevich_money, :tg_file_ids,
   releases: %{
     "1.0" =>
       "AgACAgIAAxkBAAIHo1-2pJgcWxySZMbU_aoW3OBl_RHLAALKrzEb1eawSQQMymAAAZQUi4KpdJcuAAMBAAMCAAN4AAPYVAMAAR4E"
+  },
+  stickers: %{
+    grandpa_neutral: "CAACAgIAAxkBAAJ1Z2EH6iUjVbQLEms8R-wSLN1qhn9CAAIlDQAC-3dASIPIwk9ZZ2YqIAQ",
+    grandpa_calculating:
+      "CAACAgIAAxkBAAJ1bGEH7wTpvXD0kn0rzeNv_EXikRVaAAJwEAACDEBBSCsDR7iZfQSFIAQ",
+    grandpa_like: "CAACAgIAAxkBAAJ1bmEH7xLz4rJfyhD2_D0rTCX9Q81xAAK8DgAC12xASDrvCesSBWm-IAQ"
   }
