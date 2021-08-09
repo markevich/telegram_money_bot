@@ -42,7 +42,7 @@ config :markevich_money, Oban,
   engine: Oban.Pro.Queue.SmartEngine,
   # plugins: [{Oban.Plugins.Pruner, max_age: 60}, Oban.Pro.Plugins.Lifeline, Oban.Web.Plugins.Stats],
   plugins: [
-    {Oban.Plugins.Pruner, max_age: 365 * 24 * 3600},
+    {Oban.Plugins.Pruner, max_age: 30 * 24 * 3600},
     {Oban.Plugins.Cron,
      crontab: [
        {"* * * * *", EmailProcessor},
@@ -53,7 +53,10 @@ config :markevich_money, Oban,
     Oban.Web.Plugins.Stats
   ],
   queues: [
-    transactions: [local_limit: 5, rate_limit: [allowed: 20, period: {1, :second}]],
+    # TODO: Wait for https://elixirforum.com/t/oban-having-many-dynamic-queues-okay-or-a-bad-idea/36312/17
+    # implementation
+    # Fyi: https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once
+    transactions: [local_limit: 5, rate_limit: [allowed: 1, period: {1, :second}]],
     events: 5,
     trackers: 5,
     mail_fetcher: 1,
