@@ -1,2 +1,0 @@
-defmodule MarkevichMoney.Gamification.Events.EndOfTheMonthListener do
-end

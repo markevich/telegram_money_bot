@@ -40,13 +40,13 @@ config :phoenix, :json_library, Jason
 config :markevich_money, Oban,
   repo: MarkevichMoney.Repo,
   engine: Oban.Pro.Queue.SmartEngine,
-  # plugins: [{Oban.Plugins.Pruner, max_age: 60}, Oban.Pro.Plugins.Lifeline, Oban.Web.Plugins.Stats],
   plugins: [
     {Oban.Plugins.Pruner, max_age: 30 * 24 * 3600},
     {Oban.Plugins.Cron,
      crontab: [
        {"* * * * *", EmailProcessor},
-       {"* * * * *", MarkevichMoney.Priorbank.SchedulerWorker}
+       {"* * * * *", MarkevichMoney.Priorbank.SchedulerWorker},
+       {"0 11 1 * *", MarkevichMoney.Gamification.Events.NewMonthStarted}
      ]},
     Oban.Pro.Plugins.Lifeline,
     Oban.Plugins.Gossip,
@@ -55,10 +55,11 @@ config :markevich_money, Oban,
   queues: [
     # TODO: Wait for https://elixirforum.com/t/oban-having-many-dynamic-queues-okay-or-a-bad-idea/36312/17
     # implementation
-    # Fyi: https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once
-    transactions: [local_limit: 5, rate_limit: [allowed: 1, period: {1, :second}]],
+    # FYI: https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once
+    transactions: [local_limit: 1, rate_limit: [allowed: 1, period: {1, :second}]],
     events: 5,
     trackers: 5,
+    reports: [local_limit: 1, rate_limit: [allowed: 1, period: {1, :second}]],
     mail_fetcher: 1,
     priorbank_scheduler: 1,
     priorbank_fetcher: 5

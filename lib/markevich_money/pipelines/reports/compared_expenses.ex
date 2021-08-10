@@ -1,6 +1,9 @@
 defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
+  use MarkevichMoney.Constants
+
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Transactions
+  alias MarkevichMoney.CallbackData
 
   def call(user_id) do
     user = MarkevichMoney.Users.get_user!(user_id)
@@ -9,20 +12,51 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
       current_user: user
     }
 
-    payload
-    |> calculate_previous_month_stats()
-    |> calculate_two_month_ago_stats()
-    |> union_previous_month()
-    |> union_two_month_ago()
-    |> inject_diff()
-    |> group_by_folders()
-    |> inject_folders_sum_and_diffs()
-    |> sort_folders()
-    |> sort_categories()
-    |> generate_table_data()
-    |> generate_table_output()
-    |> generate_output_message()
-    |> SendMessage.call()
+    payload =
+      payload
+      |> calculate_previous_month_stats()
+      |> calculate_two_month_ago_stats()
+
+    case payload do
+      %{stats_previous_month: p_m, stats_two_month_ago: t_m_a}
+      when p_m == [] and t_m_a == [] ->
+        # Ignore users without any transactions
+        {:no_transactions, payload}
+
+      %{stats_two_month_ago: t_m_a} when t_m_a == [] ->
+        # Only previous month exists, render generic stats
+        callback_data = %CallbackData{
+          callback_data: %{"type" => @stats_callback_previous_month},
+          current_user: user
+        }
+
+        payload =
+          callback_data
+          # TODO: We are calculating the stats twice.
+          # TODO: Make it a non callback function. We have nothing to respond to telegram in that case.
+          |> MarkevichMoney.Pipelines.Stats.Callbacks.call()
+
+        {:only_previous_month, payload}
+
+      _ ->
+        # We have stats for both periods
+        payload =
+          payload
+          |> union_previous_month()
+          |> union_two_month_ago()
+          |> inject_diff()
+          |> group_by_folders()
+          |> inject_folders_sum_and_diffs()
+          |> inject_overall_sums()
+          |> sort_folders()
+          |> sort_categories()
+          |> generate_table_data()
+          |> generate_table_output()
+          |> generate_output_message()
+          |> SendMessage.call()
+
+        {:ok, payload}
+    end
   end
 
   defp calculate_previous_month_stats(%{current_user: user} = payload) do
@@ -148,6 +182,22 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
     Map.put(payload, :union, updated_union)
   end
 
+  defp inject_overall_sums(%{union: union} = payload) do
+    sum_previous_month =
+      Enum.reduce(union, Decimal.new(0), fn {folder, _categories}, acc ->
+        Decimal.add(acc, folder.sum_previous_month)
+      end)
+
+    sum_two_month_ago =
+      Enum.reduce(union, Decimal.new(0), fn {folder, _categories}, acc ->
+        Decimal.add(acc, folder.sum_two_month_ago)
+      end)
+
+    payload
+    |> Map.put(:sum_previous_month, sum_previous_month)
+    |> Map.put(:sum_two_month_ago, sum_two_month_ago)
+  end
+
   defp sort_folders(%{union: union} = payload) do
     updated_union =
       Enum.sort_by(union, fn {folder, _categories} -> Decimal.to_float(folder.diff) end, :desc)
@@ -259,12 +309,14 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
     Map.put(payload, :table_output, table_as_string)
   end
 
-  defp generate_output_message(%{table_output: table_output} = payload) do
+  defp generate_output_message(payload) do
     message = """
     ```
 
-    #{table_output}
+    #{payload.table_output}
 
+    Прошлый месяц - #{payload.sum_previous_month}
+    Два месяца назад - #{payload.sum_two_month_ago}
     ```
     """
 
