@@ -3,103 +3,30 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
 
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Transactions
-  alias MarkevichMoney.CallbackData
 
-  def call(user_id) do
-    user = MarkevichMoney.Users.get_user!(user_id)
-
+  def call(stats_a, stats_a_label, stats_b, stats_b_label) do
     payload = %{
-      current_user: user
+      stats_a: stats_a,
+      stats_b: stats_b,
+      stats_a_label: stats_a_label,
+      stats_b_label: stats_b_label
     }
 
-    payload =
-      payload
-      |> calculate_previous_month_stats()
-      |> calculate_two_month_ago_stats()
-
-    case payload do
-      %{stats_previous_month: p_m, stats_two_month_ago: t_m_a}
-      when p_m == [] and t_m_a == [] ->
-        # Ignore users without any transactions
-        {:no_transactions, payload}
-
-      %{stats_two_month_ago: t_m_a} when t_m_a == [] ->
-        # Only previous month exists, render generic stats
-        callback_data = %CallbackData{
-          callback_data: %{"type" => @stats_callback_previous_month},
-          current_user: user
-        }
-
-        payload =
-          callback_data
-          # TODO: We are calculating the stats twice.
-          # TODO: Make it a non callback function. We have nothing to respond to telegram in that case.
-          |> MarkevichMoney.Pipelines.Stats.Callbacks.call()
-
-        {:only_previous_month, payload}
-
-      _ ->
-        # We have stats for both periods
-        payload =
-          payload
-          |> union_previous_month()
-          |> union_two_month_ago()
-          |> inject_diff()
-          |> group_by_folders()
-          |> inject_folders_sum_and_diffs()
-          |> inject_overall_sums()
-          |> sort_folders()
-          |> sort_categories()
-          |> generate_table_data()
-          |> generate_table_output()
-          |> generate_output_message()
-          |> SendMessage.call()
-
-        {:ok, payload}
-    end
-  end
-
-  defp calculate_previous_month_stats(%{current_user: user} = payload) do
-    previous_month = Timex.shift(Timex.now(), months: -1)
-
-    stats_previous_month =
-      Transactions.stats(
-        user,
-        Timex.beginning_of_month(previous_month),
-        Timex.end_of_month(previous_month)
-      )
-
     payload
-    |> Map.put(:stats_previous_month, stats_previous_month)
+    |> union_stats_b()
+    |> union_stats_a()
+    |> inject_diff()
+    |> group_by_folders()
+    |> inject_folders_sum_and_diffs()
+    |> inject_overall_sums()
+    |> sort_folders()
+    |> sort_categories()
+    |> generate_table_data()
+    |> generate_table_output()
+    |> generate_output_message()
   end
 
-  defp calculate_two_month_ago_stats(%{current_user: user} = payload) do
-    two_month_ago = Timex.shift(Timex.now(), months: -2)
-
-    stats_two_month_ago =
-      Transactions.stats(
-        user,
-        Timex.beginning_of_month(two_month_ago),
-        Timex.end_of_month(two_month_ago)
-      )
-
-    payload
-    |> Map.put(:stats_two_month_ago, stats_two_month_ago)
-  end
-
-  defp union_previous_month(%{stats_previous_month: stats} = payload) do
-    union =
-      Enum.map(stats, fn row ->
-        row
-        |> Map.put(:sum_previous_month, Decimal.abs(row.sum))
-        |> Map.put(:sum_two_month_ago, Decimal.new(0))
-        |> Map.delete(:sum)
-      end)
-
-    Map.put(payload, :union, union)
-  end
-
-  defp union_two_month_ago(%{union: union, stats_two_month_ago: stats} = payload) do
+  defp union_stats_a(%{union: union, stats_a: stats} = payload) do
     union =
       Enum.reduce(stats, union, fn row, acc ->
         index =
@@ -111,14 +38,14 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
           updated_row =
             acc
             |> Enum.at(index)
-            |> Map.put(:sum_two_month_ago, Decimal.abs(row.sum))
+            |> Map.put(:sum_a, Decimal.abs(row.sum))
 
           List.replace_at(acc, index, updated_row)
         else
           new_row =
             row
-            |> Map.put(:sum_two_month_ago, Decimal.abs(row.sum))
-            |> Map.put(:sum_previous_month, Decimal.new(0))
+            |> Map.put(:sum_a, Decimal.abs(row.sum))
+            |> Map.put(:sum_b, Decimal.new(0))
             |> Map.delete(:sum)
 
           [new_row | acc]
@@ -128,10 +55,22 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
     Map.put(payload, :union, union)
   end
 
+  defp union_stats_b(%{stats_b: stats} = payload) do
+    union =
+      Enum.map(stats, fn row ->
+        row
+        |> Map.put(:sum_b, Decimal.abs(row.sum))
+        |> Map.put(:sum_a, Decimal.new(0))
+        |> Map.delete(:sum)
+      end)
+
+    Map.put(payload, :union, union)
+  end
+
   defp inject_diff(%{union: union} = payload) do
     union_with_diff =
       Enum.map(union, fn row ->
-        diff = Decimal.sub(row.sum_previous_month, row.sum_two_month_ago)
+        diff = Decimal.sub(row.sum_b, row.sum_a)
 
         row
         |> Map.put(:diff, diff)
@@ -155,22 +94,22 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
   defp inject_folders_sum_and_diffs(%{union: union} = payload) do
     updated_union =
       Enum.map(union, fn {folder, categories} ->
-        sum_two_month_ago =
+        sum_a =
           Enum.reduce(categories, Decimal.new(0), fn row, sum ->
-            Decimal.add(sum, row.sum_two_month_ago)
+            Decimal.add(sum, row.sum_a)
           end)
 
-        sum_previous_month =
+        sum_b =
           Enum.reduce(categories, Decimal.new(0), fn row, sum ->
-            Decimal.add(sum, row.sum_previous_month)
+            Decimal.add(sum, row.sum_b)
           end)
 
-        sum_of_diff = Decimal.sub(sum_previous_month, sum_two_month_ago)
+        sum_of_diff = Decimal.sub(sum_b, sum_a)
 
         updated_folder =
           folder
-          |> Map.put(:sum_two_month_ago, sum_two_month_ago)
-          |> Map.put(:sum_previous_month, sum_previous_month)
+          |> Map.put(:sum_a, sum_a)
+          |> Map.put(:sum_b, sum_b)
           |> Map.put(:diff, sum_of_diff)
 
         {
@@ -183,19 +122,40 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
   end
 
   defp inject_overall_sums(%{union: union} = payload) do
-    sum_previous_month =
+    sum_b =
       Enum.reduce(union, Decimal.new(0), fn {folder, _categories}, acc ->
-        Decimal.add(acc, folder.sum_previous_month)
+        Decimal.add(acc, folder.sum_b)
       end)
 
-    sum_two_month_ago =
+    sum_a =
       Enum.reduce(union, Decimal.new(0), fn {folder, _categories}, acc ->
-        Decimal.add(acc, folder.sum_two_month_ago)
+        Decimal.add(acc, folder.sum_a)
       end)
+
+    diff =
+      if sum_a >= sum_b do
+        Decimal.sub(sum_b, sum_a)
+      else
+        Decimal.sub(sum_a, sum_b)
+      end
+
+    diff_in_percentage =
+      diff
+      |> Decimal.div(sum_b)
+      |> Decimal.mult(100)
+      |> Decimal.round()
+      |> Decimal.to_integer()
+
+    integer_diff =
+      diff
+      |> Decimal.round()
+      |> Decimal.to_integer()
 
     payload
-    |> Map.put(:sum_previous_month, sum_previous_month)
-    |> Map.put(:sum_two_month_ago, sum_two_month_ago)
+    |> Map.put(:sum_a, sum_a)
+    |> Map.put(:sum_b, sum_b)
+    |> Map.put(:percentage_diff, diff_in_percentage)
+    |> Map.put(:numeric_diff, integer_diff)
   end
 
   defp sort_folders(%{union: union} = payload) do
@@ -231,8 +191,8 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
               [
                 [
                   row.category_name,
-                  row.sum_two_month_ago,
-                  row.sum_previous_month,
+                  row.sum_a,
+                  row.sum_b,
                   diff
                 ],
                 ["", "", "", ""]
@@ -248,8 +208,8 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
               [
                 [
                   folder.folder_name,
-                  folder.sum_two_month_ago,
-                  folder.sum_previous_month,
+                  folder.sum_a,
+                  folder.sum_b,
                   diff
                 ]
               ]
@@ -274,8 +234,8 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
                 [
                   [
                     "└#{category.category_name}",
-                    category.sum_two_month_ago,
-                    category.sum_previous_month,
+                    category.sum_a,
+                    category.sum_b,
                     diff
                   ],
                   ["", "", "", ""]
@@ -284,8 +244,8 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
                 [
                   [
                     "├#{category.category_name}",
-                    category.sum_two_month_ago,
-                    category.sum_previous_month,
+                    category.sum_a,
+                    category.sum_b,
                     diff
                   ]
                 ]
@@ -299,10 +259,12 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
     Map.put(payload, :table_data, table_data)
   end
 
-  defp generate_table_output(%{table_data: table_data} = payload) do
+  defp generate_table_output(
+         %{table_data: table_data, stats_a_label: label_a, stats_b_label: label_b} = payload
+       ) do
     table_as_string =
       table_data
-      |> TableRex.Table.new(["Категория", "06.2021", "07.2021", "Разница"], "Сравнение расходов")
+      |> TableRex.Table.new(["Категория", label_a, label_b, "Разница"], "Сравнение расходов")
       |> TableRex.Table.put_column_meta(:all, align: :left, padding: 0)
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
@@ -315,8 +277,10 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
 
     #{payload.table_output}
 
-    Прошлый месяц - #{payload.sum_previous_month}
-    Два месяца назад - #{payload.sum_two_month_ago}
+    Подведем итоги:
+
+    #{payload.stats_a_label} - #{payload.sum_a}
+    #{payload.stats_b_label} - #{payload.sum_b}
     ```
     """
 

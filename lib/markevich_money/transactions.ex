@@ -228,4 +228,18 @@ defmodule MarkevichMoney.Transactions do
       Repo.one(similarity_for_current_user) ||
       Repo.one(similarity_for_all_users)
   end
+
+  def exists_in_month?(user_id, month) do
+    beginning_of_month = Timex.beginning_of_month(month)
+    end_of_month = Timex.end_of_month(month)
+
+    from(
+      t in Transaction,
+      where: t.user_id == ^user_id,
+      where: t.issued_at >= ^beginning_of_month,
+      where: t.issued_at <= ^end_of_month,
+      where: t.amount < 0
+    )
+    |> Repo.exists?()
+  end
 end
