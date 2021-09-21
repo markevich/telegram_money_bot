@@ -1,9 +1,6 @@
 defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
   use MarkevichMoney.Constants
 
-  alias MarkevichMoney.Steps.Telegram.SendMessage
-  alias MarkevichMoney.Transactions
-
   def call(stats_a, stats_a_label, stats_b, stats_b_label) do
     payload = %{
       stats_a: stats_a,
@@ -273,14 +270,15 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
 
   defp generate_output_message(payload) do
     message = """
+    Переверни телефон в альбомный режим для лучшей читабельности!
     ```
 
     #{payload.table_output}
 
     Подведем итоги:
 
-    #{payload.stats_a_label} - #{payload.sum_a}
-    #{payload.stats_b_label} - #{payload.sum_b}
+    #{payload.stats_a_label} - #{payload.sum_a} золотых.
+    #{payload.stats_b_label} - #{payload.sum_b} золотых.
     ```
     """
 

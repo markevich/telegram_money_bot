@@ -21,7 +21,6 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport do
   end
 
   def send_message_about_stats_calculation(%{chat_id: chat_id} = payload) do
-    # TODO: refactor that sleep immediately! It's time to introduce async message sending for telegram.
     sticker1 = Application.get_env(:markevich_money, :tg_file_ids)[:stickers][:"👴😐"]
 
     SendSticker.call(%{
@@ -75,7 +74,7 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport do
         {:short_report_sent, send_generic_monthly_expenses(user)}
 
       _ ->
-        {:no_transactions, nil}
+        {:no_transactions, send_empty_report_reaction(user)}
     end
   end
 
@@ -116,26 +115,11 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport do
 
     Sleeper.sleep()
 
-    {:ok, reaction_message, reaction_sticker} =
-      ReactionRenderer.render_full_report_reaction(
-        percentage_diff: payload.percentage_diff,
-        numeric_diff: payload.numeric_diff
-      )
-
-    %{
-      chat_id: user.telegram_chat_id,
-      file_id: reaction_sticker,
-      disable_notification: true
-    }
-    |> SendSticker.call()
-
-    Sleeper.sleep()
-
-    %{
-      chat_id: user.telegram_chat_id,
-      output_message: reaction_message
-    }
-    |> SendMessage.call()
+    ReactionRenderer.render_full_report_reaction(
+      percentage_diff: payload.percentage_diff,
+      numeric_diff: payload.numeric_diff
+    )
+    |> send_reaction_messages(user)
 
     payload
   end
@@ -149,5 +133,32 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport do
     callback_data
     # TODO: Make it a non callback function. We have nothing to respond to telegram in that case.
     |> MarkevichMoney.Pipelines.Stats.Callbacks.call()
+
+    Sleeper.sleep()
+
+    ReactionRenderer.render_short_report_reaction()
+    |> send_reaction_messages(user)
+  end
+
+  defp send_empty_report_reaction(user) do
+    ReactionRenderer.render_empty_report_reaction()
+    |> send_reaction_messages(user)
+  end
+
+  defp send_reaction_messages({:ok, message, sticker}, user) do
+    %{
+      chat_id: user.telegram_chat_id,
+      file_id: sticker,
+      disable_notification: true
+    }
+    |> SendSticker.call()
+
+    Sleeper.sleep()
+
+    %{
+      chat_id: user.telegram_chat_id,
+      output_message: message
+    }
+    |> SendMessage.call()
   end
 end
