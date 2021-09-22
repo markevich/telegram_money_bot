@@ -16,7 +16,6 @@ defmodule MarkevichMoney.Pipelines.Reports.ReactionRenderer do
 
     message = """
     Мы только начали считать твои расходы, поэтому мне не хватает данных составить полноценный отчет.
-
     Можем взглянуть пока на что ты тратил золотые недавно. А как только наберется цифр за полных два месяца - тогда и поймём, что с тобой делать: бить клюкой по голове или пощадить.
     """
 
@@ -32,12 +31,12 @@ defmodule MarkevichMoney.Pipelines.Reports.ReactionRenderer do
 
         message = """
         Ни жарко, ни холодно: расходы остались на прежнем уровне, ничего не поменялось.
-        Хотя могло быть и лучше. Я то в твои годы уже на паролёт накопил!.
+        Хотя могло быть и лучше. Я то в твои годы уже на паролёт накопил!
         """
 
         {:ok, message, sticker_id}
 
-      percentage > 5 && percentage < 15 ->
+      percentage > 5 && percentage <= 15 ->
         sticker_id = Application.get_env(:markevich_money, :tg_file_ids)[:stickers][:"👴😠"]
 
         message = """
@@ -49,8 +48,8 @@ defmodule MarkevichMoney.Pipelines.Reports.ReactionRenderer do
 
         {:ok, message, sticker_id}
 
-      percentage >= 15 && percentage <= 40 ->
-        sticker_id = Application.get_env(:markevich_money, :tg_file_ids)[:stickers][:"👴🧮"]
+      percentage > 15 && percentage <= 40 ->
+        sticker_id = Application.get_env(:markevich_money, :tg_file_ids)[:stickers][:"👴📉"]
 
         message = """
         У тебя там в штанах прореха или шо?!
@@ -66,12 +65,12 @@ defmodule MarkevichMoney.Pipelines.Reports.ReactionRenderer do
         message = """
         ТЫ ШО НАТВОРИЛ, БЕСТОЛОЧЬ?!
         Это ж надо было так потратиться! На #{human_diff} золотых больше, чем в прошлом месяце!!!
-        Когда жрать нечего будет - ко мне не приходи... Я предупреждал!.
+        Когда жрать нечего будет - ко мне не приходи... Я предупреждал!
         """
 
         {:ok, message, sticker_id}
 
-      percentage <= -5 && percentage > -15 ->
+      percentage <= -5 && percentage >= -15 ->
         sticker_id = Application.get_env(:markevich_money, :tg_file_ids)[:stickers][:"👴👍"]
 
         message = """
@@ -82,18 +81,18 @@ defmodule MarkevichMoney.Pipelines.Reports.ReactionRenderer do
 
         {:ok, message, sticker_id}
 
-      percentage <= -15 && percentage > -40 ->
+      percentage < -15 && percentage >= -40 ->
         sticker_id = Application.get_env(:markevich_money, :tg_file_ids)[:stickers][:"👴👍"]
 
         message = """
         Отвались моя борода, что я вижу! Неужто кто-то за ум взялся!
         Потратил в этом месяце на #{human_diff} золотых меньше, чем в предыдущем.
-        Похвально. Так, гляди, и любимым родственничком станешь!.
+        Похвально. Так, гляди, и любимым родственничком станешь!
         """
 
         {:ok, message, sticker_id}
 
-      percentage <= -40 ->
+      percentage < -40 ->
         sticker_id = Application.get_env(:markevich_money, :tg_file_ids)[:stickers][:"👴👍"]
 
         message = """
@@ -104,6 +103,7 @@ defmodule MarkevichMoney.Pipelines.Reports.ReactionRenderer do
 
         {:ok, message, sticker_id}
 
+      # coveralls-ignore-start
       true ->
         log_error_message(
           "Received unkown numbers for monthly report reaction renderer.",
@@ -112,6 +112,8 @@ defmodule MarkevichMoney.Pipelines.Reports.ReactionRenderer do
             numeric_diff: diff
           }
         )
+
+        # coveralls-ignore-stop
     end
   end
 end
