@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Pipelines.Reports.ReactionRenderer do
+defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ReactionRenderer do
   use MarkevichMoney.LoggerWithSentry
 
   def render_empty_report_reaction() do

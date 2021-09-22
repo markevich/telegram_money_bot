@@ -4,9 +4,9 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport do
   alias MarkevichMoney.Steps.Telegram.SendSticker
   alias MarkevichMoney.Users
   alias MarkevichMoney.CallbackData
-  alias MarkevichMoney.Pipelines.Reports.ComparedExpenses
+  alias MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpenses
   alias MarkevichMoney.Transactions
-  alias MarkevichMoney.Pipelines.Reports.ReactionRenderer
+  alias MarkevichMoney.Pipelines.Reports.MonthlyReport.ReactionRenderer
   alias MarkevichMoney.Sleeper
 
   def call(user_id) do

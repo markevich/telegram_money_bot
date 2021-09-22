@@ -1,7 +1,7 @@
-defmodule MarkevichMoney.Pipelines.Reports.ReactionRendererTest do
+defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ReactionRendererTest do
   use MarkevichMoney.DataCase, async: true
 
-  alias MarkevichMoney.Pipelines.Reports.ReactionRenderer
+  alias MarkevichMoney.Pipelines.Reports.MonthlyReport.ReactionRenderer
 
   describe "render_empty_report_reaction" do
     test "returns correct sticker id and message" do

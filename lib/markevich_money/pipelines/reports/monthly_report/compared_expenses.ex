@@ -1,4 +1,4 @@
-defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
+defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpenses do
   use MarkevichMoney.Constants
 
   def call(stats_a, stats_a_label, stats_b, stats_b_label) do
@@ -129,12 +129,17 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
         Decimal.add(acc, folder.sum_a)
       end)
 
-    diff =
-      if sum_a >= sum_b do
-        Decimal.sub(sum_b, sum_a)
-      else
-        Decimal.sub(sum_a, sum_b)
-      end
+    {numeric_diff, percentage_diff} = calculate_diffs(sum_a, sum_b)
+
+    payload
+    |> Map.put(:sum_a, sum_a)
+    |> Map.put(:sum_b, sum_b)
+    |> Map.put(:percentage_diff, percentage_diff)
+    |> Map.put(:numeric_diff, numeric_diff)
+  end
+
+  defp calculate_diffs(sum_a, sum_b) when sum_a >= sum_b do
+    diff = Decimal.sub(sum_a, sum_b)
 
     diff_in_percentage =
       diff
@@ -148,11 +153,25 @@ defmodule MarkevichMoney.Pipelines.Reports.ComparedExpenses do
       |> Decimal.round()
       |> Decimal.to_integer()
 
-    payload
-    |> Map.put(:sum_a, sum_a)
-    |> Map.put(:sum_b, sum_b)
-    |> Map.put(:percentage_diff, diff_in_percentage)
-    |> Map.put(:numeric_diff, integer_diff)
+    {-integer_diff, -diff_in_percentage}
+  end
+
+  defp calculate_diffs(sum_a, sum_b) when sum_a < sum_b do
+    diff = Decimal.sub(sum_b, sum_a)
+
+    diff_in_percentage =
+      diff
+      |> Decimal.div(sum_a)
+      |> Decimal.mult(100)
+      |> Decimal.round()
+      |> Decimal.to_integer()
+
+    integer_diff =
+      diff
+      |> Decimal.round()
+      |> Decimal.to_integer()
+
+    {integer_diff, diff_in_percentage}
   end
 
   defp sort_folders(%{union: union} = payload) do
