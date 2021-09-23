@@ -22,6 +22,12 @@ defmodule MarkevichMoney.Pipelines.Start.CallbacksTest do
       %{callback_data: callback_data, chat_id: chat_id, username: username}
     end
 
+    defmock MarkevichMoney.Sleeper, preserve: true do
+      def sleep do
+        {:ok, nil}
+      end
+    end
+
     mocked_test "Sends instructions to user", context do
       reply_payload = Pipelines.call(context.callback_data)
 

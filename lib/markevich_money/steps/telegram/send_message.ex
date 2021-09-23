@@ -107,6 +107,19 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
 
         payload
 
+      {:error, %Nadia.Model.Error{reason: "Forbidden: the group chat was deleted"} = reason} ->
+        log_error_message(
+          """
+          The group chat was deleted.
+          """,
+          %{
+            payload: payload,
+            reason: reason
+          }
+        )
+
+        payload
+
       {:error, other_reason} ->
         log_error_message(
           """
