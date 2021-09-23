@@ -1,13 +1,12 @@
 defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport do
   use MarkevichMoney.Constants
-  alias MarkevichMoney.Steps.Telegram.SendMessage
-  alias MarkevichMoney.Steps.Telegram.SendSticker
-  alias MarkevichMoney.Users
   alias MarkevichMoney.CallbackData
-  alias MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpenses
-  alias MarkevichMoney.Transactions
-  alias MarkevichMoney.Pipelines.Reports.MonthlyReport.ReactionRenderer
+  alias MarkevichMoney.Pipelines.Reports.MonthlyReport.{ComparedExpenses, ReactionRenderer}
+  alias MarkevichMoney.Pipelines.Stats.Callbacks, as: GenericStats
   alias MarkevichMoney.Sleeper
+  alias MarkevichMoney.Steps.Telegram.{SendMessage, SendSticker}
+  alias MarkevichMoney.Transactions
+  alias MarkevichMoney.Users
 
   def call(user_id) do
     user = Users.get_user!(user_id)
@@ -132,7 +131,7 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport do
 
     callback_data
     # TODO: Make it a non callback function. We have nothing to respond to telegram in that case.
-    |> MarkevichMoney.Pipelines.Stats.Callbacks.call()
+    |> GenericStats.call()
 
     Sleeper.sleep()
 

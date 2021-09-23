@@ -59,7 +59,7 @@ config :markevich_money, Oban,
     transactions: [local_limit: 1, rate_limit: [allowed: 1, period: {1, :second}]],
     events: 5,
     trackers: 5,
-    reports: [local_limit: 1, rate_limit: [allowed: 1, period: {1, :second}]],
+    reports: 2,
     mail_fetcher: 1,
     priorbank_scheduler: 1,
     priorbank_fetcher: 5

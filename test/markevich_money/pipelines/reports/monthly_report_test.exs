@@ -8,7 +8,7 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReportTest do
   alias MarkevichMoney.Pipelines.Reports.MonthlyReport
 
   defmock MarkevichMoney.Sleeper, preserve: true do
-    def sleep() do
+    def sleep do
       {:ok, nil}
     end
   end

@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ReactionRenderer do
   use MarkevichMoney.LoggerWithSentry
 
-  def render_empty_report_reaction() do
+  def render_empty_report_reaction do
     sticker_id = Application.get_env(:markevich_money, :tg_file_ids)[:stickers][:"👴😠"]
 
     message = """
@@ -11,7 +11,7 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ReactionRenderer do
     {:ok, message, sticker_id}
   end
 
-  def render_short_report_reaction() do
+  def render_short_report_reaction do
     sticker_id = Application.get_env(:markevich_money, :tg_file_ids)[:stickers][:"👴👍"]
 
     message = """
@@ -22,6 +22,7 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ReactionRenderer do
     {:ok, message, sticker_id}
   end
 
+  # credo:disable-for-next-line Credo.Check.Refactor.CyclomaticComplexity
   def render_full_report_reaction(percentage_diff: percentage, numeric_diff: diff) do
     human_diff = "`#{abs(diff)}(#{abs(percentage)}%)`"
 

@@ -2,9 +2,9 @@ defmodule MarkevichMoney.Gamification.Events.NewMonthStarted do
   use MarkevichMoney.Constants
   use MarkevichMoney.LoggerWithSentry
 
-  use Oban.Worker, queue: :reports, max_attempts: 1
+  use Oban.Worker, queue: :events, max_attempts: 1
 
-  alias MarkevichMoney.Gamification.Events.ReportSender
+  alias MarkevichMoney.Pipelines.Reports.MonthlyReport.Worker, as: MonthlyReportWorker
   alias MarkevichMoney.Users
 
   @impl Oban.Worker
@@ -14,7 +14,7 @@ defmodule MarkevichMoney.Gamification.Events.NewMonthStarted do
       %{
         user_id: user.id
       }
-      |> ReportSender.new()
+      |> MonthlyReportWorker.new()
       |> Oban.insert()
     end)
 
