@@ -75,6 +75,22 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessageTest do
     end
   end
 
+  describe "with 'Forbidden: the group chat was deleted' nadia response" do
+    defmock Nadia do
+      def send_message(_chat_id, _messaged, _opts) do
+        {:error, %Nadia.Model.Error{reason: "Forbidden: the group chat was deleted"}}
+      end
+    end
+
+    mocked_test "returns success payload" do
+      payload = %{output_message: "Hello", chat_id: "123"}
+
+      capture_log(fn ->
+        assert SendMessage.call(payload) == payload
+      end) =~ "The group chat was deleted."
+    end
+  end
+
   describe "with error nadia response" do
     defmock Nadia do
       def send_message(_chat_id, _message, _opts) do

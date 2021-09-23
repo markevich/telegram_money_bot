@@ -2,8 +2,9 @@ defmodule MarkevichMoney.Pipelines.Start.Callbacks do
   use MarkevichMoney.Constants
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines.Help.Messages, as: HelpPipeline
-  alias MarkevichMoney.Users
+  alias MarkevichMoney.Sleeper
   alias MarkevichMoney.Steps.Telegram.{AnswerCallback, SendMessage, SendPhoto}
+  alias MarkevichMoney.Users
 
   def call(%CallbackData{callback_data: %{"pipeline" => @start_callback}} = callback_data) do
     callback_data
@@ -34,19 +35,35 @@ defmodule MarkevichMoney.Pipelines.Start.Callbacks do
     callback_data
     |> Map.put(:output_message, message1)
     |> SendMessage.call()
+
+    Sleeper.sleep()
+
+    callback_data
     |> Map.put(:output_message, message2)
     |> SendMessage.call()
+
+    Sleeper.sleep()
+
+    callback_data
     |> Map.put(:output_message, message3)
     |> SendMessage.call()
+
+    Sleeper.sleep()
   end
 
   defp send_instructions(callback_data, personal_email) do
     send_instruction1(callback_data)
+    Sleeper.sleep()
     send_instruction2(callback_data)
+    Sleeper.sleep()
     send_instruction3(callback_data)
+    Sleeper.sleep()
     send_instruction4(callback_data)
+    Sleeper.sleep()
     send_instruction5(callback_data)
+    Sleeper.sleep()
     send_instruction6(callback_data, personal_email)
+    Sleeper.sleep()
     send_instruction7(callback_data)
   end
 
