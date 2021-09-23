@@ -17,9 +17,20 @@ defmodule MarkevichMoney.Transactions do
   def get_category!(id), do: Repo.get(TransactionCategory, id)
 
   def get_category_folder!(id) do
-    TransactionCategoryFolder
-    |> Repo.get!(id)
-    |> Repo.preload(:transaction_categories)
+    query =
+      from(
+        folder in TransactionCategoryFolder,
+        where: folder.id == ^id,
+        preload: [
+          transaction_categories:
+            ^from(
+              t_c in TransactionCategory,
+              order_by: [asc: t_c.id]
+            )
+        ]
+      )
+
+    Repo.one!(query)
   end
 
   def get_user_transaction!(transaction_id, user_id) do
@@ -227,5 +238,19 @@ defmodule MarkevichMoney.Transactions do
       Repo.one(query_for_all_users) ||
       Repo.one(similarity_for_current_user) ||
       Repo.one(similarity_for_all_users)
+  end
+
+  def exists_in_month?(user_id, month) do
+    beginning_of_month = Timex.beginning_of_month(month)
+    end_of_month = Timex.end_of_month(month)
+
+    from(
+      t in Transaction,
+      where: t.user_id == ^user_id,
+      where: t.issued_at >= ^beginning_of_month,
+      where: t.issued_at <= ^end_of_month,
+      where: t.amount < 0
+    )
+    |> Repo.exists?()
   end
 end

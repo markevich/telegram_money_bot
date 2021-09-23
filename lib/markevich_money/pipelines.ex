@@ -75,7 +75,7 @@ defmodule MarkevichMoney.Pipelines do
         """
           Received email from unknown user.
         """,
-        message_data: message_data
+        %{message_data: message_data}
       )
 
       message_data

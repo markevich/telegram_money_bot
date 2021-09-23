@@ -22,7 +22,7 @@ defmodule MarkevichMoney.Users do
   end
 
   def all_users do
-    Repo.all(User)
+    Repo.all(from u in User, order_by: u.id)
   end
 
   def upsert_user!(attrs) do

@@ -25,6 +25,10 @@ defmodule MarkevichMoney.MockNadia do
         def answer_callback_query(_callback_id, _options) do
           {:ok, nil}
         end
+
+        def send_sticker(_chat_id, _file_id, _opts) do
+          {:ok, nil}
+        end
       end
     end
   end

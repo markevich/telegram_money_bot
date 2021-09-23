@@ -67,18 +67,18 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
             [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"c_id\":#{context.category2.id},\"id\":#{context.transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
-                switch_inline_query: nil,
-                switch_inline_query_current_chat: nil,
-                text: context.category2.name,
-                url: nil
-              },
-              %Nadia.Model.InlineKeyboardButton{
-                callback_data:
                   "{\"c_id\":#{context.category1.id},\"id\":#{context.transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 switch_inline_query_current_chat: nil,
                 text: context.category1.name,
+                url: nil
+              },
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"c_id\":#{context.category2.id},\"id\":#{context.transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
+                switch_inline_query: nil,
+                switch_inline_query_current_chat: nil,
+                text: context.category2.name,
                 url: nil
               }
             ],
