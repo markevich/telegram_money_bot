@@ -1,17 +1,11 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
-@import "./open_startup.scss";
+@import "./open_startup.css";
 
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
 .phx-no-feedback .invalid-feedback {
   display: none;
-}
-
-.invalid-feedback {
-  color: #a94442;
-  display: block;
-  margin: -1rem 0 2rem;
 }
 
 .phx-click-loading {
@@ -62,7 +56,6 @@
   cursor: pointer;
 }
 
-
 /* Alerts and form errors */
 .alert {
   padding: 15px;
@@ -91,8 +84,16 @@
 
 .alert p {
   margin-bottom: 0;
+
 }
 
 .alert:empty {
   display: none;
+
+}
+
+.invalid-feedback {
+  color: #a94442;
+  display: block;
+  margin: -1rem 0 2rem;
 }
