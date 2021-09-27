@@ -9,8 +9,17 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
   alias MarkevichMoney.Users
 
   @impl Oban.Worker
-  def perform(%Job{args: %{"transaction_id" => _t_id} = payload}) do
-    updated_payload = call(payload)
+  def perform(%Job{args: %{"transaction_id" => t_id} = payload}) do
+    transaction = Transactions.get_transaction!(t_id)
+
+    updated_payload =
+      case Decimal.compare(transaction.amount, 0) do
+        :lt ->
+          call(transaction, payload)
+
+        _ ->
+          payload
+      end
 
     {:ok, updated_payload}
   end
@@ -24,9 +33,8 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
     :ok
   end
 
-  def call(%{"transaction_id" => transaction_id} = payload) do
-    with transaction <- Transactions.get_transaction!(transaction_id),
-         user <- Users.get_user!(transaction.user_id),
+  def call(transaction, payload) do
+    with user <- Users.get_user!(transaction.user_id),
          {:ok, category_id} when category_id != nil <-
            Map.fetch(transaction, :transaction_category_id),
          category_limit when category_limit > 0 <-

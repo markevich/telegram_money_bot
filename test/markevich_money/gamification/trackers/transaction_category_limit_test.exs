@@ -155,6 +155,21 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
         Nadia.send_message(context.user.telegram_chat_id, expected_message, parse_mode: "Markdown")
       )
     end
+
+    test "skips execution if transaction is income", context do
+      transaction =
+        insert(:transaction,
+          user: context.user,
+          amount: 25,
+          transaction_category: context.category
+        )
+
+      {:ok, result} =
+        LimitTracker
+        |> perform_job(%{"transaction_id" => transaction.id})
+
+      refute(Map.has_key?(result, :output_message))
+    end
   end
 
   describe "when category limit is 100 and new transaction does exceeds total 70" do
