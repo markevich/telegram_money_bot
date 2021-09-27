@@ -1,0 +1,20 @@
+.open-startup.title {
+  font-size: 2vw;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.open-startup.chart-container {
+  position: relative;
+  height: 40vh;
+}
+
+.open-startup.chart {
+  margin-bottom: 30px;
+}
+
+@media screen and (max-width: 500px) {
+  .open-startup.title {
+    font-size: 5vw;
+  }
+}

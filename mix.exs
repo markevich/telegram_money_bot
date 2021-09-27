@@ -46,16 +46,16 @@ defmodule MarkevichMoney.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5"},
+      {:phoenix, "~> 1.5.13"},
       {:phoenix_ecto, "~> 4.1"},
-      {:ecto_sql, "~> 3.4"},
-      {:ecto_psql_extras, "~> 0.6.5"},
+      {:ecto_sql, "~> 3.7"},
+      {:ecto_psql_extras, "~> 0.6"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.15"},
-      {:floki, ">= 0.27.0", only: :test},
-      {:phoenix_html, "~> 2.11"},
+      {:phoenix_live_view, "~> 0.16"},
+      {:floki, "~> 0.27", only: :test},
+      {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.3"},
+      {:phoenix_live_dashboard, "~> 0.5"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
@@ -63,7 +63,7 @@ defmodule MarkevichMoney.MixProject do
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:nadia, git: "https://github.com/zhyu/nadia.git"},
-      {:table_rex, "~> 3.1.1"},
+      {:table_rex, "~> 3.1"},
       {:timex, "~> 3.5"},
       {:ex_machina, "~> 2.3", only: :test},
       {:mecks_unit, "~> 0.1", only: :test},
@@ -72,9 +72,9 @@ defmodule MarkevichMoney.MixProject do
       {:hackney, "~> 1.8"},
       {:finch, "~> 0.6"},
       {:jason, "~> 1.1"},
-      {:oban, "~> 2.6"},
-      {:oban_web, "~> 2.6", organization: "oban"},
-      {:oban_pro, "~> 0.8", organization: "oban"}
+      {:oban, "~> 2.9.2"},
+      {:oban_web, "~> 2.7", organization: "oban"},
+      {:oban_pro, "~> 0.9", organization: "oban"}
     ]
   end
 
