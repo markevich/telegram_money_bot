@@ -20,6 +20,7 @@ defmodule MarkevichMoney.Constants do
       @delete_transaction_callback "dlt_trn"
       @delete_transaction_callback_prompt "ask"
       @delete_transaction_callback_confirm "dlt"
+      # TODO: reuse re-render transaction callback
       @delete_transaction_callback_cancel "cnl"
 
       @limits_stats_callback "limits_stats"
@@ -34,6 +35,8 @@ defmodule MarkevichMoney.Constants do
       @help_callback_support "support"
       @help_callback_bug "bug"
       @help_callback_edit_description "edit_description"
+
+      @rerender_transaction_callback "rerender"
 
       # messages
       @help_message "/help"

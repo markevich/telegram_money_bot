@@ -20,7 +20,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
     end
 
     def answer_callback_query(_callback_id, _options) do
-      {:ok, nil}
+      :ok
     end
   end
 

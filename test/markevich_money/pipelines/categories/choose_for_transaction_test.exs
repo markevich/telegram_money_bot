@@ -120,6 +120,16 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
                 text: "☰ Показать больше категорий️",
                 url: nil
               }
+            ],
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"id\":#{transaction.id},\"pipeline\":\"#{@rerender_transaction_callback}\"}",
+                switch_inline_query: nil,
+                switch_inline_query_current_chat: nil,
+                text: "❌ Отмена",
+                url: nil
+              }
             ]
           ]
         }
@@ -211,6 +221,16 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
                 text: "☰ Показать больше категорий️",
                 url: nil
               }
+            ],
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"id\":#{transaction.id},\"pipeline\":\"#{@rerender_transaction_callback}\"}",
+                switch_inline_query: nil,
+                switch_inline_query_current_chat: nil,
+                text: "❌ Отмена",
+                url: nil
+              }
             ]
           ]
         }
@@ -290,6 +310,16 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
                   "{\"f_id\":#{context.folder_with_many_categories.id},\"id\":#{transaction.id},\"pipeline\":\"#{@set_category_or_folder_callback}\"}",
                 switch_inline_query: nil,
                 text: "#{context.folder_with_many_categories.name}/",
+                url: nil
+              }
+            ],
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"id\":#{transaction.id},\"pipeline\":\"#{@rerender_transaction_callback}\"}",
+                switch_inline_query: nil,
+                switch_inline_query_current_chat: nil,
+                text: "❌ Отмена",
                 url: nil
               }
             ]

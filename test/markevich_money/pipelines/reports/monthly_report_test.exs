@@ -23,7 +23,7 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReportTest do
     end
 
     def answer_callback_query(_callack_id, _opts) do
-      {:ok, nil}
+      :ok
     end
   end
 
