@@ -37,6 +37,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
       end)
       |> Enum.chunk_every(2)
       |> apply_categories_keyboard_mode(payload[:callback_data]["mode"], transaction_id)
+      |> add_cancel_button(transaction_id)
 
     reply_markup = %Nadia.Model.InlineKeyboardMarkup{inline_keyboard: keyboard}
 
@@ -74,5 +75,21 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransaction do
       @choose_category_folder_full_mode ->
         keyboard
     end
+  end
+
+  defp add_cancel_button(keyboard, transaction_id) do
+    keyboard
+    |> Enum.concat([
+      [
+        %Nadia.Model.InlineKeyboardButton{
+          text: "❌ Отмена",
+          callback_data:
+            Jason.encode!(%{
+              pipeline: @rerender_transaction_callback,
+              id: transaction_id
+            })
+        }
+      ]
+    ])
   end
 end
