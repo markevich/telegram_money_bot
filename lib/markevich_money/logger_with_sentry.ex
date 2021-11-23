@@ -11,16 +11,7 @@ defmodule MarkevichMoney.LoggerWithSentry do
       end
 
       def log_error_message(message, metadata \\ %{}) do
-        message_with_meta =
-          metadata
-          |> Enum.reduce(
-            message,
-            fn {key, value}, acc ->
-              "#{acc}\n#{key}: #{inspect(value)}"
-            end
-          )
-
-        Logger.error(message_with_meta, extra: metadata)
+        Logger.error(message, extra: metadata)
       end
     end
   end

@@ -8,6 +8,8 @@ defmodule MarkevichMoney.Application do
   alias MarkevichMoney.Priorbank.Api
 
   def start(_type, _args) do
+    Logger.add_backend(Sentry.LoggerBackend)
+
     children = [
       # Start the Ecto repository
       MarkevichMoney.Repo,
