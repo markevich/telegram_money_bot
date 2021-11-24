@@ -25,14 +25,7 @@ config :logger, :console,
 
 # sentry
 config :logger,
-  backends: [:console, Sentry.LoggerBackend]
-
-config :logger, Sentry.LoggerBackend,
-  # Send messages like `Logger.error("error")` to Sentry
-  capture_log_messages: true,
-  # Do not exclude exceptions from Plug/Cowboy
-  excluded_domains: [],
-  metadata: [:extra]
+  backends: [:console]
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

@@ -24,9 +24,7 @@ defmodule MarkevichMoney.Pipelines.AddTransaction do
       |> FireTransactionCreatedEvent.call()
     else
       # Temporary
-      log_error_message("User tried to add custom transaction using unknown format", %{
-        payload: payload
-      })
+      log_error_message("User tried to add custom transaction using unknown format")
 
       payload
       |> Map.from_struct()

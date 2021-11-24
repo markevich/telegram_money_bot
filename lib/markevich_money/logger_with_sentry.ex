@@ -8,10 +8,14 @@ defmodule MarkevichMoney.LoggerWithSentry do
           crash_reason: {exception, stacktrace},
           extra: extra
         )
+
+        Sentry.capture_exception(exception, stacktrace: stacktrace, extra: %{extra: extra})
       end
 
-      def log_error_message(message, metadata \\ %{}) do
-        Logger.error(message, extra: metadata)
+      def log_error_message(message, extra \\ %{}) when is_map(extra) do
+        Logger.error(message, extra: extra)
+
+        Sentry.capture_message(message, extra: %{extra: extra})
       end
     end
   end

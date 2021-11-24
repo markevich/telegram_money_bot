@@ -38,6 +38,7 @@ if config_env() == :prod do
       """
 
   config :markevich_money, MarkevichMoneyWeb.Endpoint,
+    force_ssl: [hsts: true],
     https: [
       port: 443,
       compress: true,
