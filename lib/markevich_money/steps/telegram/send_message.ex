@@ -18,8 +18,8 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
       ]
       |> Keyword.merge(additional_options)
 
-    Nadia.send_message(current_user.telegram_chat_id, output_message, options)
-    |> process_result(payload)
+    payload
+    |> send_message(current_user.telegram_chat_id, output_message, options)
   end
 
   def call(
@@ -33,8 +33,8 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
       ]
       |> Keyword.merge(additional_options)
 
-    Nadia.send_message(current_user.telegram_chat_id, output_message, options)
-    |> process_result(payload)
+    payload
+    |> send_message(current_user.telegram_chat_id, output_message, options)
   end
 
   def call(
@@ -48,8 +48,8 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
       ]
       |> Keyword.merge(additional_options)
 
-    Nadia.send_message(chat_id, output_message, options)
-    |> process_result(payload)
+    payload
+    |> send_message(chat_id, output_message, options)
   end
 
   def call(%{output_message: output_message, chat_id: chat_id} = payload, additional_options) do
@@ -59,8 +59,8 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
       ]
       |> Keyword.merge(additional_options)
 
-    Nadia.send_message(chat_id, output_message, options)
-    |> process_result(payload)
+    payload
+    |> send_message(chat_id, output_message, options)
   end
 
   def process_result(result, payload) do
@@ -118,6 +118,32 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessage do
 
       {:error, other_reason} ->
         raise RuntimeError, message: other_reason
+    end
+  end
+
+  @telegram_limit 4096
+  defp send_message(payload, chat_id, output_message, options) do
+    # Telegram has a limit when sending message of 4096 chars
+    if String.length(output_message) > @telegram_limit do
+      {left_part, right_part} = {
+        String.slice(output_message, 0, @telegram_limit),
+        String.slice(output_message, @telegram_limit..String.length(output_message))
+      }
+
+      [part_to_move, left_part] =
+        left_part
+        |> String.reverse()
+        |> String.split("\n", parts: 2)
+
+      left_part = String.reverse(left_part) <> "\n"
+      right_part = String.reverse(part_to_move) <> right_part
+
+      default_markdown_option = [parse_mode: "Markdown"]
+      Nadia.send_message(chat_id, left_part, default_markdown_option) |> process_result(payload)
+      Nadia.send_message(chat_id, right_part, options) |> process_result(payload)
+    else
+      Nadia.send_message(chat_id, output_message, options)
+      |> process_result(payload)
     end
   end
 end
