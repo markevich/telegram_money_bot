@@ -18,6 +18,51 @@ defmodule MarkevichMoney.Steps.Telegram.SendMessageTest do
     end
   end
 
+  describe "with message longer that 4096 characters" do
+    defmock Nadia do
+      def send_message(_chat_id, _message, _opts) do
+        {:ok, nil}
+      end
+    end
+
+    setup do
+      string = "first part of the long message\n"
+      first_part = String.duplicate(string, 132)
+      second_part = string
+      output_message = first_part <> second_part
+      telegram_opts = [parse_mode: "Markdown", foo: :bar]
+
+      %{
+        first_part: first_part,
+        second_part: second_part,
+        output_message: output_message,
+        telegram_opts: telegram_opts
+      }
+    end
+
+    mocked_test "sends two messages", context do
+      payload = %{output_message: context.output_message, chat_id: "123"}
+
+      SendMessage.call(payload, context.telegram_opts)
+
+      assert_called(
+        Nadia.send_message(
+          "123",
+          context.first_part,
+          parse_mode: "Markdown"
+        )
+      )
+
+      assert_called(
+        Nadia.send_message(
+          "123",
+          context.second_part,
+          context.telegram_opts
+        )
+      )
+    end
+  end
+
   describe "with 'Forbidden: user is deactivated' nadia response" do
     defmock Nadia do
       def send_message(_chat_id, _messaged, _opts) do
