@@ -1,9 +1,10 @@
 defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
+  use MarkevichMoney.Constants
   use MecksUnit.Case
   use Oban.Testing, repo: MarkevichMoney.Repo
-  use MarkevichMoney.Constants
+
   import ExUnit.CaptureLog
 
   alias MarkevichMoney.Transactions
@@ -28,7 +29,7 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
           user_id: user.id,
           external_amount: -60,
           external_currency: "USD",
-          temporary: false
+          status: @transaction_status_normal
         },
         category: category
       }
@@ -53,7 +54,7 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
       assert(transaction.external_amount == Decimal.new(context.attributes.external_amount))
       assert(transaction.external_currency == context.attributes.external_currency)
       assert(transaction.transaction_category_id == context.category.id)
-      assert(transaction.temporary == false)
+      assert(transaction.status == @transaction_status_normal)
 
       assert(result[:output_message] =~ "Pizza worker")
 
@@ -75,9 +76,9 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
       )
     end
 
-    mocked_test "creates new temporary transaction, predict category, fire required events",
+    mocked_test "creates new fund freeze transaction, predict category, fire required events",
                 context do
-      attributes = Map.put(context.attributes, :temporary, true)
+      attributes = Map.put(context.attributes, :status, @transaction_status_bank_fund_freeze)
 
       {:ok, result} =
         CreateTransactionWorker
@@ -96,7 +97,7 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
       assert(transaction.external_amount == Decimal.new(context.attributes.external_amount))
       assert(transaction.external_currency == context.attributes.external_currency)
       assert(transaction.transaction_category_id == context.category.id)
-      assert(transaction.temporary == true)
+      assert(transaction.status == @transaction_status_bank_fund_freeze)
 
       assert(result[:output_message] =~ "Pizza worker")
 
@@ -151,7 +152,7 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
           issued_at: issued_at,
           to: "Pizza worker existing",
           user_id: user.id,
-          temporary: false
+          status: @transaction_status_normal
         },
         existing_transaction: existing_transaction,
         user: user
@@ -176,7 +177,7 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
     end
   end
 
-  describe ".perform with attributes for existing temporary transaction" do
+  describe ".perform with attributes for existing fund freeze transaction" do
     setup do
       user = insert(:user)
 
@@ -195,7 +196,7 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
         to: "Pizza worker existing",
         user: user,
         lookup_hash: lookup_hash,
-        temporary: true
+        status: @transaction_status_bank_fund_freeze
       }
 
       existing_transaction = insert(:transaction, attributes_for_existing_transaction)
@@ -209,7 +210,7 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
           issued_at: issued_at,
           to: "Pizza worker existing",
           user_id: user.id,
-          temporary: true
+          status: @transaction_status_bank_fund_freeze
         },
         existing_transaction: existing_transaction,
         user: user

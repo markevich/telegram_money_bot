@@ -1,4 +1,6 @@
 defmodule MarkevichMoney.Priorbank.Integration do
+  use MarkevichMoney.Constants
+
   alias MarkevichMoney.Priorbank.Api
   alias MarkevichMoney.Priorbank.PriorbankConnection
   alias MarkevichMoney.Repo
@@ -60,7 +62,7 @@ defmodule MarkevichMoney.Priorbank.Integration do
         balance: "0",
         issued_at: issued_at,
         to: transaction["transDetails"] |> cleanup_to(),
-        temporary: true
+        status: @transaction_status_bank_fund_freeze
       }
 
       if transaction["transCurrIso"] != "BYN" do
@@ -85,7 +87,7 @@ defmodule MarkevichMoney.Priorbank.Integration do
         balance: "0",
         issued_at: issued_at,
         to: transaction["transDetails"] |> cleanup_to(),
-        temporary: false
+        status: @transaction_status_normal
       }
 
       if transaction["transCurrIso"] != "BYN" do

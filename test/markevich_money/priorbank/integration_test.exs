@@ -1,5 +1,6 @@
 defmodule MarkevichMoney.Priorbank.IntegrationTest do
   use MarkevichMoney.DataCase, async: true
+  use MarkevichMoney.Constants
   use MecksUnit.Case
 
   alias MarkevichMoney.Priorbank
@@ -294,7 +295,7 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             currency_code: "BYN",
             issued_at: ~N[2021-04-16 13:42:36],
             to: "BLR MINSK P2P SDBO NO FEE",
-            temporary: true
+            status: @transaction_status_bank_fund_freeze
           },
           %{
             account: "BYN cards",
@@ -305,7 +306,7 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             external_currency: "USD",
             issued_at: ~N[2021-04-16 13:38:03],
             to: "BLR MINSK P2P SDBO NO FEE",
-            temporary: true
+            status: @transaction_status_bank_fund_freeze
           },
           %{
             account: "BYN cards",
@@ -314,7 +315,7 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             currency_code: "BYN",
             issued_at: ~N[2021-04-15 17:19:53],
             to: "BLR MINSK IR WWW.NEW.BYCARD.BY B",
-            temporary: true
+            status: @transaction_status_bank_fund_freeze
           },
           %{
             account: "BYN cards",
@@ -323,7 +324,7 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             currency_code: "BYN",
             issued_at: ~N[2021-04-14 12:07:57],
             to: "NLD Amsterdam Yandex.Taxi",
-            temporary: false
+            status: @transaction_status_normal
           },
           %{
             account: "BYN cards",
@@ -334,7 +335,7 @@ defmodule MarkevichMoney.Priorbank.IntegrationTest do
             external_currency: "USD",
             issued_at: ~N[2021-04-14 17:02:00],
             to: "LUX 19, RUE DE BI ALIEXPRESS",
-            temporary: false
+            status: @transaction_status_normal
           }
         ]
       )

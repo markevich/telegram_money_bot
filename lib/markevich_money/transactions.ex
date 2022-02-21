@@ -1,4 +1,6 @@
 defmodule MarkevichMoney.Transactions do
+  use MarkevichMoney.Constants
+
   alias MarkevichMoney.Repo
 
   alias MarkevichMoney.Transactions.Transaction
@@ -42,10 +44,10 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.preload([:transaction_category, :user])
   end
 
-  defp get_transaction_by_lookup_hash_and_temporality(lookup_hash, temporary) do
+  defp get_transaction_by_lookup_hash_and_status(lookup_hash, status) do
     from(transaction in Transaction,
       where: transaction.lookup_hash == ^lookup_hash,
-      where: transaction.temporary == ^temporary
+      where: transaction.status == ^status
     )
     |> Repo.one()
   end
@@ -68,22 +70,31 @@ defmodule MarkevichMoney.Transactions do
     from(t in Transaction, where: t.id == ^id) |> Repo.delete_all()
   end
 
-  @spec upsert_transaction(integer, String.t(), Decimal.t(), String.t()) ::
-          {:exists, %Transaction{}} | {:new, %Transaction{}}
-  def upsert_transaction(user_id, account, amount, issued_at, temporary \\ false) do
+  def upsert_transaction(user_id, account, amount, issued_at, status) do
     lookup_hash = calculate_lookup_hash(user_id, account, amount, issued_at)
 
-    existing_transaction = get_transaction_by_lookup_hash_and_temporality(lookup_hash, temporary)
+    existing_transaction = get_transaction_by_lookup_hash_and_status(lookup_hash, status)
 
     # TODO: Race condition is possible here. Use something more efficient
     if existing_transaction do
       {:exists, existing_transaction}
     else
+      attrs = [
+        user_id: user_id,
+        account: account,
+        amount: amount,
+        issued_at: issued_at,
+        status: status,
+        lookup_hash: lookup_hash
+      ]
+
       {:ok, transaction} =
-        Repo.insert(
-          %Transaction{user_id: user_id, lookup_hash: lookup_hash},
+        attrs
+        |> Enum.into(%{})
+        |> Transaction.create_changeset()
+        |> Repo.insert(
           returning: true,
-          on_conflict: [set: [lookup_hash: lookup_hash]],
+          on_conflict: [set: attrs],
           conflict_target: :lookup_hash
         )
 
@@ -112,7 +123,7 @@ defmodule MarkevichMoney.Transactions do
   def update_transaction(%Transaction{} = transaction, attrs) do
     updated =
       transaction
-      |> Transaction.update_changeset(attrs)
+      |> Transaction.update_after_upsert_changeset(attrs)
       |> Repo.update!()
       |> Repo.preload([transaction_category: [:transaction_category_folder]], force: true)
       |> Repo.preload(:user)
@@ -130,7 +141,7 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.amount < ^0,
         where: transaction.issued_at >= ^from,
         where: transaction.issued_at <= ^to,
-        where: transaction.temporary == false,
+        where: transaction.status == @transaction_status_normal,
         group_by: [category.name, category.id, folder.name, folder.has_single_category],
         select: %{
           sum: sum(transaction.amount),
@@ -152,7 +163,7 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.amount < ^0,
         where: transaction.issued_at >= ^from,
         where: transaction.issued_at <= ^to,
-        where: transaction.temporary == false,
+        where: transaction.status == @transaction_status_normal,
         select:
           {transaction.to, transaction.custom_description, transaction.amount,
            transaction.issued_at},
@@ -189,7 +200,7 @@ defmodule MarkevichMoney.Transactions do
         where: transaction.issued_at >= ^beginning_of_month,
         where: transaction.issued_at <= ^end_of_month,
         where: transaction.id not in ^exclude_transaction_ids,
-        where: transaction.temporary == false,
+        where: transaction.status == @transaction_status_normal,
         select: sum(transaction.amount)
       )
 
@@ -217,6 +228,7 @@ defmodule MarkevichMoney.Transactions do
         order_by: [desc: t.id],
         limit: 1
 
+    # levenstein or trigrams
     similarity_for_current_user =
       from t in Transaction,
         select: t.transaction_category_id,

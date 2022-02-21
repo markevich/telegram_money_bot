@@ -6,7 +6,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
   describe "happy path" do
     setup do
-      {:ok, %{transaction: insert(:transaction)}}
+      {:ok, %{transaction: insert(:transaction, status: @transaction_status_normal)}}
     end
 
     test "set required payload keys", %{transaction: transaction} do
@@ -19,7 +19,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
   describe "render buttons markup" do
     setup do
-      {:ok, %{transaction: insert(:transaction)}}
+      {:ok, %{transaction: insert(:transaction, status: @transaction_status_normal)}}
     end
 
     test "returns buttons struct", %{transaction: transaction} do
@@ -50,14 +50,14 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
   describe "transaction (outcome)" do
     setup do
-      {:ok, %{transaction: insert(:transaction)}}
+      {:ok, %{transaction: insert(:transaction, status: @transaction_status_normal)}}
     end
 
     test "renders transaction", %{transaction: transaction} do
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
       assert reply_payload[:output_message] == """
-             Транзакция №#{transaction.id}(Списание)
+             ➖ Транзакция №#{transaction.id}(Списание)
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code}
@@ -73,14 +73,14 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
   describe "transaction (income)" do
     setup do
-      {:ok, %{transaction: insert(:transaction, amount: 10)}}
+      {:ok, %{transaction: insert(:transaction, amount: 10, status: @transaction_status_normal)}}
     end
 
     test "renders transaction", %{transaction: transaction} do
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
       assert reply_payload[:output_message] == """
-             Транзакция №#{transaction.id}(Поступление)
+             ➕ Транзакция №#{transaction.id}(Поступление)
              ```
 
              Сумма    #{transaction.amount} #{transaction.currency_code}
@@ -95,14 +95,14 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
   describe "transaction (zero)" do
     setup do
-      {:ok, %{transaction: insert(:transaction, amount: 0)}}
+      {:ok, %{transaction: insert(:transaction, amount: 0, status: @transaction_status_normal)}}
     end
 
     test "renders transaction", %{transaction: transaction} do
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
       assert reply_payload[:output_message] == """
-             Транзакция №#{transaction.id}(Сомнительная)
+             🛸 Транзакция №#{transaction.id}(Сомнительная)
              ```
 
              Сумма    #{transaction.amount} #{transaction.currency_code}
@@ -118,7 +118,9 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
   describe "transaction with category" do
     setup do
       category = insert(:transaction_category)
-      transaction = insert(:transaction, transaction_category: category)
+
+      transaction =
+        insert(:transaction, transaction_category: category, status: @transaction_status_normal)
 
       {:ok, %{transaction: transaction, category: category}}
     end
@@ -127,7 +129,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
       assert reply_payload[:output_message] == """
-             Транзакция №#{transaction.id}(Списание)
+             ➖ Транзакция №#{transaction.id}(Списание)
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code}
@@ -143,14 +145,22 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
   describe "transaction with external amount" do
     setup do
-      {:ok, %{transaction: insert(:transaction, external_amount: 10, external_currency: "USD")}}
+      {:ok,
+       %{
+         transaction:
+           insert(:transaction,
+             external_amount: 10,
+             external_currency: "USD",
+             status: @transaction_status_normal
+           )
+       }}
     end
 
     test "renders transaction", %{transaction: transaction} do
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
       assert reply_payload[:output_message] == """
-             Транзакция №#{transaction.id}(Списание)
+             ➖ Транзакция №#{transaction.id}(Списание)
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code} (#{transaction.external_amount} #{transaction.external_currency})
@@ -172,7 +182,8 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
            insert(:transaction,
              external_amount: 10,
              external_currency: "USD",
-             account: @manual_account
+             account: @manual_account,
+             status: @transaction_status_normal
            )
        }}
     end
@@ -181,7 +192,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
       assert reply_payload[:output_message] == """
-             Транзакция №#{transaction.id}(Списание)
+             ➖ Транзакция №#{transaction.id}(Списание)
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code} (#{transaction.external_amount} #{transaction.external_currency})
@@ -196,14 +207,18 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
   describe "transaction with custom description" do
     setup do
-      {:ok, %{transaction: insert(:transaction, custom_description: "Big Mac")}}
+      {:ok,
+       %{
+         transaction:
+           insert(:transaction, custom_description: "Big Mac", status: @transaction_status_normal)
+       }}
     end
 
     test "renders transaction", %{transaction: transaction} do
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
       assert reply_payload[:output_message] == """
-             Транзакция №#{transaction.id}(Списание)
+             ➖ Транзакция №#{transaction.id}(Списание)
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code}
@@ -226,7 +241,8 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
       category =
         insert(:transaction_category, name: "Fast Food", transaction_category_folder: folder)
 
-      transaction = insert(:transaction, transaction_category: category)
+      transaction =
+        insert(:transaction, transaction_category: category, status: @transaction_status_normal)
 
       {
         :ok,
@@ -242,7 +258,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
       assert reply_payload[:output_message] == """
-             Транзакция №#{transaction.id}(Списание)
+             ➖ Транзакция №#{transaction.id}(Списание)
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code}
@@ -256,30 +272,28 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
     end
   end
 
-  describe "Temporary transaction" do
+  describe "Requires confirmation transaction" do
     setup do
-      category = insert(:transaction_category, name: "Fast Food temporary")
-
-      transaction = insert(:transaction, transaction_category: category, temporary: true)
+      transaction = insert(:transaction, status: @transaction_status_requires_confirmation)
 
       {
         :ok,
-        %{transaction: transaction, category: category}
+        %{transaction: transaction}
       }
     end
 
     test "renders transaction", context do
       transaction = context.transaction
-      category = context.category
 
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
       assert reply_payload[:output_message] == """
-             Блокировка средств №#{transaction.id}(Списание)
+             ⚠️ Транзакция №#{transaction.id}(Списание)
+             Ожидает подтверждения
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code}
-             Категория  #{category.name}
+             Категория
              Кому       #{transaction.to}
              Остаток    #{transaction.balance}
              Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
@@ -287,5 +301,91 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              ```
              """
     end
+
+    # test "renders valid buttons", context do
+    #   transaction = context.transaction
+
+    #   reply_payload = RenderTransaction.call(%{transaction: transaction})
+
+    #   assert "implement me" = "1"
+    # end
+  end
+
+  describe "Bank freeze confirmation transaction" do
+    setup do
+      transaction = insert(:transaction, status: @transaction_status_bank_fund_freeze)
+
+      {
+        :ok,
+        %{transaction: transaction}
+      }
+    end
+
+    test "renders transaction", context do
+      transaction = context.transaction
+
+      reply_payload = RenderTransaction.call(%{transaction: transaction})
+
+      assert reply_payload[:output_message] == """
+             ⏳ Транзакция №#{transaction.id}(Блокировка средств)
+             Не учитывается
+             ```
+
+             Сумма      #{transaction.amount} #{transaction.currency_code}
+             Категория
+             Кому       #{transaction.to}
+             Остаток    #{transaction.balance}
+             Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
+
+             ```
+             """
+    end
+
+    # test "renders valid buttons", context do
+    #   transaction = context.transaction
+
+    #   reply_payload = RenderTransaction.call(%{transaction: transaction})
+
+    #   assert "implement me" = "1"
+    # end
+  end
+
+  describe "ignored transaction" do
+    setup do
+      transaction = insert(:transaction, status: @transaction_status_ignored)
+
+      {
+        :ok,
+        %{transaction: transaction}
+      }
+    end
+
+    test "renders transaction", context do
+      transaction = context.transaction
+
+      reply_payload = RenderTransaction.call(%{transaction: transaction})
+
+      assert reply_payload[:output_message] == """
+             🗑️ Транзакция №#{transaction.id}(Списание)
+             Не учитывается
+             ```
+
+             Сумма      #{transaction.amount} #{transaction.currency_code}
+             Категория
+             Кому       #{transaction.to}
+             Остаток    #{transaction.balance}
+             Дата       #{Timex.format!(transaction.issued_at, "{0D}.{0M}.{YYYY} в {h24}:{0m}")}
+
+             ```
+             """
+    end
+
+    # test "renders valid buttons", context do
+    #   transaction = context.transaction
+
+    #   reply_payload = RenderTransaction.call(%{transaction: transaction})
+
+    #   assert "implement me" = "1"
+    # end
   end
 end

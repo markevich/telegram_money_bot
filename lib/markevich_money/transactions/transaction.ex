@@ -21,6 +21,14 @@ defmodule MarkevichMoney.Transactions.Transaction do
     field :custom_description, :string
     field :temporary, :boolean
 
+    field :status, Ecto.Enum,
+      values: [
+        @transaction_status_normal,
+        @transaction_status_requires_confirmation,
+        @transaction_status_bank_fund_freeze,
+        @transaction_status_ignored
+      ]
+
     belongs_to(:transaction_category, TransactionCategory)
     belongs_to(:user, User)
 
@@ -43,12 +51,14 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :transaction_category_id,
       :lookup_hash,
       :user_id,
-      :temporary
+      :status
     ])
     |> upcase_currency_code
+    |> validate_required([:user_id, :account, :amount, :issued_at, :status])
+    |> validate_inclusion(:status, Ecto.Enum.values(__MODULE__, :status))
   end
 
-  def update_changeset(transaction, attrs) do
+  def update_after_upsert_changeset(transaction, attrs) do
     transaction
     |> cast(attrs, [
       :account,
@@ -61,10 +71,11 @@ defmodule MarkevichMoney.Transactions.Transaction do
       :to,
       :transaction_category_id,
       :custom_description,
-      :temporary
+      :status
     ])
-    |> validate_required([:account, :issued_at, :amount, :currency_code, :balance, :to])
+    |> validate_required([:account, :issued_at, :amount, :currency_code, :balance, :to, :status])
     |> upcase_currency_code
+    |> validate_inclusion(:status, Ecto.Enum.values(__MODULE__, :status))
   end
 
   defp upcase_currency_code(%Ecto.Changeset{valid?: true, changes: %{}} = changeset) do

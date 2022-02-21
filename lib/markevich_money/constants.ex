@@ -55,6 +55,11 @@ defmodule MarkevichMoney.Constants do
       @transaction_type_unknown "unknown"
 
       @manual_account "Добавленные вручную"
+
+      @transaction_status_normal :normal
+      @transaction_status_requires_confirmation :requires_confirmation
+      @transaction_status_bank_fund_freeze :bank_fund_freeze
+      @transaction_status_ignored :ignored
     end
   end
 end

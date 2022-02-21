@@ -26,11 +26,19 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
       |> TableRex.Table.put_column_meta(0, padding: 0)
       |> TableRex.Table.render!(horizontal_style: :off, vertical_style: :off)
 
-    flow_type = flow_type(transaction_type)
-    transaction_type = transaction_type(transaction.temporary)
+    transaction_emoji = transaction_emoji(transaction_type, transaction.status)
+    transaction_type = transaction_type(transaction_type, transaction.status)
+    transaction_status = transaction_human_status(transaction.status)
+
+    transaction_header =
+      """
+      #{transaction_emoji} Транзакция №#{transaction.id}(#{transaction_type})
+      #{transaction_status}
+      """
+      |> String.trim()
 
     """
-    #{transaction_type} №#{transaction.id}(#{flow_type})
+    #{transaction_header}
     ```
 
     #{table}
@@ -38,19 +46,37 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
     """
   end
 
-  defp transaction_type(temporary) do
-    if temporary do
-      "Блокировка средств"
-    else
-      "Транзакция"
+  defp transaction_emoji(transaction_type, transaction_status) do
+    normal_type_emoji =
+      case transaction_type do
+        @transaction_type_income -> "➕"
+        @transaction_type_expense -> "➖"
+        @transaction_type_unknown -> "🛸"
+      end
+
+    case transaction_status do
+      @transaction_status_normal -> normal_type_emoji
+      @transaction_status_requires_confirmation -> "⚠️"
+      @transaction_status_bank_fund_freeze -> "⏳"
+      @transaction_status_ignored -> "🗑️"
     end
   end
 
-  defp flow_type(transaction_type) do
-    case transaction_type do
-      @transaction_type_income -> "Поступление"
-      @transaction_type_expense -> "Списание"
-      @transaction_type_unknown -> "Сомнительная"
+  defp transaction_type(transaction_type, transaction_status) do
+    case {transaction_type, transaction_status} do
+      {_, @transaction_status_bank_fund_freeze} -> "Блокировка средств"
+      {@transaction_type_income, _} -> "Поступление"
+      {@transaction_type_expense, _} -> "Списание"
+      {@transaction_type_unknown, _} -> "Сомнительная"
+    end
+  end
+
+  defp transaction_human_status(transaction_status) do
+    case transaction_status do
+      @transaction_status_normal -> ""
+      @transaction_status_requires_confirmation -> "Ожидает подтверждения"
+      @transaction_status_bank_fund_freeze -> "Не учитывается"
+      @transaction_status_ignored -> "Не учитывается"
     end
   end
 

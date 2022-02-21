@@ -1,4 +1,6 @@
 defmodule MarkevichMoney.Steps.Transaction.FindOrCreateTransaction do
+  use MarkevichMoney.Constants
+
   alias MarkevichMoney.Transactions
 
   def call(payload) do
@@ -12,7 +14,13 @@ defmodule MarkevichMoney.Steps.Transaction.FindOrCreateTransaction do
          parsed_attributes: %{account: account, amount: amount, issued_at: issued_at},
          current_user: current_user
        }) do
-    case Transactions.upsert_transaction(current_user.id, account, amount, issued_at) do
+    case Transactions.upsert_transaction(
+           current_user.id,
+           account,
+           amount,
+           issued_at,
+           @transaction_status_normal
+         ) do
       # TODO: That code means that we probably have an incorrect processing of transactions from alfabank.
       #   New and existing transactions will behave like the `new` one,
       #   i.e sending messages to the users and firing `created` events.

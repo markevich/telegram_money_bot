@@ -29,6 +29,7 @@ defmodule MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessage do
       currency_code: "BYN",
       user_id: current_user.id,
       balance: 0,
+      status: @transaction_status_normal,
       issued_at: DateTime.utc_now(),
       lookup_hash: Ecto.UUID.generate()
     }
