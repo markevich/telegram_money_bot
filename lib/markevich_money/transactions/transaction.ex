@@ -78,6 +78,15 @@ defmodule MarkevichMoney.Transactions.Transaction do
     |> validate_inclusion(:status, Ecto.Enum.values(__MODULE__, :status))
   end
 
+  def update_status_changeset(transaction, new_status) do
+    transaction
+    |> cast(%{status: new_status}, [
+      :status
+    ])
+    |> validate_required([:status])
+    |> validate_inclusion(:status, Ecto.Enum.values(__MODULE__, :status))
+  end
+
   defp upcase_currency_code(%Ecto.Changeset{valid?: true, changes: %{}} = changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{currency_code: currency_code}} ->

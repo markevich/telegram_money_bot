@@ -5,7 +5,6 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.{CallbackData, MessageData}
   alias MarkevichMoney.Pipelines.AddTransaction, as: AddTransactionPipeline
   alias MarkevichMoney.Pipelines.Categories.Callbacks, as: CategoriesCallbacksPipeline
-  alias MarkevichMoney.Pipelines.DeleteTransaction, as: DeleteTransactionPipeline
   alias MarkevichMoney.Pipelines.EditDescription, as: EditDescriptionPipeline
   alias MarkevichMoney.Pipelines.Help.Callbacks, as: HelpCallbacksPipeline
   alias MarkevichMoney.Pipelines.Help.Messages, as: HelpMessagesPipeline
@@ -18,6 +17,7 @@ defmodule MarkevichMoney.Pipelines do
   alias MarkevichMoney.Pipelines.Start.Messages, as: StartMessagesPipeline
   alias MarkevichMoney.Pipelines.Stats.Callbacks, as: StatsCallbacksPipeline
   alias MarkevichMoney.Pipelines.Stats.Messages, as: StatsMessagesPipeline
+  alias MarkevichMoney.Pipelines.UpdateTransactionStatus, as: UpdateTransactionStatusPipeline
   alias MarkevichMoney.Steps.Telegram.SendMessage
   alias MarkevichMoney.Users
 
@@ -44,11 +44,11 @@ defmodule MarkevichMoney.Pipelines do
   end
 
   def call(
-        %CallbackData{callback_data: %{"pipeline" => @delete_transaction_callback}} =
+        %CallbackData{callback_data: %{"pipeline" => @update_transaction_status_pipeline}} =
           callback_data
       ) do
     callback_data
-    |> DeleteTransactionPipeline.call()
+    |> UpdateTransactionStatusPipeline.call()
   end
 
   def call(%CallbackData{callback_data: %{"pipeline" => @limits_stats_callback}} = callback_data) do

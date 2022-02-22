@@ -146,7 +146,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
         )
       )
 
-      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Успешно"))
     end
   end
 
@@ -247,7 +247,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
         )
       )
 
-      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Успешно"))
     end
   end
 
@@ -338,7 +338,7 @@ defmodule MarkevichMoney.Pipelines.Categories.ChooseForTransactionTest do
         )
       )
 
-      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Успешно"))
     end
   end
 end

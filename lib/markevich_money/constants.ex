@@ -4,8 +4,6 @@ defmodule MarkevichMoney.Constants do
   defmacro __using__(_) do
     quote do
       # callbacks
-      # TODO: Rename those constant values to refer the `folder` instead of the `category`
-      #   We need to do that in 2 steps. Support old & new names for some time and then drop the old one.
       @choose_category_folder_callback "choose_category"
       @choose_category_folder_short_mode "ccsm"
       @choose_category_folder_full_mode "ccfm"
@@ -17,11 +15,9 @@ defmodule MarkevichMoney.Constants do
       @stats_callback_previous_month "p_month"
       @stats_callback_lifetime "all"
 
-      @delete_transaction_callback "dlt_trn"
-      @delete_transaction_callback_prompt "ask"
-      @delete_transaction_callback_confirm "dlt"
-      # TODO: reuse re-render transaction callback
-      @delete_transaction_callback_cancel "cnl"
+      @update_transaction_status_pipeline "upd_status"
+      @transaction_set_ignored_status_callback "s_ignored"
+      @transaction_set_normal_status_callback "s_normal"
 
       @limits_stats_callback "limits_stats"
 

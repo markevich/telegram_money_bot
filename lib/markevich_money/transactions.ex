@@ -66,8 +66,14 @@ defmodule MarkevichMoney.Transactions do
     |> Repo.one()
   end
 
-  def delete_transaction(id) do
-    from(t in Transaction, where: t.id == ^id) |> Repo.delete_all()
+  def update_status(id, new_status) do
+    transaction =
+      from(t in Transaction, where: t.id == ^id)
+      |> Repo.one()
+
+    transaction
+    |> Transaction.update_status_changeset(new_status)
+    |> Repo.update!()
   end
 
   def upsert_transaction(user_id, account, amount, issued_at, status) do

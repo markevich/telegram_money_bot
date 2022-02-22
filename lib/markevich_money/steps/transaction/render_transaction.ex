@@ -74,9 +74,9 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
   defp transaction_human_status(transaction_status) do
     case transaction_status do
       @transaction_status_normal -> ""
-      @transaction_status_requires_confirmation -> "Ожидает подтверждения"
-      @transaction_status_bank_fund_freeze -> "Не учитывается"
-      @transaction_status_ignored -> "Не учитывается"
+      @transaction_status_requires_confirmation -> "_Ожидает подтверждения_"
+      @transaction_status_bank_fund_freeze -> "_Не учитывается_"
+      @transaction_status_ignored -> "_Не учитывается_"
     end
   end
 
@@ -143,26 +143,95 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
     "#{transaction.amount} #{transaction.currency_code} #{amount_before_conversion}"
   end
 
-  defp render_buttons(%Transaction{} = transaction) do
+  defp render_buttons(%Transaction{status: @transaction_status_normal} = transaction) do
     %Nadia.Model.InlineKeyboardMarkup{
       inline_keyboard: [
         [
           %Nadia.Model.InlineKeyboardButton{
-            text: "Категория",
+            text: "📂 Выбрать категорию",
             callback_data:
               Jason.encode!(%{
                 pipeline: @choose_category_folder_callback,
                 id: transaction.id,
                 mode: @choose_category_folder_short_mode
               })
-          },
+          }
+        ],
+        [
           %Nadia.Model.InlineKeyboardButton{
-            text: "Удалить",
+            text: "🗑 Не учитывать в статистике",
             callback_data:
               Jason.encode!(%{
-                pipeline: @delete_transaction_callback,
-                action: @delete_transaction_callback_prompt,
+                pipeline: @update_transaction_status_pipeline,
+                action: @transaction_set_ignored_status_callback,
                 id: transaction.id
+              })
+          }
+        ]
+      ]
+    }
+  end
+
+  defp render_buttons(%Transaction{status: @transaction_status_ignored} = transaction) do
+    %Nadia.Model.InlineKeyboardMarkup{
+      inline_keyboard: [
+        [
+          %Nadia.Model.InlineKeyboardButton{
+            text: "↩️ Учитывать в статистике",
+            callback_data:
+              Jason.encode!(%{
+                pipeline: @update_transaction_status_pipeline,
+                action: @transaction_set_normal_status_callback,
+                id: transaction.id
+              })
+          }
+        ]
+      ]
+    }
+  end
+
+  defp render_buttons(
+         %Transaction{status: @transaction_status_requires_confirmation} = transaction
+       ) do
+    %Nadia.Model.InlineKeyboardMarkup{
+      inline_keyboard: [
+        [
+          %Nadia.Model.InlineKeyboardButton{
+            text: "✅ Учитывать в статистике",
+            callback_data:
+              Jason.encode!(%{
+                pipeline: @update_transaction_status_pipeline,
+                action: @transaction_set_normal_status_callback,
+                id: transaction.id
+              })
+          }
+        ],
+        [
+          %Nadia.Model.InlineKeyboardButton{
+            text: "🗑 Не учитывать в статистике",
+            callback_data:
+              Jason.encode!(%{
+                pipeline: @update_transaction_status_pipeline,
+                action: @transaction_set_ignored_status_callback,
+                id: transaction.id
+              })
+          }
+        ]
+      ]
+    }
+  end
+
+  defp render_buttons(%Transaction{status: @transaction_status_bank_fund_freeze} = transaction) do
+    %Nadia.Model.InlineKeyboardMarkup{
+      inline_keyboard: [
+        [
+          %Nadia.Model.InlineKeyboardButton{
+            text: "📂 Выбрать категорию",
+            callback_data:
+              Jason.encode!(%{
+                pipeline: @choose_category_folder_callback,
+                id: transaction.id,
+                mode: @choose_category_folder_short_mode
               })
           }
         ]

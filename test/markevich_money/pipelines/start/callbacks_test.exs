@@ -47,7 +47,7 @@ defmodule MarkevichMoney.Pipelines.Start.CallbacksTest do
       )
 
       assert_called(
-        Nadia.answer_callback_query(context.callback_data.callback_id, text: "Success")
+        Nadia.answer_callback_query(context.callback_data.callback_id, text: "Успешно")
       )
     end
   end

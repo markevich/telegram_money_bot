@@ -25,26 +25,30 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
     test "returns buttons struct", %{transaction: transaction} do
       reply_payload = RenderTransaction.call(%{transaction: transaction})
 
-      assert reply_payload[:reply_markup] == %Nadia.Model.InlineKeyboardMarkup{
-               inline_keyboard: [
-                 [
-                   %Nadia.Model.InlineKeyboardButton{
-                     callback_data:
-                       "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
-                     switch_inline_query: nil,
-                     text: "Категория",
-                     url: nil
-                   },
-                   %Nadia.Model.InlineKeyboardButton{
-                     callback_data:
-                       "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{@delete_transaction_callback}\"}",
-                     switch_inline_query: nil,
-                     text: "Удалить",
-                     url: nil
-                   }
-                 ]
-               ]
-             }
+      assert(
+        reply_payload[:reply_markup] == %Nadia.Model.InlineKeyboardMarkup{
+          inline_keyboard: [
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
+                switch_inline_query: nil,
+                text: "📂 Выбрать категорию",
+                url: nil
+              }
+            ],
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"action\":\"#{@transaction_set_ignored_status_callback}\",\"id\":#{transaction.id},\"pipeline\":\"#{@update_transaction_status_pipeline}\"}",
+                switch_inline_query: nil,
+                text: "🗑 Не учитывать в статистике",
+                url: nil
+              }
+            ]
+          ]
+        }
+      )
     end
   end
 
@@ -289,7 +293,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
       assert reply_payload[:output_message] == """
              ⚠️ Транзакция №#{transaction.id}(Списание)
-             Ожидает подтверждения
+             _Ожидает подтверждения_
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code}
@@ -302,13 +306,36 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              """
     end
 
-    # test "renders valid buttons", context do
-    #   transaction = context.transaction
+    test "renders valid buttons", context do
+      transaction = context.transaction
 
-    #   reply_payload = RenderTransaction.call(%{transaction: transaction})
+      reply_payload = RenderTransaction.call(%{transaction: transaction})
 
-    #   assert "implement me" = "1"
-    # end
+      assert(
+        reply_payload[:reply_markup] == %Nadia.Model.InlineKeyboardMarkup{
+          inline_keyboard: [
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"action\":\"#{@transaction_set_normal_status_callback}\",\"id\":#{transaction.id},\"pipeline\":\"#{@update_transaction_status_pipeline}\"}",
+                switch_inline_query: nil,
+                text: "✅ Учитывать в статистике",
+                url: nil
+              }
+            ],
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"action\":\"#{@transaction_set_ignored_status_callback}\",\"id\":#{transaction.id},\"pipeline\":\"#{@update_transaction_status_pipeline}\"}",
+                switch_inline_query: nil,
+                text: "🗑 Не учитывать в статистике",
+                url: nil
+              }
+            ]
+          ]
+        }
+      )
+    end
   end
 
   describe "Bank freeze confirmation transaction" do
@@ -328,7 +355,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
       assert reply_payload[:output_message] == """
              ⏳ Транзакция №#{transaction.id}(Блокировка средств)
-             Не учитывается
+             _Не учитывается_
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code}
@@ -341,13 +368,27 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              """
     end
 
-    # test "renders valid buttons", context do
-    #   transaction = context.transaction
+    test "renders valid buttons", context do
+      transaction = context.transaction
 
-    #   reply_payload = RenderTransaction.call(%{transaction: transaction})
+      reply_payload = RenderTransaction.call(%{transaction: transaction})
 
-    #   assert "implement me" = "1"
-    # end
+      assert(
+        reply_payload[:reply_markup] == %Nadia.Model.InlineKeyboardMarkup{
+          inline_keyboard: [
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
+                switch_inline_query: nil,
+                text: "📂 Выбрать категорию",
+                url: nil
+              }
+            ]
+          ]
+        }
+      )
+    end
   end
 
   describe "ignored transaction" do
@@ -367,7 +408,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
 
       assert reply_payload[:output_message] == """
              🗑️ Транзакция №#{transaction.id}(Списание)
-             Не учитывается
+             _Не учитывается_
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code}
@@ -380,12 +421,26 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
              """
     end
 
-    # test "renders valid buttons", context do
-    #   transaction = context.transaction
+    test "renders valid buttons", context do
+      transaction = context.transaction
 
-    #   reply_payload = RenderTransaction.call(%{transaction: transaction})
+      reply_payload = RenderTransaction.call(%{transaction: transaction})
 
-    #   assert "implement me" = "1"
-    # end
+      assert(
+        reply_payload[:reply_markup] == %Nadia.Model.InlineKeyboardMarkup{
+          inline_keyboard: [
+            [
+              %Nadia.Model.InlineKeyboardButton{
+                callback_data:
+                  "{\"action\":\"#{@transaction_set_normal_status_callback}\",\"id\":#{transaction.id},\"pipeline\":\"#{@update_transaction_status_pipeline}\"}",
+                switch_inline_query: nil,
+                text: "↩️ Учитывать в статистике",
+                url: nil
+              }
+            ]
+          ]
+        }
+      )
+    end
   end
 end
