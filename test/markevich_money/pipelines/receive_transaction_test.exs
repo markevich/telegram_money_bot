@@ -293,7 +293,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransactionTest do
       transaction = Repo.one!(query)
 
       expected_message = """
-      Транзакция №#{transaction.id}(Поступление)
+      ➕ Транзакция №#{transaction.id}(Поступление)
       ```
 
       Сумма    #{amount} #{context.currency}

@@ -107,7 +107,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
         )
       )
 
-      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Успешно"))
     end
   end
 
@@ -173,14 +173,16 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
                 callback_data:
                   "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
                 switch_inline_query: nil,
-                text: "Категория",
+                text: "📂 Выбрать категорию",
                 url: nil
-              },
+              }
+            ],
+            [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{@delete_transaction_callback}\"}",
+                  "{\"action\":\"#{@transaction_set_ignored_status_callback}\",\"id\":#{transaction.id},\"pipeline\":\"#{@update_transaction_status_pipeline}\"}",
                 switch_inline_query: nil,
-                text: "Удалить",
+                text: "🗑 Не учитывать в статистике",
                 url: nil
               }
             ]
@@ -199,7 +201,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
         )
       )
 
-      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Успешно"))
 
       assert_enqueued(
         worker: MarkevichMoney.Gamification.Events.Broadcaster,
@@ -271,14 +273,16 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
                 callback_data:
                   "{\"id\":#{transaction.id},\"mode\":\"#{@choose_category_folder_short_mode}\",\"pipeline\":\"#{@choose_category_folder_callback}\"}",
                 switch_inline_query: nil,
-                text: "Категория",
+                text: "📂 Выбрать категорию",
                 url: nil
-              },
+              }
+            ],
+            [
               %Nadia.Model.InlineKeyboardButton{
                 callback_data:
-                  "{\"action\":\"#{@delete_transaction_callback_prompt}\",\"id\":#{transaction.id},\"pipeline\":\"#{@delete_transaction_callback}\"}",
+                  "{\"action\":\"#{@transaction_set_ignored_status_callback}\",\"id\":#{transaction.id},\"pipeline\":\"#{@update_transaction_status_pipeline}\"}",
                 switch_inline_query: nil,
-                text: "Удалить",
+                text: "🗑 Не учитывать в статистике",
                 url: nil
               }
             ]
@@ -297,7 +301,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
         )
       )
 
-      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Success"))
+      assert_called(Nadia.answer_callback_query(context.callback_id, text: "Успешно"))
 
       assert_enqueued(
         worker: MarkevichMoney.Gamification.Events.Broadcaster,

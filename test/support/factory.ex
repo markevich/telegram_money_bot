@@ -1,5 +1,6 @@
 defmodule MarkevichMoney.Factory do
   use ExMachina.Ecto, repo: MarkevichMoney.Repo
+  use MarkevichMoney.Constants
 
   def user_factory do
     %MarkevichMoney.Users.User{
@@ -17,7 +18,8 @@ defmodule MarkevichMoney.Factory do
       balance: "1000",
       to: "Pizza",
       lookup_hash: Ecto.UUID.generate(),
-      user: build(:user)
+      user: build(:user),
+      status: @transaction_status_normal
     }
   end
 

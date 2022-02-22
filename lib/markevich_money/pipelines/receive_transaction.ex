@@ -3,6 +3,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
 
   alias MarkevichMoney.Steps.Transaction.{
     CalculateAmountSign,
+    DetermineTransactionStatus,
     FindOrCreateTransaction,
     FireTransactionCreatedEvent,
     ParseAccount,
@@ -26,6 +27,7 @@ defmodule MarkevichMoney.Pipelines.ReceiveTransaction do
       |> ParseTo.call()
       |> ParseIssuedAt.call()
       |> PredictCategory.call()
+      |> DetermineTransactionStatus.call()
       |> FindOrCreateTransaction.call()
       |> UpdateTransaction.call()
       |> RenderTransaction.call()
