@@ -1,0 +1,194 @@
+name: Elixir CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+
+jobs:
+  dependencies:
+    env:
+      MIX_ENV: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        elixir: ['1.12.2']
+        otp: ['24.0']
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+      - name: Checkout Github repo
+        uses: actions/checkout@v2
+      - name: Set configs
+        run: cp config/test.secret.example.exs config/test.secret.exs
+      - name: Sets up an Erlang/OTP environment
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+      - name: Retrieve cached dependencies
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
+      - name: Install dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix hex.organization auth oban --key ${{ secrets.OBAN_LICENSE_KEY }}
+          mix local.hex --force
+          mix deps.get
+          mix deps.compile
+
+  static-code-analysis:
+    env:
+      MIX_ENV: test
+    needs: dependencies
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        elixir: ['1.12.2']
+        otp: ['24.0']
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+      - name: Checkout Github repo
+        uses: actions/checkout@v2
+      - name: Copy configs
+        run: cp config/test.secret.example.exs config/test.secret.exs
+      - name: Sets up an Erlang/OTP environment
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+      - name: Retrieve cached dependencies
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
+      - run: mix format --check-formatted
+      - run: mix credo
+
+  mix-test:
+    env:
+      MIX_ENV: test
+    needs: dependencies
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        elixir: ['1.12.2']
+        otp: ['24.0']
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Inject dynamic env
+        run: echo "DATABASE_URL=postgresql://postgres:postgres@localhost:${{job.services.postgres.ports[5432]}}/markevich_money_test" >> $GITHUB_ENV
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+      - name: Checkout Github repo
+        uses: actions/checkout@v2
+      - name: Copy configs
+        run: cp config/test.secret.example.exs config/test.secret.exs
+      - name: Sets up an Erlang/OTP environment
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+      - name: Retrieve cached dependencies
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: |
+            deps
+            _build
+          key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
+      - name: Setup database
+        run: mix do ecto.create, ecto.migrate
+      - name: Run tests
+        run: mix coveralls.github
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+  # test:
+  #   env:
+  #     MIX_ENV: test
+  #   runs-on: ubuntu-latest
+  #   name: OTP 24/ Elixir 1.12.2
+  #   services:
+  #     # Label used to access the service container
+  #     postgres:
+  #       # Docker Hub image
+  #       image: postgres:14
+  #       # Provide the password for postgres
+  #       env:
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_PORT: 5432
+  #       ports:
+  #         - 5432/tcp
+  #       # Set health checks to wait until postgres has started
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+  #   steps:
+  #     - name: Inject dynamic env
+  #       run: echo "DATABASE_URL=postgresql://postgres:postgres@localhost:${{job.services.postgres.ports[5432]}}/markevich_money_test" >> $GITHUB_ENV
+  #     - uses: actions/checkout@v2
+  #     - run: cp config/test.secret.example.exs config/test.secret.exs
+  #     - name: Setup elixir
+  #       uses: erlef/setup-beam@v1
+  #       with:
+  #         otp-version: 24.0
+  #         elixir-version: 1.12.2
+  #     - name: Retrieve Mix Dependencies Cache
+  #       uses: actions/cache@v1
+  #       id: mix-cache # id to use in retrieve action
+  #       with:
+  #         path: |
+  #           deps
+  #           _build
+  #           priv/plts
+  #         key: ${{ runner.os }}-otp-24-elixir-1.12.2-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
+  #     - name: Install dependencies
+  #       if: steps.mix-cache.outputs.cache-hit != 'true'
+  #       run: |
+  #         mix hex.organization auth oban --key ${{ secrets.OBAN_LICENSE_KEY }}
+  #         mix deps.get
+  #         mix deps.compile
+  #     - name: Setup database
+  #       run: mix do ecto.create, ecto.migrate
+  #     - name: Check Formatting
+  #       run: mix format --check-formatted
+  #     - name: Run Credo linter
+  #       run: mix credo --strict
+  #     - name: Run tests
+  #       run: mix test
