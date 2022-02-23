@@ -294,6 +294,7 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransactionTest do
       assert reply_payload[:output_message] == """
              ⚠️ Транзакция №#{transaction.id}(Списание)
              _Ожидает подтверждения_
+             _Не учитывается_
              ```
 
              Сумма      #{transaction.amount} #{transaction.currency_code}
