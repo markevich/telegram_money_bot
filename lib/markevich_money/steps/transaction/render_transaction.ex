@@ -73,10 +73,20 @@ defmodule MarkevichMoney.Steps.Transaction.RenderTransaction do
 
   defp transaction_human_status(transaction_status) do
     case transaction_status do
-      @transaction_status_normal -> ""
-      @transaction_status_requires_confirmation -> "_Ожидает подтверждения_"
-      @transaction_status_bank_fund_freeze -> "_Не учитывается_"
-      @transaction_status_ignored -> "_Не учитывается_"
+      @transaction_status_normal ->
+        ""
+
+      @transaction_status_requires_confirmation ->
+        """
+        _Ожидает подтверждения_
+        _Не учитывается_
+        """
+
+      @transaction_status_bank_fund_freeze ->
+        "_Не учитывается_"
+
+      @transaction_status_ignored ->
+        "_Не учитывается_"
     end
   end
 
