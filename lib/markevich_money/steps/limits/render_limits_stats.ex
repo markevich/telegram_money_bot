@@ -20,8 +20,9 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsStats do
 
   defp reject_categories_without_limits(limits) do
     limits
-    |> Enum.reject(fn category -> !category.transaction_category_limit end)
-    |> Enum.reject(fn category -> category.transaction_category_limit.limit == 0 end)
+    |> Enum.reject(fn category ->
+      !category.transaction_category_limit || category.transaction_category_limit.limit == 0
+    end)
   end
 
   defp render_limits_stats(limits, _) when limits == [] do

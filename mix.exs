@@ -46,7 +46,7 @@ defmodule MarkevichMoney.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.13"},
+      {:phoenix, "~> 1.6.0"},
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.7"},
       {:ecto_psql_extras, "~> 0.6"},
@@ -56,8 +56,8 @@ defmodule MarkevichMoney.MixProject do
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.5"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 0.5"},
       {:gettext, "~> 0.11"},
       {:plug_cowboy, "~> 2.3"},
       {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
@@ -72,9 +72,9 @@ defmodule MarkevichMoney.MixProject do
       {:hackney, "~> 1.8"},
       {:finch, "~> 0.6"},
       {:jason, "~> 1.1"},
-      {:oban, "~> 2.9.2"},
-      {:oban_web, "~> 2.7", organization: "oban"},
-      {:oban_pro, "~> 0.9", organization: "oban"}
+      {:oban, "~> 2.10"},
+      {:oban_web, "~> 2.9", organization: "oban"},
+      {:oban_pro, "~> 0.10", organization: "oban"}
     ]
   end
 
