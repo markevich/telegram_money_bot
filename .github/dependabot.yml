@@ -18,8 +18,8 @@ updates:
       interval: "monthly"
       time: "03:00"
     insecure-external-code-execution: allow
-  - package-ecosystem: npm
-    directory: "/assets"
-    schedule:
-      interval: "monthly"
-      time: "03:00"
+  # - package-ecosystem: npm
+  #   directory: "/assets"
+  #   schedule:
+  #     interval: "monthly"
+  #     time: "03:00"
