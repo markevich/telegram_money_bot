@@ -44,5 +44,6 @@
         "../priv/static/js/app.js"
       ]
     }
-  ]
+  ],
+  "name": "assets"
 }
