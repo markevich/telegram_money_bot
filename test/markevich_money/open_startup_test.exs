@@ -41,15 +41,15 @@ defmodule MarkevichMoney.OpenStartupTest do
     end
 
     test "list_incomes/0 returns list of positive profits" do
-      _expense = insert(:profit, %{amount: -10, date: ~D[2021-10-12]})
-      income = insert(:profit, %{amount: 10, date: ~D[2021-10-02]})
+      _expense = insert(:profit, %{amount: -10, date: ~D[2022-04-01]})
+      income = insert(:profit, %{amount: 10, date: ~D[2022-04-01]})
 
       assert OpenStartup.list_incomes() == [income]
     end
 
     test "list_expenses/0 returns list of negative profits" do
-      expense = insert(:profit, %{amount: -10, date: ~D[2021-10-12]})
-      _income = insert(:profit, %{amount: 10, date: ~D[2021-10-02]})
+      expense = insert(:profit, %{amount: -10, date: ~D[2022-04-01]})
+      _income = insert(:profit, %{amount: 10, date: ~D[2022-04-01]})
 
       assert OpenStartup.list_expenses() == [expense]
     end
@@ -69,91 +69,91 @@ defmodule MarkevichMoney.OpenStartupTest do
       insert_list(5, :transaction,
         user: user,
         transaction_category: food_category,
-        issued_at: ~N[2021-06-03 12:00:00]
+        issued_at: ~N[2021-09-03 12:00:00]
       )
 
       insert_list(4, :transaction,
         user: user,
         transaction_category: transport_category,
-        issued_at: ~N[2021-06-03 12:00:00]
+        issued_at: ~N[2021-09-03 12:00:00]
       )
 
       insert_list(3, :transaction,
         user: user,
         transaction_category: home_category,
-        issued_at: ~N[2021-06-03 12:00:00]
+        issued_at: ~N[2021-09-03 12:00:00]
       )
 
       insert_list(2, :transaction,
         user: user,
         transaction_category: pet_category,
-        issued_at: ~N[2021-06-03 12:00:00]
+        issued_at: ~N[2021-09-03 12:00:00]
       )
 
       insert_list(1, :transaction,
         user: user,
         transaction_category: other_category,
-        issued_at: ~N[2021-06-03 12:00:00]
+        issued_at: ~N[2021-09-03 12:00:00]
       )
 
       insert_list(5, :transaction,
         user: user,
         transaction_category: pet_category,
-        issued_at: ~N[2021-05-03 12:00:00]
+        issued_at: ~N[2021-08-03 12:00:00]
       )
 
       insert_list(4, :transaction,
         user: user,
         transaction_category: home_category,
-        issued_at: ~N[2021-05-03 12:00:00]
+        issued_at: ~N[2021-08-03 12:00:00]
       )
 
       insert_list(3, :transaction,
         user: user,
         transaction_category: transport_category,
-        issued_at: ~N[2021-05-03 12:00:00]
+        issued_at: ~N[2021-08-03 12:00:00]
       )
 
       insert_list(2, :transaction,
         user: user,
         transaction_category: food_category,
-        issued_at: ~N[2021-05-03 12:00:00]
+        issued_at: ~N[2021-08-03 12:00:00]
       )
 
       insert_list(1, :transaction,
         user: user,
         transaction_category: other_category,
-        issued_at: ~N[2021-05-03 12:00:00]
+        issued_at: ~N[2021-08-03 12:00:00]
       )
 
       insert_list(5, :transaction,
         user: user,
         transaction_category: pet_category,
-        issued_at: ~N[2021-03-03 12:00:00]
+        issued_at: ~N[2021-06-03 12:00:00]
       )
 
       insert_list(4, :transaction,
         user: user,
         transaction_category: home_category,
-        issued_at: ~N[2021-03-03 12:00:00]
+        issued_at: ~N[2021-06-03 12:00:00]
       )
 
       insert_list(3, :transaction,
         user: user,
         transaction_category: transport_category,
-        issued_at: ~N[2021-03-03 12:00:00]
+        issued_at: ~N[2021-06-03 12:00:00]
       )
 
       insert_list(2, :transaction,
         user: user,
         transaction_category: food_category,
-        issued_at: ~N[2021-03-03 12:00:00]
+        issued_at: ~N[2021-06-03 12:00:00]
       )
 
       insert_list(1, :transaction,
         user: user,
         transaction_category: other_category,
-        issued_at: ~N[2021-03-03 12:00:00]
+        issued_at: ~N[2021-06-03 12:00:00]
       )
 
       records = OpenStartup.list_popular_categories_by_month()
@@ -165,19 +165,19 @@ defmodule MarkevichMoney.OpenStartupTest do
               [
                 %{
                   category_name: "food_popular_category",
-                  date: ~D[2021-03-01],
+                  date: ~D[2021-06-01],
                   records_count: 2
                 }
               ],
               [
                 %{
                   category_name: "food_popular_category",
-                  date: ~D[2021-06-01],
+                  date: ~D[2021-09-01],
                   records_count: 5
                 },
                 %{
                   category_name: "food_popular_category",
-                  date: ~D[2021-05-01],
+                  date: ~D[2021-08-01],
                   records_count: 2
                 }
               ]
@@ -186,19 +186,19 @@ defmodule MarkevichMoney.OpenStartupTest do
               [
                 %{
                   category_name: "home_popular_category",
-                  date: ~D[2021-03-01],
+                  date: ~D[2021-06-01],
                   records_count: 4
                 }
               ],
               [
                 %{
                   category_name: "home_popular_category",
-                  date: ~D[2021-06-01],
+                  date: ~D[2021-09-01],
                   records_count: 3
                 },
                 %{
                   category_name: "home_popular_category",
-                  date: ~D[2021-05-01],
+                  date: ~D[2021-08-01],
                   records_count: 4
                 }
               ]
@@ -207,19 +207,19 @@ defmodule MarkevichMoney.OpenStartupTest do
               [
                 %{
                   category_name: "pet_popular_category",
-                  date: ~D[2021-03-01],
+                  date: ~D[2021-06-01],
                   records_count: 5
                 }
               ],
               [
                 %{
                   category_name: "pet_popular_category",
-                  date: ~D[2021-06-01],
+                  date: ~D[2021-09-01],
                   records_count: 2
                 },
                 %{
                   category_name: "pet_popular_category",
-                  date: ~D[2021-05-01],
+                  date: ~D[2021-08-01],
                   records_count: 5
                 }
               ]
@@ -228,19 +228,19 @@ defmodule MarkevichMoney.OpenStartupTest do
               [
                 %{
                   category_name: "transport_popular_category",
-                  date: ~D[2021-03-01],
+                  date: ~D[2021-06-01],
                   records_count: 3
                 }
               ],
               [
                 %{
                   category_name: "transport_popular_category",
-                  date: ~D[2021-06-01],
+                  date: ~D[2021-09-01],
                   records_count: 4
                 },
                 %{
                   category_name: "transport_popular_category",
-                  date: ~D[2021-05-01],
+                  date: ~D[2021-08-01],
                   records_count: 3
                 }
               ]
@@ -264,105 +264,105 @@ defmodule MarkevichMoney.OpenStartupTest do
       insert(:transaction,
         user: user,
         transaction_category: food_category,
-        issued_at: ~N[2021-06-14 12:00:00],
+        issued_at: ~N[2021-09-14 12:00:00],
         amount: -10
       )
 
       insert(:transaction,
         user: user,
         transaction_category: transport_category,
-        issued_at: ~N[2021-06-14 12:00:00],
+        issued_at: ~N[2021-09-14 12:00:00],
         amount: -20
       )
 
       insert(:transaction,
         user: user,
         transaction_category: home_category,
-        issued_at: ~N[2021-06-14 12:00:00],
+        issued_at: ~N[2021-09-14 12:00:00],
         amount: -30
       )
 
       insert(:transaction,
         user: user,
         transaction_category: pet_category,
-        issued_at: ~N[2021-06-14 12:00:00],
+        issued_at: ~N[2021-09-14 12:00:00],
         amount: -40
       )
 
       insert(:transaction,
         user: user,
         transaction_category: other_category,
-        issued_at: ~N[2021-06-14 12:00:00],
+        issued_at: ~N[2021-09-14 12:00:00],
         amount: -5
       )
 
       insert(:transaction,
         user: user,
         transaction_category: food_category,
-        issued_at: ~N[2021-05-14 12:00:00],
+        issued_at: ~N[2021-08-14 12:00:00],
         amount: -40
       )
 
       insert(:transaction,
         user: user,
         transaction_category: transport_category,
-        issued_at: ~N[2021-05-14 12:00:00],
+        issued_at: ~N[2021-08-14 12:00:00],
         amount: -30
       )
 
       insert(:transaction,
         user: user,
         transaction_category: home_category,
-        issued_at: ~N[2021-05-14 12:00:00],
+        issued_at: ~N[2021-08-14 12:00:00],
         amount: -20
       )
 
       insert(:transaction,
         user: user,
         transaction_category: pet_category,
-        issued_at: ~N[2021-05-14 12:00:00],
+        issued_at: ~N[2021-08-14 12:00:00],
         amount: -10
       )
 
       insert(:transaction,
         user: user,
         transaction_category: other_category,
-        issued_at: ~N[2021-05-14 12:00:00],
+        issued_at: ~N[2021-08-14 12:00:00],
         amount: -5
       )
 
       insert(:transaction,
         user: user,
         transaction_category: food_category,
-        issued_at: ~N[2021-03-14 12:00:00],
+        issued_at: ~N[2021-06-14 12:00:00],
         amount: -40
       )
 
       insert(:transaction,
         user: user,
         transaction_category: transport_category,
-        issued_at: ~N[2021-03-14 12:00:00],
+        issued_at: ~N[2021-06-14 12:00:00],
         amount: -30
       )
 
       insert(:transaction,
         user: user,
         transaction_category: home_category,
-        issued_at: ~N[2021-03-14 12:00:00],
+        issued_at: ~N[2021-06-14 12:00:00],
         amount: -20
       )
 
       insert(:transaction,
         user: user,
         transaction_category: pet_category,
-        issued_at: ~N[2021-03-14 12:00:00],
+        issued_at: ~N[2021-06-14 12:00:00],
         amount: -10
       )
 
       insert(:transaction,
         user: user,
         transaction_category: other_category,
-        issued_at: ~N[2021-03-14 12:00:00],
+        issued_at: ~N[2021-06-14 12:00:00],
         amount: -5
       )
 
@@ -375,19 +375,19 @@ defmodule MarkevichMoney.OpenStartupTest do
               [
                 %{
                   category_name: "food_expensive_category",
-                  date: ~D[2021-03-01],
+                  date: ~D[2021-06-01],
                   sum_amount: Decimal.new(40)
                 }
               ],
               [
                 %{
                   category_name: "food_expensive_category",
-                  date: ~D[2021-06-01],
+                  date: ~D[2021-09-01],
                   sum_amount: Decimal.new(10)
                 },
                 %{
                   category_name: "food_expensive_category",
-                  date: ~D[2021-05-01],
+                  date: ~D[2021-08-01],
                   sum_amount: Decimal.new(40)
                 }
               ]
@@ -396,19 +396,19 @@ defmodule MarkevichMoney.OpenStartupTest do
               [
                 %{
                   category_name: "home_expensive_category",
-                  date: ~D[2021-03-01],
+                  date: ~D[2021-06-01],
                   sum_amount: Decimal.new(20)
                 }
               ],
               [
                 %{
                   category_name: "home_expensive_category",
-                  date: ~D[2021-06-01],
+                  date: ~D[2021-09-01],
                   sum_amount: Decimal.new(30)
                 },
                 %{
                   category_name: "home_expensive_category",
-                  date: ~D[2021-05-01],
+                  date: ~D[2021-08-01],
                   sum_amount: Decimal.new(20)
                 }
               ]
@@ -417,19 +417,19 @@ defmodule MarkevichMoney.OpenStartupTest do
               [
                 %{
                   category_name: "other_expensive_category",
-                  date: ~D[2021-03-01],
+                  date: ~D[2021-06-01],
                   sum_amount: Decimal.new(5)
                 }
               ],
               [
                 %{
                   category_name: "other_expensive_category",
-                  date: ~D[2021-06-01],
+                  date: ~D[2021-09-01],
                   sum_amount: Decimal.new(5)
                 },
                 %{
                   category_name: "other_expensive_category",
-                  date: ~D[2021-05-01],
+                  date: ~D[2021-08-01],
                   sum_amount: Decimal.new(5)
                 }
               ]
@@ -438,19 +438,19 @@ defmodule MarkevichMoney.OpenStartupTest do
               [
                 %{
                   category_name: "pet_expensive_category",
-                  date: ~D[2021-03-01],
+                  date: ~D[2021-06-01],
                   sum_amount: Decimal.new(10)
                 }
               ],
               [
                 %{
                   category_name: "pet_expensive_category",
-                  date: ~D[2021-06-01],
+                  date: ~D[2021-09-01],
                   sum_amount: Decimal.new(40)
                 },
                 %{
                   category_name: "pet_expensive_category",
-                  date: ~D[2021-05-01],
+                  date: ~D[2021-08-01],
                   sum_amount: Decimal.new(10)
                 }
               ]
