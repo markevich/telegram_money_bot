@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        elixir: ['1.12.2']
+        elixir: ['1.13.4']
         otp: ['24.0']
     steps:
       - name: Cancel previous runs
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        elixir: ['1.12.2']
+        elixir: ['1.13.4']
         otp: ['24.0']
     steps:
       - name: Cancel previous runs
@@ -87,7 +87,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        elixir: ['1.12.2']
+        elixir: ['1.13.4']
         otp: ['24.0']
     services:
       postgres:
@@ -133,62 +133,3 @@ jobs:
         run: mix coveralls.github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-
-  # test:
-  #   env:
-  #     MIX_ENV: test
-  #   runs-on: ubuntu-latest
-  #   name: OTP 24/ Elixir 1.12.2
-  #   services:
-  #     # Label used to access the service container
-  #     postgres:
-  #       # Docker Hub image
-  #       image: postgres:14
-  #       # Provide the password for postgres
-  #       env:
-  #         POSTGRES_USER: postgres
-  #         POSTGRES_PASSWORD: postgres
-  #         POSTGRES_PORT: 5432
-  #       ports:
-  #         - 5432/tcp
-  #       # Set health checks to wait until postgres has started
-  #       options: >-
-  #         --health-cmd pg_isready
-  #         --health-interval 10s
-  #         --health-timeout 5s
-  #         --health-retries 5
-  #   steps:
-  #     - name: Inject dynamic env
-  #       run: echo "DATABASE_URL=postgresql://postgres:postgres@localhost:${{job.services.postgres.ports[5432]}}/markevich_money_test" >> $GITHUB_ENV
-  #     - uses: actions/checkout@v2
-  #     - run: cp config/test.secret.example.exs config/test.secret.exs
-  #     - name: Setup elixir
-  #       uses: erlef/setup-beam@v1
-  #       with:
-  #         otp-version: 24.0
-  #         elixir-version: 1.12.2
-  #     - name: Retrieve Mix Dependencies Cache
-  #       uses: actions/cache@v1
-  #       id: mix-cache # id to use in retrieve action
-  #       with:
-  #         path: |
-  #           deps
-  #           _build
-  #           priv/plts
-  #         key: ${{ runner.os }}-otp-24-elixir-1.12.2-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
-  #     - name: Install dependencies
-  #       if: steps.mix-cache.outputs.cache-hit != 'true'
-  #       run: |
-  #         mix hex.organization auth oban --key ${{ secrets.OBAN_LICENSE_KEY }}
-  #         mix deps.get
-  #         mix deps.compile
-  #     - name: Setup database
-  #       run: mix do ecto.create, ecto.migrate
-  #     - name: Check Formatting
-  #       run: mix format --check-formatted
-  #     - name: Run Credo linter
-  #       run: mix credo --strict
-  #     - name: Run tests
-  #       run: mix test
