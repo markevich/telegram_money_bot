@@ -5,7 +5,7 @@ import "../css/app.css"
 
 import "phoenix_html"
 import { Socket } from "phoenix"
-import topbar from "topbar"
+import topbar from "../vendor/topbar"
 import { LiveSocket } from "phoenix_live_view"
 import openProfits from "./open_startup"
 

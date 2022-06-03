@@ -1,6 +1,6 @@
 # This file is responsible for storing all file ids in telegram
 
-use Mix.Config
+import Config
 
 config :markevich_money, :tg_file_ids,
   user_registration: %{
