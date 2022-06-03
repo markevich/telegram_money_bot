@@ -4,15 +4,26 @@ defmodule MarkevichMoney.Steps.Transaction.DetermineTransactionStatus do
   def call(%{input_message: input_message} = payload) do
     payload
     |> Map.update!(:parsed_attributes, fn parsed_data ->
-      Map.put(parsed_data, :status, guess_status(input_message))
+      Map.put(parsed_data, :status, guess_status(parsed_data, input_message))
     end)
   end
 
-  defp guess_status(input_message) do
-    if Regex.match?(@requires_confirmation_regex, input_message) do
+  defp guess_status(parsed_data, input_message) do
+    with true <- match_confirmation_regex?(input_message),
+         amount when amount < 0 <- get_amount(parsed_data) do
       :requires_confirmation
     else
-      :normal
+      _ -> :normal
     end
+  end
+
+  defp match_confirmation_regex?(input_message) do
+    Regex.match?(@requires_confirmation_regex, input_message)
+  end
+
+  defp get_amount(parsed_data) do
+    %{amount: amount} = parsed_data
+
+    amount
   end
 end
