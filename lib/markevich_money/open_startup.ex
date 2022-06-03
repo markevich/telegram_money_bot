@@ -10,6 +10,31 @@ defmodule MarkevichMoney.OpenStartup do
     Repo.all(Profit)
   end
 
+  def list_transactions_count_grouped_by_month do
+    {:ok, %{rows: rows}} =
+      Repo.query("""
+      SELECT generated::date as gen_date, monthly_transactions.c from
+      generate_series(date_trunc('month', current_date - interval '1 year'), date_trunc('month', current_date), '1 month') AS generated
+      INNER JOIN LATERAL (
+        SELECT count(t.id) as c
+        FROM transactions t
+        WHERE date_trunc('month', t.inserted_at)::date = date_trunc('month', generated::date)
+      ) as monthly_transactions
+      ON TRUE
+      ORDER BY gen_date
+      """)
+
+    rows
+    |> Enum.map(fn row ->
+      [date, transactions_count] = row
+
+      %{
+        date: date,
+        transactions_count: transactions_count
+      }
+    end)
+  end
+
   def list_profits_grouped_by_month do
     query =
       from(profit in Profit,

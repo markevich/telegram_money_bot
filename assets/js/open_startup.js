@@ -11,6 +11,7 @@ export default {
   mostExpensiveCategories() { return JSON.parse(this.el.dataset.mostExpensiveCategories) },
   activeUsers() { return JSON.parse(this.el.dataset.activeUsers)},
   users() { return JSON.parse(this.el.dataset.users)},
+  transactions() { return JSON.parse(this.el.dataset.transactions)},
   colors() {
     const colors = {
       blue: "rgb(54, 162, 235)",
@@ -104,6 +105,81 @@ export default {
             scaleLabel: {
               display: true,
               labelString: 'Сумма'
+            },
+            suggestedMin: 0,
+            beginAtZero: true,
+          }
+        }
+      }
+    };
+    new Chart(ctx, config)
+  },
+
+  createTransactionsChart() {
+    const ctx = document.getElementById('data-transactions');
+    const colors = this.colors();
+
+    var config = {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            fill: false,
+            borderColor: colors[0],
+            backgroundColor: colors[0],
+            data: this.transactions().map((u) => {
+              return {
+                x: u.date,
+                y: u.transactions_count,
+              }
+            }),
+          },
+        ]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Количество транзакции."
+        },
+        legend: {
+          display: false
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            title: function () {
+              return "";
+            },
+            label: function (item) {
+              return ` ${item.formattedValue}`;
+            }
+          },
+          displayColors: false,
+        },
+        hover: {
+          mode: 'nearest',
+          intersect: true
+        },
+        scales: {
+          x: {
+            display: true,
+            adapters: {
+              date: {
+                locale: ru
+              }
+            },
+            type: 'time',
+            time: {
+              unit: 'month'
+            },
+            offset: true
+          },
+          y: {
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Количество'
             },
             suggestedMin: 0,
             beginAtZero: true,
@@ -373,6 +449,7 @@ export default {
 
   mounted() {
     this.createUsersChart()
+    this.createTransactionsChart()
     this.createPopularCategoriesChart()
     this.createMostExpensiveCategoriesChart()
     this.createProfitsTrendChart()
