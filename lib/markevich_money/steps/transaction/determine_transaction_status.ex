@@ -22,7 +22,7 @@ defmodule MarkevichMoney.Steps.Transaction.DetermineTransactionStatus do
   end
 
   defp get_amount(parsed_data) do
-    %{parsed_attributes: %{amount: amount}} = parsed_data
+    %{amount: amount} = parsed_data
 
     amount
   end
