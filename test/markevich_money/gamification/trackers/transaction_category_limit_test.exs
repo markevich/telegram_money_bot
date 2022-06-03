@@ -3,7 +3,7 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimitTest do
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
   use MecksUnit.Case
-  use Oban.Testing, repo: MarkevichMoney.Repo
+  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
   import ExUnit.CaptureLog
 
   alias MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit, as: LimitTracker

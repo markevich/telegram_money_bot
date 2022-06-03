@@ -2,7 +2,7 @@ defmodule MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessageTest do
   @moduledoc false
   use MarkevichMoney.Constants
   use MarkevichMoney.DataCase, async: true
-  use Oban.Testing, repo: MarkevichMoney.Repo
+  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
   alias MarkevichMoney.Steps.Transaction.ParseCustomTransactionMessage
 
   describe "Valid messages" do

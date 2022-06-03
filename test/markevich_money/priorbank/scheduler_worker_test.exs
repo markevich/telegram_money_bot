@@ -1,6 +1,6 @@
 defmodule MarkevichMoney.Priorbank.SchedulerWorkerTest do
   use MarkevichMoney.DataCase, async: true
-  use Oban.Testing, repo: MarkevichMoney.Repo
+  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
 
   alias MarkevichMoney.Priorbank.FetcherWorker
   alias MarkevichMoney.Priorbank.SchedulerWorker

@@ -3,7 +3,7 @@ defmodule MarkevichMoney.Transactions.CreateTransactionWorkerTest do
   use MarkevichMoney.MockNadia, async: true
   use MarkevichMoney.Constants
   use MecksUnit.Case
-  use Oban.Testing, repo: MarkevichMoney.Repo
+  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
 
   import ExUnit.CaptureLog
 

@@ -3,7 +3,7 @@ defmodule MarkevichMoney.Pipelines.AddTransactionTest do
   import ExUnit.CaptureLog
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
-  use Oban.Testing, repo: MarkevichMoney.Repo
+  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
   use MarkevichMoney.Constants
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines

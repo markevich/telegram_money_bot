@@ -78,7 +78,7 @@ config :markevich_money, Oban,
     #  crontab: [
     #    {"* * * * *", MarkevichMoney.Priorbank.SchedulerWorker}
     #  ]},
-    Oban.Pro.Plugins.Lifeline,
+    Oban.Pro.Plugins.DynamicLifeline,
     Oban.Plugins.Gossip,
     Oban.Web.Plugins.Stats
   ]
