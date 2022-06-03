@@ -3,7 +3,7 @@ defmodule MarkevichMoney.Pipelines.Categories.SetForTransactionTest do
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
   use MarkevichMoney.Constants
-  use Oban.Testing, repo: MarkevichMoney.Repo
+  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
   alias MarkevichMoney.CallbackData
   alias MarkevichMoney.Pipelines
   alias MarkevichMoney.Steps.Transaction.RenderTransaction

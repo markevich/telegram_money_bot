@@ -34,14 +34,20 @@ config :markevich_money, Oban,
   repo: MarkevichMoney.Repo,
   engine: Oban.Pro.Queue.SmartEngine,
   plugins: [
-    {Oban.Plugins.Pruner, max_age: 30 * 24 * 3600},
+    {
+      Oban.Pro.Plugins.DynamicPruner,
+      state_overrides: [
+        completed: {:max_age, {1, :month}},
+        discarded: {:max_age, {3, :month}}
+      ]
+    },
     {Oban.Plugins.Cron,
      crontab: [
        {"* * * * *", EmailProcessor},
        {"* * * * *", MarkevichMoney.Priorbank.SchedulerWorker},
        {"0 11 1 * *", MarkevichMoney.Gamification.Events.NewMonthStarted}
      ]},
-    Oban.Pro.Plugins.Lifeline,
+    Oban.Pro.Plugins.DynamicLifeline,
     Oban.Plugins.Gossip,
     Oban.Web.Plugins.Stats
   ],

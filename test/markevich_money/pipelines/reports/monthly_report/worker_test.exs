@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.WorkerTest do
   use MarkevichMoney.DataCase, async: true
   use MecksUnit.Case
-  use Oban.Testing, repo: MarkevichMoney.Repo
+  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
 
   alias MarkevichMoney.Pipelines.Reports.MonthlyReport
   alias MarkevichMoney.Pipelines.Reports.MonthlyReport.Worker
