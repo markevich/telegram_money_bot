@@ -90,10 +90,10 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       Расходы c `#{from}` по `#{to}`:
       ```
 
-       Всего:   25.0
+       Всего:   25.00
 
-       #{context.category2.name}     15.0
-       #{context.category1.name}     10.0
+       #{context.category2.name}     15.00
+       #{context.category1.name}     10.00
 
       ```
 
@@ -250,10 +250,10 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       Расходы c `#{from}` по `#{to}`:
       ```
 
-       Всего:   25.0
+       Всего:   25.00
 
-       #{context.category2.name}     15.0
-       #{context.category1.name}     10.0
+       #{context.category2.name}     15.00
+       #{context.category1.name}     10.00
 
       ```
 
@@ -366,10 +366,10 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       Расходы c `#{from}` по `#{to}`:
       ```
 
-       Всего:   25.0
+       Всего:   25.00
 
-       #{context.category2.name}     15.0
-       #{context.category1.name}     10.0
+       #{context.category2.name}     15.00
+       #{context.category1.name}     10.00
 
       ```
 
@@ -472,10 +472,10 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       Расходы c `#{from}` по `#{to}`:
       ```
 
-       Всего:   25.0
+       Всего:   25.00
 
-       #{context.category2.name}     15.0
-       #{context.category1.name}     10.0
+       #{context.category2.name}     15.00
+       #{context.category1.name}     10.00
 
       ```
       """
@@ -549,10 +549,10 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       Расходы c `#{from}` по `#{to}`:
       ```
 
-       Всего:           25.0
+       Всего:           25.00
 
-       ❓Без категории   15.0
-       kek              10.0
+       ❓Без категории   15.00
+       kek              10.00
 
       ```
       """
@@ -627,10 +627,10 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       Расходы c `#{from}` по `#{to}`:
       ```
 
-       Всего:           25.0
+       Всего:           25.00
 
-       ❓Без категории   15.0
-       kek              10.0
+       ❓Без категории   15.00
+       kek              10.00
 
       ```
 
@@ -691,7 +691,7 @@ defmodule MarkevichMoney.Stats.GeneralTest do
 
       insert(:transaction,
         user: user,
-        amount: -15,
+        amount: -15.55,
         transaction_category_id: restaraunt_category.id
       )
 
@@ -751,15 +751,15 @@ defmodule MarkevichMoney.Stats.GeneralTest do
       Расходы c `#{from}` по `#{to}`:
       ```
 
-       Всего:           70.0
+       Всего:           70.55
 
-       StatsFood        = 25.0
-        ├Restaraunt     15.0
-        └Cafe           10.0
-       Home             = 20.0
-        └Repair         20.0
-       ❓Без категории   15.0
-       Generic          10.0
+       StatsFood        = 25.55
+        ├Restaraunt     15.55
+        └Cafe           10.00
+       Home             = 20.00
+        └Repair         20.00
+       ❓Без категории   15.00
+       Generic          10.00
 
       ```
       """

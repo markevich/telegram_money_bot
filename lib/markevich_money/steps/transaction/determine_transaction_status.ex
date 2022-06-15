@@ -1,5 +1,5 @@
 defmodule MarkevichMoney.Steps.Transaction.DetermineTransactionStatus do
-  @requires_confirmation_regex ~r/BLR\/ONLINE SERVICE\/TRANSFERS\sAK\sAM/i
+  @requires_confirmation_regex ~r/TRANSFERS\sAK\sAM/i
 
   def call(%{input_message: input_message} = payload) do
     payload

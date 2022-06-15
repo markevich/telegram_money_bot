@@ -141,7 +141,7 @@ defmodule MarkevichMoney.OpenStartup do
       %{
         date: date,
         category_name: category_name,
-        sum_amount: Decimal.abs(sum_amount) |> Decimal.round()
+        sum_amount: Decimal.abs(sum_amount) |> Decimal.round(2)
       }
     end)
     |> Enum.group_by(fn row ->

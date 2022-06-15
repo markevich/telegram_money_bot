@@ -395,19 +395,19 @@ defmodule MarkevichMoney.OpenStartupTest do
                 %{
                   category_name: "food_expensive_category",
                   date: date3,
-                  sum_amount: Decimal.new(40)
+                  sum_amount: Decimal.new("40.00")
                 }
               ],
               [
                 %{
                   category_name: "food_expensive_category",
                   date: date1,
-                  sum_amount: Decimal.new(10)
+                  sum_amount: Decimal.new("10.00")
                 },
                 %{
                   category_name: "food_expensive_category",
                   date: date2,
-                  sum_amount: Decimal.new(40)
+                  sum_amount: Decimal.new("40.00")
                 }
               ]
             ],
@@ -416,19 +416,19 @@ defmodule MarkevichMoney.OpenStartupTest do
                 %{
                   category_name: "home_expensive_category",
                   date: date3,
-                  sum_amount: Decimal.new(20)
+                  sum_amount: Decimal.new("20.00")
                 }
               ],
               [
                 %{
                   category_name: "home_expensive_category",
                   date: date1,
-                  sum_amount: Decimal.new(30)
+                  sum_amount: Decimal.new("30.00")
                 },
                 %{
                   category_name: "home_expensive_category",
                   date: date2,
-                  sum_amount: Decimal.new(20)
+                  sum_amount: Decimal.new("20.00")
                 }
               ]
             ],
@@ -437,19 +437,19 @@ defmodule MarkevichMoney.OpenStartupTest do
                 %{
                   category_name: "other_expensive_category",
                   date: date3,
-                  sum_amount: Decimal.new(5)
+                  sum_amount: Decimal.new("5.00")
                 }
               ],
               [
                 %{
                   category_name: "other_expensive_category",
                   date: date1,
-                  sum_amount: Decimal.new(5)
+                  sum_amount: Decimal.new("5.00")
                 },
                 %{
                   category_name: "other_expensive_category",
                   date: date2,
-                  sum_amount: Decimal.new(5)
+                  sum_amount: Decimal.new("5.00")
                 }
               ]
             ],
@@ -458,19 +458,19 @@ defmodule MarkevichMoney.OpenStartupTest do
                 %{
                   category_name: "pet_expensive_category",
                   date: date3,
-                  sum_amount: Decimal.new(10)
+                  sum_amount: Decimal.new("10.00")
                 }
               ],
               [
                 %{
                   category_name: "pet_expensive_category",
                   date: date1,
-                  sum_amount: Decimal.new(40)
+                  sum_amount: Decimal.new("40.00")
                 },
                 %{
                   category_name: "pet_expensive_category",
                   date: date2,
-                  sum_amount: Decimal.new(10)
+                  sum_amount: Decimal.new("10.00")
                 }
               ]
             ]

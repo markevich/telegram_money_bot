@@ -48,7 +48,7 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsStats do
     Enum.map(categories, fn category ->
       total_spending =
         Transactions.get_category_monthly_spendings(current_user.id, category.id, [])
-        |> round()
+        |> Decimal.round(2)
 
       limit = limit_value(category)
 
@@ -64,7 +64,7 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsStats do
       Enum.map(categories, fn category ->
         total_spending =
           Transactions.get_category_monthly_spendings(current_user.id, category.id, [])
-          |> round()
+          |> Decimal.round(2)
 
         limit = limit_value(category)
 

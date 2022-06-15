@@ -99,14 +99,14 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsValuesTest do
 
         ```
         ```
-         Расходы за текущий месяц
+          Расходы за текущий месяц
 
-         Категория     Расходы
+         Категория    Расходы
 
          Food
-          └Cafe        0 из 100
-         limit_cat2    0 из 125
-         HomeCbTest    100 из 200
+          └Cafe       0.00 из 100
+         limit_cat2   0.00 из 125
+         HomeCbTest   100.00 из 200
 
         ```
 

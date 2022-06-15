@@ -7,6 +7,8 @@ defmodule EmailProcessor do
   use MarkevichMoney.LoggerWithSentry
   use Oban.Worker, queue: :mail_fetcher, max_attempts: 1
 
+  require Logger
+
   @impl Oban.Worker
   def perform(payload) do
     call()
@@ -26,6 +28,8 @@ defmodule EmailProcessor do
   end
 
   defp retreive_and_send_to_pipeline(client, index) do
+    Process.sleep(500)
+    Logger.info("Receiving email #{index}")
     {:ok, mail_content} = :epop_client.bin_retrieve(client, index)
 
     case get_to_and_body(mail_content) do

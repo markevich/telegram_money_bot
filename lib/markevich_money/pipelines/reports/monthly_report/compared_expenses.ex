@@ -176,7 +176,7 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpenses do
 
   defp sort_folders(%{union: union} = payload) do
     updated_union =
-      Enum.sort_by(union, fn {folder, _categories} -> Decimal.to_float(folder.diff) end, :desc)
+      Enum.sort_by(union, fn {folder, _categories} -> folder.diff end, {:desc, Decimal})
 
     Map.put(payload, :union, updated_union)
   end
@@ -185,7 +185,7 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpenses do
     updated_union =
       Enum.map(union, fn {folder, categories} ->
         sorted_categories =
-          Enum.sort_by(categories, fn category -> Decimal.to_float(category.diff) end, :desc)
+          Enum.sort_by(categories, fn category -> category.diff end, {:desc, Decimal})
 
         {
           folder,
@@ -202,13 +202,13 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpenses do
         if folder.folder_with_single_category do
           category_table_row =
             Enum.flat_map(categories, fn row ->
-              diff = symbolic_diff(row.diff)
+              diff = row.diff |> Decimal.round(2) |> symbolic_diff()
 
               [
                 [
                   row.category_name,
-                  row.sum_a,
-                  row.sum_b,
+                  Decimal.round(row.sum_a, 2),
+                  Decimal.round(row.sum_b, 2),
                   diff
                 ],
                 ["", "", "", ""]
@@ -217,15 +217,15 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpenses do
 
           acc ++ category_table_row
         else
-          diff = symbolic_diff(folder.diff)
+          diff = folder.diff |> Decimal.round(2) |> symbolic_diff()
 
           folder_row =
             if Enum.count(categories) > 1 do
               [
                 [
                   folder.folder_name,
-                  folder.sum_a,
-                  folder.sum_b,
+                  Decimal.round(folder.sum_a, 2),
+                  Decimal.round(folder.sum_b, 2),
                   diff
                 ]
               ]
@@ -244,14 +244,14 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpenses do
 
           category_row =
             Enum.flat_map(categories, fn category ->
-              diff = symbolic_diff(category.diff)
+              diff = category.diff |> Decimal.round(2) |> symbolic_diff()
 
               if List.last(categories) == category do
                 [
                   [
                     "└#{category.category_name}",
-                    category.sum_a,
-                    category.sum_b,
+                    Decimal.round(category.sum_a, 2),
+                    Decimal.round(category.sum_b, 2),
                     diff
                   ],
                   ["", "", "", ""]
@@ -260,8 +260,8 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpenses do
                 [
                   [
                     "├#{category.category_name}",
-                    category.sum_a,
-                    category.sum_b,
+                    Decimal.round(category.sum_a, 2),
+                    Decimal.round(category.sum_b, 2),
                     diff
                   ]
                 ]

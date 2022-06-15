@@ -148,10 +148,10 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
-        Всего: 70.0
+        Всего: 70.00
 
-       55.0   #{context.transaction2.to}   #{transaction2_issued_at}
-       15.0   #{context.transaction1.to}   #{transaction1_issued_at}
+       55.00   #{context.transaction2.to}   #{transaction2_issued_at}
+       15.00   #{context.transaction1.to}   #{transaction1_issued_at}
 
       ```
       """
@@ -251,10 +251,10 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
-        Всего: 70.0
+        Всего: 70.00
 
-       55.0   #{context.transaction2.to}   #{transaction2_issued_at}
-       15.0   #{context.transaction1.to}   #{transaction1_issued_at}
+       55.00   #{context.transaction2.to}   #{transaction2_issued_at}
+       15.00   #{context.transaction1.to}   #{transaction1_issued_at}
 
       ```
       """
@@ -357,10 +357,10 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
-        Всего: 70.0
+        Всего: 70.00
 
-       55.0   #{context.transaction2.to}   #{transaction2_issued_at}
-       15.0   #{context.transaction1.to}   #{transaction1_issued_at}
+       55.00   #{context.transaction2.to}   #{transaction2_issued_at}
+       15.00   #{context.transaction1.to}   #{transaction1_issued_at}
 
       ```
       """
@@ -488,9 +488,9 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       expected_message = """
       Расходы "❓Без категории" c `#{from}` по `#{to}`:
       ```
-        Всего: 10.0
+        Всего: 10.00
 
-       10.0   #{context.transaction1.to}   #{transaction1_issued_at}
+       10.00   #{context.transaction1.to}   #{transaction1_issued_at}
 
       ```
       """
@@ -576,10 +576,10 @@ defmodule MarkevichMoney.Stats.ByCategoryTest do
       expected_message = """
       Расходы "#{context.category.name}" c `#{from}` по `#{to}`:
       ```
-        Всего: 70.0
+        Всего: 70.00
 
-       55.0   #{context.transaction2.to}          #{transaction2_issued_at}
-       15.0   #{context.transaction1.custom_description}   #{transaction1_issued_at}
+       55.00   #{context.transaction2.to}          #{transaction2_issued_at}
+       15.00   #{context.transaction1.custom_description}   #{transaction1_issued_at}
 
       ```
       """
