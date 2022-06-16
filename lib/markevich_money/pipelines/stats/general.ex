@@ -25,8 +25,8 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
   defp put_stats_total(%{stats: stats} = payload) do
     total =
       stats
-      |> Enum.reduce(0, fn stat, acc ->
-        acc + abs(Decimal.to_float(stat.sum))
+      |> Enum.reduce(Decimal.new("0"), fn stat, acc ->
+        Decimal.add(acc, Decimal.abs(stat.sum))
       end)
 
     Map.put(payload, :stats_total, total)
@@ -78,7 +78,7 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
   end
 
   defp put_output_message(%{stats: stats, stat_from: stat_from, stat_to: stat_to} = payload) do
-    header = ["Всего:", Float.ceil(payload[:stats_total], 2)]
+    header = ["Всего:", Decimal.round(payload[:stats_total], 2)]
 
     table =
       stats
@@ -110,16 +110,15 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
         categories
         |> Enum.map(& &1[:sum])
         |> Enum.reduce(Decimal.new(0), fn num, acc -> Decimal.add(acc, num) end)
-        |> Decimal.to_float()
-        |> abs()
-        |> Float.ceil(2)
+        |> Decimal.abs()
+        |> Decimal.round(2)
 
       {
         Map.put(folder, :sum, sum),
         categories
       }
     end)
-    |> Enum.sort_by(fn {folder, _categories} -> folder.sum end, :desc)
+    |> Enum.sort_by(fn {folder, _categories} -> folder.sum end, {:desc, Decimal})
     |> Enum.reduce([], fn {folder, categories}, acc ->
       if folder.has_single_category do
         acc ++ render_folder_with_single_category(folder, categories)
@@ -133,10 +132,8 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
     Enum.map(categories, fn category ->
       number =
         category.sum
-        |> Decimal.to_float()
-        |> abs()
-        |> Float.ceil(2)
-        |> :erlang.float_to_binary([:compact, decimals: 2])
+        |> Decimal.abs()
+        |> Decimal.round(2)
 
       ["#{category.category_name}", number]
     end)
@@ -144,31 +141,25 @@ defmodule MarkevichMoney.Pipelines.Stats.General do
 
   defp render_folder_with_multiple_category(folder, categories) do
     acc = []
-    folder_sum = :erlang.float_to_binary(folder.sum, [:compact, decimals: 2])
-    acc = acc ++ [["#{folder.name}", "= #{folder_sum}"]]
+    acc = acc ++ [["#{folder.name}", "= #{folder.sum}"]]
 
     sorted =
       Enum.map(categories, fn category ->
         float_sum =
           category.sum
-          |> Decimal.to_float()
-          |> abs()
-          |> Float.ceil(2)
+          |> Decimal.abs()
+          |> Decimal.round(2)
 
         Map.put(category, :sum, float_sum)
       end)
-      |> Enum.sort_by(fn category -> category.sum end, :desc)
+      |> Enum.sort_by(fn category -> category.sum end, {:desc, Decimal})
 
     rendered =
       Enum.map(sorted, fn category ->
-        number =
-          category.sum
-          |> :erlang.float_to_binary([:compact, decimals: 2])
-
         if List.last(sorted) == category do
-          [" └#{category.category_name}", number]
+          [" └#{category.category_name}", category.sum]
         else
-          [" ├#{category.category_name}", number]
+          [" ├#{category.category_name}", category.sum]
         end
       end)
 

@@ -38,8 +38,8 @@ defmodule MarkevichMoney.Pipelines.Stats.ByCategory do
   defp put_stats_total(%{stats: stats} = payload) do
     total =
       stats
-      |> Enum.reduce(0, fn {_to, _custom_description, amount, _issued_at}, acc ->
-        acc + abs(Decimal.to_float(amount))
+      |> Enum.reduce(Decimal.new("0"), fn {_to, _custom_description, amount, _issued_at}, acc ->
+        Decimal.add(acc, Decimal.abs(amount))
       end)
 
     Map.put(payload, :stats_total, total)
@@ -69,7 +69,7 @@ defmodule MarkevichMoney.Pipelines.Stats.ByCategory do
     table =
       stats
       |> Enum.map(fn {to, custom_description, amount, issued_at} ->
-        number = amount |> Decimal.to_float() |> abs() |> Float.ceil(2)
+        number = amount |> Decimal.abs() |> Decimal.round(2)
         issued_at = Timex.format!(issued_at, "{0D}.{0M} {h24}:{m}")
         description = custom_description || to
         [number, description, issued_at]
@@ -81,7 +81,7 @@ defmodule MarkevichMoney.Pipelines.Stats.ByCategory do
     message = """
     Расходы "#{transaction_category.name}" c `#{from}` по `#{to}`:
     ```
-      Всего: #{Float.ceil(stats_total, 2)}
+      Всего: #{Decimal.round(stats_total, 2)}
 
     #{table}
     ```

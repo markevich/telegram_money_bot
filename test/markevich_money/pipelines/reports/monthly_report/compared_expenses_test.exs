@@ -151,22 +151,22 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReport.ComparedExpensesTest do
         Переверни телефон в альбомный режим для лучшей читабельности!
         ```
 
-                Сравнение расходов
+                 Сравнение расходов
 
         Категория   Month 1 Month 2 Разница
 
-        Bills       0       50      🔴+50
+        Bills       0.00    50.00   🔴+50.00
 
-        Sport       0       40      🔴+40
+        Sport       0.00    40.00   🔴+40.00
 
-        Food folder 45      30      🟢-15
-        ├Food 1     15      30      🔴+15
-        └Food 2     30      0       🟢-30
+        Food folder 45.00   30.00   🟢-15.00
+        ├Food 1     15.00   30.00   🔴+15.00
+        └Food 2     30.00   0.00    🟢-30.00
 
-        Home        60      0       🟢-60
+        Home        60.00   0.00    🟢-60.00
 
         Home folder
-        └Home 1     150     0       🟢-150
+        └Home 1     150.00  0.00    🟢-150.00
 
 
 

@@ -44,9 +44,11 @@ defmodule MarkevichMoney.Gamification.Trackers.TransactionCategoryLimit do
         Transactions.get_category_monthly_spendings(transaction.user_id, category_id, [
           transaction.id
         ])
+        |> Decimal.to_float()
 
       total_with_current =
         Transactions.get_category_monthly_spendings(transaction.user_id, category_id, [])
+        |> Decimal.to_float()
 
       total_without_current_percentage =
         Float.round(total_without_current / category_limit * 100, 2)

@@ -76,14 +76,14 @@ defmodule MarkevichMoney.Steps.Limits.RenderLimitsStatsTest do
 
       expected_message = """
       ```
-       Расходы за текущий месяц
+         Расходы за текущий месяц
 
        Категория      Расходы
 
        Food
-        ├Cafe         0 из 100
-        └Restaraunt   0 из 500
-       HomeCbTest     100 из 200
+        ├Cafe         0.00 из 100
+        └Restaraunt   0.00 из 500
+       HomeCbTest     100.00 из 200
 
       ```
       """
