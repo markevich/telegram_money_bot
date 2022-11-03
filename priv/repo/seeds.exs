@@ -46,6 +46,7 @@ food_folder_name = "🍔 Еда"
 entertainment_folder_name = "🎉 Развлечения"
 transport_folder_name = "🚜 Транспорт"
 home_folder_name = "🏠 Дом"
+kids_folder_name = "🧒 Дети"
 
 food_folder =
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
@@ -68,6 +69,12 @@ transport_folder =
 home_folder =
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
     name: home_folder_name,
+    has_single_category: false
+  })
+
+kids_folder =
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategoryFolder{
+    name: kids_folder_name,
     has_single_category: false
   })
 
@@ -116,5 +123,17 @@ end)
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
     name: category_name,
     transaction_category_folder: home_folder
+  })
+end)
+
+[
+  "🧒👕 Одежда",
+  "🧒📚 Обучение",
+  "🧒🎉 Развлечения"
+]
+|> Enum.each(fn category_name ->
+  MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{
+    name: category_name,
+    transaction_category_folder: kids_folder
   })
 end)
