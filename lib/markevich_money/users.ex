@@ -13,6 +13,15 @@ defmodule MarkevichMoney.Users do
     Repo.one(from u in User, where: u.telegram_chat_id == ^chat_id)
   end
 
+  def get_user_by_token!(token) do
+    Repo.one!(
+      from u in User,
+        where:
+          u.api_token == ^token and
+            not is_nil(u.api_token)
+    )
+  end
+
   def get_user_by_chat_id!(chat_id) do
     Repo.one!(from u in User, where: u.telegram_chat_id == ^chat_id)
   end

@@ -3,6 +3,8 @@ defmodule MarkevichMoney.Transactions do
 
   alias MarkevichMoney.Repo
 
+  alias MarkevichMoney.Transactions.CreateTransactionWorker
+
   alias MarkevichMoney.Transactions.Transaction
   alias MarkevichMoney.Transactions.TransactionCategory
   alias MarkevichMoney.Transactions.TransactionCategoryFolder
@@ -106,6 +108,12 @@ defmodule MarkevichMoney.Transactions do
 
       {:new, transaction}
     end
+  end
+
+  def create_from_api(attrs) do
+    %{transaction_attributes: attrs, source: :api_v1}
+    |> CreateTransactionWorker.new()
+    |> Oban.insert()
   end
 
   def calculate_lookup_hash(user_id, account, amount, issued_at) do
