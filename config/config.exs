@@ -53,7 +53,7 @@ config :markevich_money, Oban,
     {Oban.Plugins.Cron,
      crontab: [
        {"* * * * *", EmailProcessor},
-       {"* * * * *", MarkevichMoney.Priorbank.SchedulerWorker},
+       #  {"* * * * *", MarkevichMoney.Priorbank.SchedulerWorker},
        {"0 11 1 * *", MarkevichMoney.Gamification.Events.NewMonthStarted}
      ]},
     Oban.Pro.Plugins.DynamicLifeline,
@@ -68,9 +68,9 @@ config :markevich_money, Oban,
     events: 5,
     trackers: 5,
     reports: 2,
-    mail_fetcher: 1,
-    priorbank_scheduler: 1,
-    priorbank_fetcher: 5
+    mail_fetcher: 1
+    # priorbank_scheduler: 1,
+    # priorbank_fetcher: 5
   ]
 
 config :markevich_money, priorbank_api_url: "https://www.prior.by"

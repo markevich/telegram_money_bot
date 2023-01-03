@@ -219,7 +219,7 @@ defmodule MarkevichMoney.Transactions do
       )
 
     case Repo.one(query) do
-      nil -> 0
+      nil -> Decimal.new(0)
       decimal -> decimal |> Decimal.abs()
     end
   end
