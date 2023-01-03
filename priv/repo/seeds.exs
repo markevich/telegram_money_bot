@@ -129,7 +129,8 @@ end)
 [
   "🧒👕 Одежда",
   "🧒📚 Обучение",
-  "🧒🎉 Развлечения"
+  "🧒🎉 Развлечения",
+  "🧒💖 Здоровье"
 ]
 |> Enum.each(fn category_name ->
   MarkevichMoney.Repo.insert!(%MarkevichMoney.Transactions.TransactionCategory{

@@ -32,6 +32,10 @@ defmodule MarkevichMoneyWeb.Router do
   scope "/api", MarkevichMoneyWeb do
     pipe_through :api
 
+    scope "/v1" do
+      post "/transactions", TransactionsController, :create
+    end
+
     scope "/bot" do
       post "/webhook", BotController, :webhook
     end

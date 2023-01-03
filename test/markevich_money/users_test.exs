@@ -17,4 +17,16 @@ defmodule MarkevichMoney.UsersTest do
       assert result == [user1, user2]
     end
   end
+
+  describe "#get_user_by_token!" do
+    test "returns user with same token" do
+      token = Ecto.UUID.generate()
+
+      original_user = insert(:user, api_token: token)
+
+      user = Users.get_user_by_token!(token)
+
+      assert(original_user.id == user.id)
+    end
+  end
 end

@@ -8,6 +8,7 @@ defmodule MarkevichMoney.Users.User do
   schema "users" do
     field :telegram_chat_id, :integer
     field :notification_email, :string
+    field :api_token, :string
 
     timestamps()
   end
