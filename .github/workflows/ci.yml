@@ -41,7 +41,8 @@ jobs:
       - name: Install dependencies
         if: steps.mix-cache.outputs.cache-hit != 'true'
         run: |
-          mix hex.organization auth oban --key ${{ secrets.OBAN_LICENSE_KEY }}
+          eval `ssh-agent -s`
+          ssh-add - <<< '${{ secrets.BEBRAN_WEB_KEY }}'
           mix local.hex --force
           mix deps.get
           mix deps.compile

@@ -69,9 +69,8 @@ config :markevich_money, Oban,
     #  crontab: [
     #    {"* * * * *", MarkevichMoney.Priorbank.SchedulerWorker}
     #  ]},
-    Oban.Pro.Plugins.DynamicLifeline,
     Oban.Plugins.Gossip,
-    Oban.Web.Plugins.Stats
+    Bebran.Web.Plugins.Stats
   ]
 
 import_config "dev.secret.exs"

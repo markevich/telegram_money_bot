@@ -2,7 +2,7 @@ defmodule MarkevichMoney.Gamification.Events.BroadcasterTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MecksUnit.Case
-  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
+  use Oban.Testing, repo: MarkevichMoney.Repo
   use MarkevichMoney.Constants
   import ExUnit.CaptureLog
 

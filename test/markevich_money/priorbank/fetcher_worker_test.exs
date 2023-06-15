@@ -1,6 +1,6 @@
 defmodule MarkevichMoney.Priorbank.FetcherWorkerTest do
   use MarkevichMoney.DataCase, async: true
-  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
+  use Oban.Testing, repo: MarkevichMoney.Repo
   use MecksUnit.Case
 
   alias MarkevichMoney.Priorbank.FetcherWorker

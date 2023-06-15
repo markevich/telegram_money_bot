@@ -74,8 +74,7 @@ defmodule MarkevichMoney.MixProject do
       {:finch, "~> 0.6"},
       {:jason, "~> 1.1"},
       {:oban, "~> 2.12"},
-      {:oban_web, "~> 2.9", organization: "oban"},
-      {:oban_pro, "~> 0.11", organization: "oban"}
+      {:bebran_web, "~> 2.9", git: "git@github.com:markevich/bebran_web.git"}
     ]
   end
 
