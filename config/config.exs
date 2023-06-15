@@ -41,30 +41,21 @@ config :esbuild,
 
 config :markevich_money, Oban,
   repo: MarkevichMoney.Repo,
-  engine: Oban.Pro.Queue.SmartEngine,
   plugins: [
-    {
-      Oban.Pro.Plugins.DynamicPruner,
-      state_overrides: [
-        completed: {:max_age, {1, :month}},
-        discarded: {:max_age, {3, :month}}
-      ]
-    },
     {Oban.Plugins.Cron,
      crontab: [
        {"* * * * *", EmailProcessor},
        #  {"* * * * *", MarkevichMoney.Priorbank.SchedulerWorker},
        {"0 11 1 * *", MarkevichMoney.Gamification.Events.NewMonthStarted}
      ]},
-    Oban.Pro.Plugins.DynamicLifeline,
     Oban.Plugins.Gossip,
-    Oban.Web.Plugins.Stats
+    Bebran.Web.Plugins.Stats
   ],
   queues: [
     # TODO: Wait for https://elixirforum.com/t/oban-having-many-dynamic-queues-okay-or-a-bad-idea/36312/17
     # implementation
     # FYI: https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once
-    transactions: [local_limit: 1, rate_limit: [allowed: 1, period: {1, :second}]],
+    transactions: 1,
     events: 5,
     trackers: 5,
     reports: 2,

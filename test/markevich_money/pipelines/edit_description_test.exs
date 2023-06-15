@@ -2,7 +2,7 @@ defmodule MarkevichMoney.Pipelines.EditDescriptionTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MarkevichMoney.MockNadia, async: true
-  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
+  use Oban.Testing, repo: MarkevichMoney.Repo
   use MarkevichMoney.Constants
   alias MarkevichMoney.MessageData
   alias MarkevichMoney.Pipelines

@@ -1,7 +1,7 @@
 defmodule MarkevichMoney.PriorbankTest do
   use MarkevichMoney.DataCase, async: true
   use MecksUnit.Case
-  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
+  use Oban.Testing, repo: MarkevichMoney.Repo
 
   alias MarkevichMoney.Priorbank
   alias MarkevichMoney.Transactions.CreateTransactionWorker

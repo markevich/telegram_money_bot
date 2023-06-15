@@ -1,6 +1,6 @@
 defmodule MarkevichMoney.TransactionsTest do
   use MarkevichMoney.DataCase, async: true
-  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
+  use Oban.Testing, repo: MarkevichMoney.Repo
 
   alias MarkevichMoney.Transactions
   alias MarkevichMoney.Transactions.CreateTransactionWorker

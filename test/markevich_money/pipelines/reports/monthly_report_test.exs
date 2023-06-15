@@ -2,7 +2,7 @@ defmodule MarkevichMoney.Pipelines.Reports.MonthlyReportTest do
   @moduledoc false
   use MarkevichMoney.DataCase, async: true
   use MecksUnit.Case
-  use Oban.Pro.Testing, repo: MarkevichMoney.Repo
+  use Oban.Testing, repo: MarkevichMoney.Repo
   use MarkevichMoney.Constants
 
   alias MarkevichMoney.Pipelines.Reports.MonthlyReport
