@@ -73,7 +73,7 @@ defmodule MarkevichMoney.MixProject do
       {:hackney, "~> 1.8"},
       {:finch, "~> 0.6"},
       {:jason, "~> 1.1"},
-      {:oban, "~> 2.12"},
+      {:oban, "~> 2.15"},
       {:bebran_web, "~> 2.9", git: "git@github.com:markevich/bebran_web.git"}
     ]
   end

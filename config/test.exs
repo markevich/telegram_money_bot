@@ -9,6 +9,6 @@ config :markevich_money, MarkevichMoneyWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-config :markevich_money, Oban, queues: false, testing: :manual
+config :markevich_money, Oban, testing: :manual
 
 import_config "test.secret.exs"
