@@ -36,7 +36,7 @@ defmodule MarkevichMoney.Steps.Transaction.ParseAmountAndCurrencyTest do
     Со счёта: BY06ALFA30143400080030270000
     Оплата товаров/услуг
     Успешно
-    Сумма:3.53 USD (7.04 BYN)
+    Сумма:3 500.53 USD (7 200.04 BYN)
     Остаток:35 BYN
     На время:15:14:35
     ToFooBar
@@ -47,9 +47,9 @@ defmodule MarkevichMoney.Steps.Transaction.ParseAmountAndCurrencyTest do
       payload = Map.put(default_payload, :input_message, @transaction_with_conversion)
       reply_payload = ParseAmountAndCurrency.call(payload)
 
-      assert(reply_payload[:parsed_attributes][:amount] == 7.04)
+      assert(reply_payload[:parsed_attributes][:amount] == 7200.04)
       assert(reply_payload[:parsed_attributes][:currency_code] == "BYN")
-      assert(reply_payload[:parsed_attributes][:external_amount] == 3.53)
+      assert(reply_payload[:parsed_attributes][:external_amount] == 3500.53)
       assert(reply_payload[:parsed_attributes][:external_currency] == "USD")
     end
   end
