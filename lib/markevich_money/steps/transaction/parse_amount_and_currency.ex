@@ -1,6 +1,6 @@
 defmodule MarkevichMoney.Steps.Transaction.ParseAmountAndCurrency do
   # credo:disable-for-next-line
-  @regex ~r/Сумма:((?<amount>\d+\.?\d*)\s(?<currency>\w{3}))(\s\((?<external_amount>\d+\.?\d*)\s(?<external_currency>\w{3})\))?/
+  @regex ~r/Сумма:((?<amount>\d+\.?\d*)(?<currency>\w{3}))(\((?<external_amount>\d+\.?\d*)(?<external_currency>\w{3})\))?/
 
   def call(%{input_message: input_message} = payload) do
     payload
@@ -10,7 +10,9 @@ defmodule MarkevichMoney.Steps.Transaction.ParseAmountAndCurrency do
   end
 
   defp match_attributes(input_message) do
-    Regex.named_captures(@regex, input_message)
+    without_whitespace = Regex.replace(~r/\s/u, input_message, "")
+
+    Regex.named_captures(@regex, without_whitespace)
     |> parse_attributes
   end
 
@@ -29,6 +31,7 @@ defmodule MarkevichMoney.Steps.Transaction.ParseAmountAndCurrency do
       # then first number is `external_amount`, second is `amount`
 
       {origin_card_amount, _} = Float.parse(external_amount)
+
       {external_card_amount, _} = Float.parse(amount)
 
       %{
